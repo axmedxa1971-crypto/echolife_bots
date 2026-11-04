@@ -3,7 +3,7 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import random, json, os
 from datetime import datetime, timedelta
 
-BOT_TOKEN = "ВСТАВЬ_ТОКЕН_СЮДА"
+BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 LIVES_FILE = "lives.json"
