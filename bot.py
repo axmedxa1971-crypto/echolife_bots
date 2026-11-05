@@ -9,7 +9,10 @@ try:
 except ImportError:
     HAS_PIL = False
 
+# ================= НАСТРОЙКА =================
 BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
+HF_TOKEN = "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" # начинается на hf_...
+
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True)
 
 # ================= БАЗА ДАННЫХ =================
@@ -29,6 +32,7 @@ def save_db(data):
 players_db = load_db()
 
 # ================= СПРАВОЧНИКИ =================
+# (Страны, болезни, имена оставил полными, как ты просил ранее)
 COUNTRIES = [
     ("Индия", "🇮🇳", "south_asia", 23000, 70, 0.75, 0.35, 2500, 83.5, "₹"),("Пакистан", "🇵🇰", "south_asia", 6000, 66, 0.55, 0.37, 1500, 278.0, "₨"),("Бангладеш", "🇧🇩", "south_asia", 3000, 74, 0.75, 0.40, 2000, 110.0, "৳"),("Непал", "🇳🇵", "south_asia", 550, 70, 0.65, 0.21, 1200, 133.0, "₨"),("Шри-Ланка", "🇱🇰", "south_asia", 320, 77, 0.92, 0.19, 3800, 300.0, "₨"),("Афганистан", "🇦🇫", "south_asia", 1000, 65, 0.40, 0.26, 800, 70.0, "؋"),
     ("Китай", "🇨🇳", "east_asia", 9000, 78, 0.95, 0.65, 12000, 7.2, "¥"),("Япония", "🇯🇵", "east_asia", 800, 84, 0.99, 0.92, 35000, 150.0, "¥"),("Южная Корея", "🇰🇷", "east_asia", 250, 83, 0.98, 0.81, 33000, 1330.0, "₩"),("Монголия", "🇲🇳", "east_asia", 80, 70, 0.90, 0.68, 4500, 3450.0, "₮"),
@@ -45,11 +49,11 @@ TOTAL_WEIGHT = sum(c[3] for c in COUNTRIES)
 DISEASES = {
     "Астма": {"mort": 1.1, "cash": 300}, "Диабет 1 типа": {"mort": 1.4, "cash": 1500}, "Диабет 2 типа": {"mort": 1.2, "cash": 800}, "Гипертония": {"mort": 1.3, "cash": 400}, "Артрит": {"mort": 1.15, "cash": 500}, "Псориаз": {"mort": 1.05, "cash": 300}, "Эпилепсия": {"mort": 1.5, "cash": 600}, "Мигрень": {"mort": 1.05, "cash": 200},
     "Туберкулез": {"mort": 1.8, "cash": 1500}, "Сифилис": {"mort": 1.3, "cash": 500}, "Гонорея": {"mort": 1.1, "cash": 400}, "ВИЧ/СПИД": {"mort": 1.5, "cash": 2000}, "Гепатит B": {"mort": 1.5, "cash": 1200}, "Гепатит C": {"mort": 1.6, "cash": 2500}, "Холера": {"mort": 2.5, "cash": 800}, "Тиф": {"mort": 1.8, "cash": 600}, "Корь": {"mort": 1.6, "cash": 400}, "Ковид-19": {"mort": 1.4, "cash": 1000}, "Малярия": {"mort": 2.0, "cash": 600},
-    "Рак легких": {"mort": 3.0, "cash": 5000}, "Рак груди": {"mort": 2.2, "cash": 4000}, "Лейкемия": {"mort": 2.8, "cash": 8000},
-    "ПТСР": {"mort": 1.4, "cash": 500}, "Депрессия": {"mort": 1.3, "cash": 400}, "Биполярное расстройство": {"mort": 1.3, "cash": 700}, "Шизофрения": {"mort": 1.4, "cash": 800}, "Алкоголизм": {"mort": 1.8, "cash": 600}, "Наркомания": {"mort": 2.0, "cash": 1500},
+    "Рак легких": {"mort": 3.0, "cash": 5000}, "Рак груди": {"mort": 2.2, "cash": 4000}, "Лейкемия": {"mort": 2.8, "cash": 8000}, "ПТСР": {"mort": 1.4, "cash": 500}, "Депрессия": {"mort": 1.3, "cash": 400}, "Биполярное расстройство": {"mort": 1.3, "cash": 700}, "Шизофрения": {"mort": 1.4, "cash": 800}, "Алкоголизм": {"mort": 1.8, "cash": 600}, "Наркомания": {"mort": 2.0, "cash": 1500},
     "Сердечная недостаточность": {"mort": 2.2, "cash": 1500}, "Инфаркт": {"mort": 2.5, "cash": 3000}, "Инсульт": {"mort": 2.5, "cash": 3000}, "Цирроз печени": {"mort": 2.2, "cash": 1000}, "Полиомиелит": {"mort": 1.5, "cash": 500}, "Ожирение": {"mort": 1.3, "cash": 400}, "Анемия": {"mort": 1.1, "cash": 200}, "Бесплодие": {"mort": 1.0, "cash": 0}
 }
 
+# Разделяем стереотипы на позитивные и негативные
 ETHNICITIES = {
     "south_asia": [("Хиндустанец", 35, None),("Бенгалец", 15, "Общество считает тебя бедным."),("Тамил", 10, "Общество считает тебя хитрым."),("Мусульманин", 15, "Общество считает тебя агрессивным."),("Далит", 10, "Общество считает тебя грязным."),("Сикх", 5, "Общество считает тебя воинственным.")],
     "east_asia": [("Хань", 60, None),("Японец", 15, "Общество считает тебя трудоголиком."),("Кореец", 12, "Общество считает тебя умным."),("Монгол", 5, "Общество считает тебя дикарем."),("Уйгур", 5, "Общество считает тебя чужим.")],
@@ -92,10 +96,10 @@ TESTS = {
     3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2},{"q": "Производная от x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1},{"q": "Сколько планет в Солнечной системе?", "opts": ["7", "8", "9"], "ans": 1},{"q": "Кто открыл тяготение?", "opts": ["Эйнштейн", "Ньютон", "Галилей"], "ans": 1},{"q": "Что такое ДНК?", "opts": ["Белок", "Кислота", "Углевод"], "ans": 1},{"q": "Столица Японии?", "opts": ["Осака", "Токио", "Киото"], "ans": 1},{"q": "log(100) по основанию 10?", "opts": ["1", "2", "10"], "ans": 1},{"q": "Интеграл от 2x dx?", "opts": ["x^2 + C", "2x^2 + C", "x + C"], "ans": 0},{"q": "Кто написал 'Преступление и наказание'?", "opts": ["Толстой", "Достоевский", "Чехов"], "ans": 1},{"q": "Что такое фотон?", "opts": ["Квант света", "Частица атома", "Волна"], "ans": 0}]
 }
 
-# ================= НЕЙРОСЕТЬ =================
+# ================= НЕЙРОСЕТЬ (HUGGING FACE) =================
 def generate_ai_image(scene_type):
     prompts = {
-        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset, high quality",
+        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset",
         "child": "8-bit pixel art, a little child playing in a village near a wooden house, green grass, sunny day",
         "fight": "8-bit pixel art, two characters fighting, action scene, yellow impact star, street background",
         "love": "8-bit pixel art, a man and a woman in love, red hearts floating, sunset background",
@@ -115,20 +119,34 @@ def generate_ai_image(scene_type):
     }
     
     prompt = prompts.get(scene_type, prompts["life"])
-    seed = random.randint(1, 999999)
     
-    # ИСПОЛЬЗУЕМ МОДЕЛЬ FLUX (самая лучшая и бесплатная)
-    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=512&height=512&nologo=true&seed={seed}&model=flux"
+    # Используем специализированную модель для пиксель-арта
+    API_URL = "https://api-inference.huggingface.co/models/nerijs/pixel-art-xl"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+    payload = {"inputs": prompt, "parameters": {"negative_prompt": "blurry, text, watermark, bad quality"}}
     
     try:
-        response = requests.get(url, timeout=30) # Даем 30 секунд
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=25)
         if response.status_code == 200:
             return io.BytesIO(response.content)
         else:
-            print(f"Ошибка Pollinations: {response.status_code}")
+            print(f"Ошибка HuggingFace: {response.text}")
     except Exception as e:
         print(f"Ошибка сети: {e}")
     return None
+
+def send_scene(chat_id, l, text, kb, scene_type="life"):
+    status_msg = bot.send_message(chat_id, "📸 <i>Нейросеть рисует сцену...</i>", parse_mode="HTML")
+    photo = generate_ai_image(scene_type)
+    try: bot.delete_message(chat_id, status_msg.message_id)
+    except: pass
+
+    if photo:
+        try:
+            bot.send_photo(chat_id, photo, caption=text, reply_markup=kb, parse_mode="HTML")
+            return
+        except: pass
+    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 
 # ================= УТИЛИТЫ =================
 def fmt_money(amount_usd, country):
@@ -394,10 +412,30 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
 
 def apply_outcome(l, outcome):
     vvp = l["country"][7]
+    # ПРОВЕРКА: хороший или плохой стереотип
+    BAD_TRAITS = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
+    is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS)
+
     if outcome == "prej_fight_win": l["clean_cash"] += 5000; l["prejudice"] = None; return "Ты сломал стереотип!"
     if outcome == "prej_fight_fail": l["clean_cash"] -= 2000; l["diseases"].append("ПТСР"); return "Ты потратил силы."
-    if outcome == "prej_exploit": l["dirty_cash"] += 15000; return "Ты использовал стереотип."
-    if outcome == "prej_exploit_fail": l["in_prison"] = 3; return "Тебя поймали."
+    
+    if outcome == "prej_exploit":
+        if is_bad:
+            l["dirty_cash"] += 15000
+            return "Ты использовал негативный стереотип для незаконного обогащения."
+        else:
+            l["clean_cash"] += 10000
+            l["career_xp"] += 20
+            return "Ты оседлал позитивный стереотип! Тебя повысили и дали премию."
+            
+    if outcome == "prej_exploit_fail":
+        if is_bad:
+            l["in_prison"] = 3
+            return "Ты пытался провернуть махинацию на негативном стереотипе и сел в тюрьму."
+        else:
+            l["clean_cash"] -= 2000
+            return "Ты слишком сильно старался соответствовать хорошему стереотипу и выгорел на работе."
+            
     if outcome == "prej_accept": l["clean_cash"] -= 1000; return "Ты смирился."
     
     if outcome == "marry": l["married"] = True; add_to_life_map(l, "Женился"); return "Вы поженились!"
@@ -446,7 +484,16 @@ def resolve_choice(user_id, chat_id, i):
         "prej_fight_win": "office", "prej_fight_fail": "sad", "prej_exploit": "money_win", "prej_exploit_fail": "prison", "prej_accept": "sad",
         "bribe_dps": "police", "dps_jail": "prison", "dps_warning": "police", "bribe_dps_big": "police", "drunk_jail": "prison"
     }
-    sc = scene_map.get(outcome, "life")
+    
+    # Если использовали хороший стереотип, показываем офис/успех, а не тюрьму
+    if outcome in ["prej_exploit", "prej_exploit_fail"]:
+        BAD_TRAITS = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
+        is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS)
+        if not is_bad: sc = "office" if outcome == "prej_exploit" else "sad"
+        else: sc = "money_win" if outcome == "prej_exploit" else "prison"
+    else:
+        sc = scene_map.get(outcome, "life")
+        
     save_db(players_db)
     send_scene(chat_id, l, format_year(l), kb_year(), sc)
 
