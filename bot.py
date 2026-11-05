@@ -95,48 +95,40 @@ TESTS = {
 # ================= НЕЙРОСЕТЬ =================
 def generate_ai_image(scene_type):
     prompts = {
-        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset, retro game style",
-        "child": "8-bit pixel art, a little child playing in a village near a wooden house, green grass, sunny day, retro game style",
-        "fight": "8-bit pixel art, two characters fighting, action scene, yellow impact star, street background, retro game style",
-        "love": "8-bit pixel art, a man and a woman in love, red hearts floating, sunset background, retro game style",
-        "hospital": "8-bit pixel art, a person lying in a hospital bed, doctor room, white walls, red cross, retro game style",
-        "prison": "8-bit pixel art, a person inside a dark prison cell, iron bars, gloomy, retro game style",
-        "office": "8-bit pixel art, a person working at a desk in a modern office, computer, window, retro game style",
-        "office_angry": "8-bit pixel art, a very angry boss screaming at employee in office, red atmosphere, retro game style",
-        "police": "8-bit pixel art, a police car with flashing lights on a night street, retro game style",
-        "sad": "8-bit pixel art, a sad person standing alone in the rain, dark clouds, gloomy city, retro game style",
-        "money_win": "8-bit pixel art, a happy person jumping surrounded by bags of gold money, confetti, retro game style",
-        "money_lose": "8-bit pixel art, a sad person looking at an empty wallet, broken piggy bank, retro game style",
-        "criminal": "8-bit pixel art, a gangster in a black suit with sunglasses, dark alley, retro game style",
-        "military": "8-bit pixel art, a soldier in camouflage uniform, military base, retro game style",
-        "wedding": "8-bit pixel art, a wedding ceremony, bride and groom, rings, church, retro game style",
-        "school": "8-bit pixel art, children sitting at desks in a classroom, blackboard, retro game style",
-        "life": "8-bit pixel art, a casual person standing on a city street, daytime, retro game style"
+        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset, high quality",
+        "child": "8-bit pixel art, a little child playing in a village near a wooden house, green grass, sunny day",
+        "fight": "8-bit pixel art, two characters fighting, action scene, yellow impact star, street background",
+        "love": "8-bit pixel art, a man and a woman in love, red hearts floating, sunset background",
+        "hospital": "8-bit pixel art, a person lying in a hospital bed, doctor room, white walls, red cross",
+        "prison": "8-bit pixel art, a person inside a dark prison cell, iron bars, gloomy",
+        "office": "8-bit pixel art, a person working at a desk in a modern office, computer, window",
+        "office_angry": "8-bit pixel art, a very angry boss screaming at employee in office, red atmosphere",
+        "police": "8-bit pixel art, a police car with flashing lights on a night street",
+        "sad": "8-bit pixel art, a sad person standing alone in the rain, dark clouds, gloomy city",
+        "money_win": "8-bit pixel art, a happy person jumping surrounded by bags of gold money, confetti",
+        "money_lose": "8-bit pixel art, a sad person looking at an empty wallet, broken piggy bank",
+        "criminal": "8-bit pixel art, a gangster in a black suit with sunglasses, dark alley",
+        "military": "8-bit pixel art, a soldier in camouflage uniform, military base",
+        "wedding": "8-bit pixel art, a wedding ceremony, bride and groom, rings, church",
+        "school": "8-bit pixel art, children sitting at desks in a classroom, blackboard",
+        "life": "8-bit pixel art, a casual person standing on a city street, daytime"
     }
+    
     prompt = prompts.get(scene_type, prompts["life"])
     seed = random.randint(1, 999999)
-    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=512&height=512&nologo=true&seed={seed}"
+    
+    # ИСПОЛЬЗУЕМ МОДЕЛЬ FLUX (самая лучшая и бесплатная)
+    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=512&height=512&nologo=true&seed={seed}&model=flux"
     
     try:
-        response = requests.get(url, timeout=20)
+        response = requests.get(url, timeout=30) # Даем 30 секунд
         if response.status_code == 200:
             return io.BytesIO(response.content)
+        else:
+            print(f"Ошибка Pollinations: {response.status_code}")
     except Exception as e:
-        print(f"Ошибка ИИ: {e}")
+        print(f"Ошибка сети: {e}")
     return None
-
-def send_scene(chat_id, l, text, kb, scene_type="life"):
-    status_msg = bot.send_message(chat_id, "📸 <i>Нейросеть рисует сцену...</i>", parse_mode="HTML")
-    photo = generate_ai_image(scene_type)
-    try: bot.delete_message(chat_id, status_msg.message_id)
-    except: pass
-
-    if photo:
-        try:
-            bot.send_photo(chat_id, photo, caption=text, reply_markup=kb, parse_mode="HTML")
-            return
-        except: pass
-    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 
 # ================= УТИЛИТЫ =================
 def fmt_money(amount_usd, country):
