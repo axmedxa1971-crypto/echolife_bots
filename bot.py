@@ -11,7 +11,6 @@ except ImportError:
 
 # ================= НАСТРОЙКА =================
 BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
-HF_TOKEN = "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" # начинается на hf_...
 
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True)
 
@@ -96,10 +95,10 @@ TESTS = {
     3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2},{"q": "Производная от x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1},{"q": "Сколько планет в Солнечной системе?", "opts": ["7", "8", "9"], "ans": 1},{"q": "Кто открыл тяготение?", "opts": ["Эйнштейн", "Ньютон", "Галилей"], "ans": 1},{"q": "Что такое ДНК?", "opts": ["Белок", "Кислота", "Углевод"], "ans": 1},{"q": "Столица Японии?", "opts": ["Осака", "Токио", "Киото"], "ans": 1},{"q": "log(100) по основанию 10?", "opts": ["1", "2", "10"], "ans": 1},{"q": "Интеграл от 2x dx?", "opts": ["x^2 + C", "2x^2 + C", "x + C"], "ans": 0},{"q": "Кто написал 'Преступление и наказание'?", "opts": ["Толстой", "Достоевский", "Чехов"], "ans": 1},{"q": "Что такое фотон?", "opts": ["Квант света", "Частица атома", "Волна"], "ans": 0}]
 }
 
-# ================= НЕЙРОСЕТЬ (HUGGING FACE) =================
+# ================= НЕЙРОСЕТЬ =================
 def generate_ai_image(scene_type):
     prompts = {
-        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset",
+        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset, high quality",
         "child": "8-bit pixel art, a little child playing in a village near a wooden house, green grass, sunny day",
         "fight": "8-bit pixel art, two characters fighting, action scene, yellow impact star, street background",
         "love": "8-bit pixel art, a man and a woman in love, red hearts floating, sunset background",
@@ -119,34 +118,20 @@ def generate_ai_image(scene_type):
     }
     
     prompt = prompts.get(scene_type, prompts["life"])
+    seed = random.randint(1, 999999)
     
-    # Используем специализированную модель для пиксель-арта
-    API_URL = "https://api-inference.huggingface.co/models/nerijs/pixel-art-xl"
-    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
-    payload = {"inputs": prompt, "parameters": {"negative_prompt": "blurry, text, watermark, bad quality"}}
+    # ИСПОЛЬЗУЕМ МОДЕЛЬ FLUX (самая лучшая и бесплатная)
+    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=512&height=512&nologo=true&seed={seed}&model=flux"
     
     try:
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=25)
+        response = requests.get(url, timeout=30) # Даем 30 секунд
         if response.status_code == 200:
             return io.BytesIO(response.content)
         else:
-            print(f"Ошибка HuggingFace: {response.text}")
+            print(f"Ошибка Pollinations: {response.status_code}")
     except Exception as e:
         print(f"Ошибка сети: {e}")
     return None
-
-def send_scene(chat_id, l, text, kb, scene_type="life"):
-    status_msg = bot.send_message(chat_id, "📸 <i>Нейросеть рисует сцену...</i>", parse_mode="HTML")
-    photo = generate_ai_image(scene_type)
-    try: bot.delete_message(chat_id, status_msg.message_id)
-    except: pass
-
-    if photo:
-        try:
-            bot.send_photo(chat_id, photo, caption=text, reply_markup=kb, parse_mode="HTML")
-            return
-        except: pass
-    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 
 # ================= УТИЛИТЫ =================
 def fmt_money(amount_usd, country):
