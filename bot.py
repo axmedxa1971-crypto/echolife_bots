@@ -10,10 +10,90 @@ try:
 except ImportError:
     HAS_PIL = False
 
+# ================= НАСТРОЙКА =================
 BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
 bot = telebot.TeleBot(BOT_TOKEN)
 
-# ================= СПРАВОЧНИКИ =================
+# ================= СТАТИСТИКА =================
+STATS_FILE = "stats.json"
+def load_stats():
+    if os.path.exists(STATS_FILE):
+        try:
+            with open(STATS_FILE, "r", encoding="utf-8") as f: return json.load(f)
+        except: pass
+    return {"total_lives": 0}
+def save_stats(stats):
+    try:
+        with open(STATS_FILE, "w", encoding="utf-8") as f: json.dump(stats, f, ensure_ascii=False)
+    except: pass
+GLOBAL_STATS = load_stats()
+
+# ================= ЭТНОСЫ И СТЕРЕОТИПЫ =================
+ETHNICITIES = {
+    "south_asia": [
+        ("Хиндустанец", 35, None),
+        ("Бенгалец", 15, "Общество считает тебя бедным."),
+        ("Тамил", 10, "Общество считает тебя хитрым."),
+        ("Мусульманин", 15, "Общество считает тебя агрессивным."),
+        ("Далит", 10, "Общество считает тебя грязным.")
+    ],
+    "east_asia": [
+        ("Хань (Китаец)", 60, None),
+        ("Японец", 15, "Общество считает тебя трудоголиком."),
+        ("Кореец", 12, "Общество считает тебя умным."),
+        ("Монгол", 5, "Общество считает тебя дикарем.")
+    ],
+    "southeast_asia": [
+        ("Яванец", 35, None),
+        ("Тайец", 20, None),
+        ("Вьетнамец", 15, "Общество считает тебя хитрым."),
+        ("Филиппинец", 15, "Общество считает тебя беззаботным.")
+    ],
+    "africa": [
+        ("Йоруба", 20, None),
+        ("Игбо", 15, "Общество считает тебя предприимчивым."),
+        ("Хауса", 15, "Общество считает тебя фанатиком."),
+        ("Зулус", 10, "Общество считает тебя агрессивным."),
+        ("Копт", 5, "Общество считает тебя предателем.")
+    ],
+    "arab": [
+        ("Араб", 55, None),
+        ("Египтянин", 20, None),
+        ("Бербер", 8, "Общество считает тебя дикарем."),
+        ("Курд", 5, "Общество считает тебя сепаратистом.")
+    ],
+    "latam": [
+        ("Метис", 45, None),
+        ("Креол", 20, "Общество считает тебя снобом."),
+        ("Мулат", 15, None),
+        ("Индеец", 10, "Общество считает тебя дикарем.")
+    ],
+    "europe": [
+        ("Немец", 12, None),
+        ("Француз", 12, None),
+        ("Итальянец", 8, "Считают, что ты связан с мафией."),
+        ("Еврей", 8, "Считают тебя скупым."),
+        ("Цыган", 8, "Считают тебя вором."),
+        ("Турок", 8, "Считают тебя чужаком.")
+    ],
+    "post_soviet": [
+        ("Русский", 50, None),
+        ("Украинец", 15, None),
+        ("Белорус", 5, None),
+        ("Кавказец", 10, "Считают тебя бандитом."),
+        ("Еврей", 4, "Считают тебя скупым."),
+        ("Среднеазиат", 8, "Считают тебя гастарбайтером.")
+    ],
+    "developed": [
+        ("WASP (Белый англосакс)", 35, None),
+        ("Афроамериканец", 18, "Считают тебя агрессивным."),
+        ("Латиноамериканец", 15, "Считают тебя нелегалом."),
+        ("Азиат", 12, "Считают тебя умным."),
+        ("Еврей", 5, "Считают тебя скупым.")
+    ]
+}
+
+# ================= СТРАНЫ (85) =================
 COUNTRIES = [
     ("Индия", "🇮🇳", "south_asia", 23000, 70, 0.75, 0.35, 2500, 83.5, "₹"),
     ("Пакистан", "🇵🇰", "south_asia", 6000, 66, 0.55, 0.37, 1500, 278.0, "₨"),
@@ -107,6 +187,7 @@ COUNTRIES = [
 ]
 TOTAL_WEIGHT = sum(c[3] for c in COUNTRIES)
 
+# ================= БОЛЕЗНИ =================
 DISEASES = {
     "Астма": {"mort": 1.1, "cash": 300, "fert": 0}, "Диабет 1 типа": {"mort": 1.4, "cash": 1500, "fert": -15},
     "Диабет 2 типа": {"mort": 1.2, "cash": 800, "fert": -10}, "Гипертония": {"mort": 1.3, "cash": 400, "fert": 0},
@@ -128,6 +209,7 @@ DISEASES = {
     "Анемия": {"mort": 1.1, "cash": 200, "fert": -5}, "Бесплодие": {"mort": 1.0, "cash": 0, "fert": -100},
 }
 
+# ================= ШКОЛЫ =================
 SCHOOLS = {
     "south_asia": [["Школа Раджа Капура", "Муниципальная школа"], ["Колледж Св. Ксавьера", "Делийский колледж"], ["Университет Дели", "Индийский технологический институт"]],
     "east_asia": [["Школа №1", "Школа Хиросимы"], ["Токийский колледж", "Пекинский колледж"], ["Университет Васэда", "Пекинский университет"]],
@@ -140,16 +222,31 @@ SCHOOLS = {
     "developed": [["High School", "Public School"], ["Community College", "State College"], ["MIT / Гарвард", "Стэнфорд", "Йель"]],
 }
 
+# ================= ИМЕНА =================
 NAMES = {
-    "south_asia": {"m": ["Арджун","Раджеш","Викрам"], "f": ["Прия","Айша","Рани"]},
-    "east_asia": {"m": ["Вэй","Мин","Хиро"], "f": ["Юки","Сакура","Мэй"]},
-    "southeast_asia": {"m": ["Агус","Буди","Димас"], "f": ["Дези","Сри","Вина"]},
-    "africa": {"m": ["Чинеду","Эмека","Кваме"], "f": ["Нгози","Амара","Айша"]},
-    "arab": {"m": ["Мухаммед","Ахмед","Али"], "f": ["Фатима","Лейла","Марьям"]},
-    "latam": {"m": ["Хуан","Карлос","Хосе"], "f": ["Мария","Кармен","Изабель"]},
-    "europe": {"m": ["Томас","Лукас","Феликс"], "f": ["Анна","Эмилия","Софи"]},
-    "post_soviet": {"m": ["Иван","Дмитрий","Сергей"], "f": ["Анна","Мария","Елена"]},
-    "developed": {"m": ["Джеймс","Джон","Майкл"], "f": ["Эмили","Сара","Джессика"]},
+    "south_asia": {"m": ["Арджун","Раджеш","Викрам","Адитья","Рохан"], "f": ["Прия","Айша","Рани","Дивья","Ниша"]},
+    "east_asia": {"m": ["Вэй","Мин","Хиро","Джун","Кай"], "f": ["Юки","Сакура","Мэй","Ли","Линь"]},
+    "southeast_asia": {"m": ["Агус","Буди","Димас","Хуан","Хосе"], "f": ["Дези","Сри","Вина","Аю","Мария"]},
+    "africa": {"m": ["Чинеду","Эмека","Кваме","Кофи","Аде"], "f": ["Нгози","Амара","Айша","Фатима","Амина"]},
+    "arab": {"m": ["Мухаммед","Ахмед","Али","Омар","Хасан"], "f": ["Фатима","Айша","Лейла","Марьям","Нур"]},
+    "latam": {"m": ["Хуан","Карлос","Хосе","Педро","Луис"], "f": ["Мария","Кармен","Изабель","Лусия","Ана"]},
+    "europe": {"m": ["Томас","Лукас","Феликс","Пол","Пьер"], "f": ["Анна","Эмилия","Софи","Клара","Шарлотта"]},
+    "post_soviet": {"m": ["Иван","Дмитрий","Александр","Сергей","Андрей"], "f": ["Анна","Мария","Елена","Ольга","Наташа"]},
+    "developed": {"m": ["Джеймс","Джон","Майкл","Дэвид","Крис"], "f": ["Эмили","Сара","Джессика","Эмма","Оливия"]},
+}
+
+# ================= ОРГАНИЗАЦИИ =================
+ORGS = {
+    "Уличная банда": "Мелкие хулиганы. Грязные деньги.",
+    "Синдикат 'Черная Роза'": "Мафия. Кодекс чести, контрабанда.",
+    "Картель 'Сьерра'": "Наркокартель. Деньги и война.",
+    "Братство Дракона": "Триада. Теневые схемы.",
+    "Цифровой Синдикат": "Хакеры. Кража крипты.",
+    "Орден Пустыни": "Террористы. Смертники.",
+    "Красный Молот": "Экстремисты. Саботаж.",
+    "Эко-Фронт": "Радикалы-экологи. Поджоги.",
+    "Полиция": "Стражи порядка. Риск и коррупция.",
+    "Армия": "Вооруженные силы. Дисциплина и риск.",
 }
 
 CAREER_TITLES = {
@@ -161,87 +258,129 @@ CAREER_TITLES = {
 
 INCOME_LABELS = ["Бедная семья", "Средний класс", "Богатая семья"]
 PROPERTIES = {"Общага": 3000, "Квартира": 30000, "Дом": 200000, "Особняк": 1500000, "Остров": 50000000}
-CARS = {"Скутер": 800, "Седан": 15000, "Внедорожник": 40000, "Спорткар": 200000}
-BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 150000, "Завод": 2000000}
+CARS = {"Скутер": 800, "Седан": 15000, "Внедорожник": 40000, "Спорткар": 200000, "Гиперкар": 2000000}
+BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 150000, "Завод": 2000000, "Корпорация": 10000000}
+
+TESTS = {
+    1: [{"q": "5 + 7?", "opts": ["10", "12", "13"], "ans": 1}, {"q": "Сколько цветов у радуги?", "opts": ["5", "7", "9"], "ans": 1}],
+    2: [{"q": "x - 4 = 10, x?", "opts": ["6", "14", "40"], "ans": 1}, {"q": "Столица Франции?", "opts": ["Лондон", "Париж", "Берлин"], "ans": 1}],
+    3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2}, {"q": "Производная x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1}]
+}
 
 players = {}
 
-# ================= ГРАФИКА =================
+# ================= УЛУЧШЕННАЯ ГРАФИКА (СЦЕНЫ) =================
 def generate_pixel_art(l, scene_type="life"):
     if not HAS_PIL: return None
-    w, h = 256, 144
-    img = Image.new('RGB', (w, h), color='#1a1a2e')
+    w, h = 320, 180
+    img = Image.new('RGB', (w, h), color='#0f172a')
     d = ImageDraw.Draw(img)
     
-    if scene_type == "rich" or (l and l.get("clean_cash", 0) > 500000):
-        d.rectangle([0, 0, w, 90], fill='#fca5a5')
-        d.ellipse([180, 20, 240, 80], fill='#fbbf24')
-        d.polygon([(0, 90), (60, 40), (120, 90)], fill='#f87171')
-        d.rectangle([0, 90, w, h], fill='#22c55e')
-        d.rectangle([80, 40, 180, 120], fill='#f3f4f6')
-        d.polygon([(60, 40), (130, 0), (200, 40)], fill='#b91c1c')
-        d.rectangle([110, 80, 140, 120], fill='#78350f')
-        d.rectangle([90, 60, 105, 75], fill='#fef08a')
-        d.rectangle([160, 60, 175, 75], fill='#fef08a')
-    elif scene_type == "prison" or (l and l["in_prison"] > 0):
-        d.rectangle([0, 0, w, h], fill='#374151')
-        for i in range(20, w, 40): d.line([(i, 0), (i, h)], fill='#4b5563', width=4)
-        d.rectangle([20, 100, 100, 120], fill='#4a3b2b')
-    elif scene_type == "hospital" or (l and l["diseases"]):
-        d.rectangle([0, 0, w, h], fill='#e5e7eb')
-        d.rectangle([40, 40, 60, 60], fill='#ef4444')
-        d.rectangle([50, 30, 52, 70], fill='#ef4444')
-        d.rectangle([100, 90, 180, 120], fill='#ffffff', outline='#9ca3af')
-    elif scene_type == "child" or (l and l["age"] < 13):
-        d.rectangle([0, 0, w, 90], fill='#93c5fd')
-        d.ellipse([200, 10, 240, 50], fill='#fde047')
-        d.ellipse([30, 20, 60, 30], fill='#ffffff')
-        d.ellipse([45, 15, 75, 30], fill='#ffffff')
-        d.rectangle([0, 90, w, h], fill='#66bb6a')
-        d.rectangle([80, 40, 150, 110], fill='#d97706')
-        d.polygon([(70, 40), (115, 10), (160, 40)], fill='#991b1b')
-        d.rectangle([100, 80, 120, 110], fill='#451a03')
+    # 1. ФОНОВЫЕ СЦЕНЫ
+    if scene_type in ["fight", "school"]:
+        d.rectangle([0, 0, w, 100], fill='#93c5fd') # День
+        d.rectangle([0, 100, w, h], fill='#66bb6a') # Трава
+        for i in range(0, w, 15): d.rectangle([i, 100, i+5, 120], fill='#78350f') # Забор
+    elif scene_type in ["love", "wedding"]:
+        d.rectangle([0, 0, w, 100], fill='#fca5a5') # Закат
+        d.ellipse([240, 40, 280, 80], fill='#fbbf24') # Солнце
+        d.rectangle([0, 100, w, h], fill='#fde047') # Песок
+    elif scene_type in ["money_win"]:
+        d.rectangle([0, 0, w, h], fill='#22c55e') # Зеленый фон
+    elif scene_type in ["money_lose", "sad"]:
+        d.rectangle([0, 0, w, 100], fill='#64748b') # Пасмурно
+        d.rectangle([0, 100, w, h], fill='#475569') # Асфальт
+        for x in range(20, w, 40): d.point((x, 20), fill='#94a3b8') # Дождь
+    elif scene_type == "office_angry":
+        d.rectangle([0, 0, w, 100], fill='#ef4444') # Красный фон (злость)
+        d.rectangle([0, 100, w, h], fill='#94a3b8') # Пол
     elif scene_type == "office":
-        d.rectangle([0, 0, w, 90], fill='#6b7280')
-        d.rectangle([40, 20, 100, 80], fill='#3b82f6')
-        d.rectangle([150, 20, 210, 80], fill='#3b82f6')
-        d.rectangle([0, 90, w, h], fill='#9ca3af')
-        d.rectangle([80, 100, 160, 120], fill='#5d4037')
-    else:
-        d.rectangle([0, 0, w, 90], fill='#1e3a8a')
-        d.ellipse([200, 10, 220, 30], fill='#fef08a')
-        for x in range(20, 200, 40): d.point((x, 20), fill='#ffffff')
-        d.rectangle([0, 90, w, h], fill='#475569')
-        d.rectangle([40, 60, 46, 100], fill='#6b7280')
-        d.ellipse([35, 55, 51, 65], fill='#fef08a')
-
-    def draw_person(x, y, color_body, color_head='#fcd34d'):
-        d.rectangle([x, y+20, x+16, y+50], fill=color_body)
-        d.rectangle([x+2, y, x+14, y+20], fill=color_head)
-        d.rectangle([x+2, y+50, x+6, y+65], fill='#1f2937')
-        d.rectangle([x+10, y+50, x+14, y+65], fill='#1f2937')
-        d.point((x+5, y+8), fill='#000000')
-        d.point((x+11, y+8), fill='#000000')
-        d.rectangle([x+4, y+15, x+12, y+17], fill='#000000')
-
-    if scene_type == "rich":
-        draw_person(110, 60, '#fbbf24', '#fcd34d')
-        draw_person(140, 60, '#e5e7eb', '#fcd34d')
-        draw_person(125, 75, '#93c5fd', '#fcd34d')
-    elif scene_type == "office":
-        draw_person(110, 60, '#3b82f6', '#fcd34d')
-    elif scene_type == "child":
-        draw_person(110, 65, '#3b82f6' if l and l["gender"]=="m" else '#ec4899')
-        draw_person(70, 65, '#6b7280', '#fcd34d')
-        draw_person(150, 65, '#6b7280', '#fcd34d')
+        d.rectangle([0, 0, w, 100], fill='#4fc3f7') # Голубое небо
+        d.rectangle([0, 100, w, h], fill='#94a3b8') # Офисный пол
     elif scene_type == "hospital":
-        d.rectangle([120, 70, 160, 85], fill='#9ca3af')
-        draw_person(130, 50, '#9ca3af', '#fcd34d')
+        d.rectangle([0, 0, w, h], fill='#e2e8f0') # Белые стены
+        d.rectangle([40, 40, 80, 80], fill='#ef4444') # Крест
+        d.rectangle([55, 25, 65, 95], fill='#ef4444')
     elif scene_type == "prison":
-        draw_person(110, 60, '#212121', '#fcd34d')
+        d.rectangle([0, 0, w, h], fill='#374151')
+        for i in range(20, w, 40): d.line([(i, 0), (i, h)], fill='#4b5563', width=6)
+        d.line([(0, 60), (w, 60)], fill='#4b5563', width=6)
+    elif scene_type == "police":
+        d.rectangle([0, 0, w, 100], fill='#1e3a8a') # Ночь
+        d.rectangle([0, 100, w, h], fill='#475569') # Асфальт
+        d.rectangle([200, 110, 280, 150], fill='#ffffff')
+        d.rectangle([210, 90, 270, 110], fill='#000000') # Сирена
+        d.ellipse([210, 140, 230, 160], fill='#000000')
+        d.ellipse([250, 140, 270, 160], fill='#000000')
     else:
-        draw_person(110, 60, '#3b82f6' if l and l["gender"]=="m" else '#ec4899', '#fcd34d')
+        d.rectangle([0, 0, w, 100], fill='#0f172a') # Ночь
+        d.rectangle([0, 100, w, h], fill='#3f6212') # Трава
+        
+    # 2. ЗВЕЗДЫ И ЛУНА
+    if scene_type in ["life", "child", "rich", "prison"]:
+        d.ellipse([240, 20, 280, 60], fill='#fef08a')
+        for _ in range(15): d.point((random.randint(0, 200), random.randint(0, 80)), fill='#ffffff')
 
+    # 3. ПЕРСОНАЖИ
+    def draw_character(x, y, is_adult, gender, shirt_color, skin_color='#fcd34d', hair_color='#1f2937'):
+        h_scale = 30 if is_adult else 20
+        d.rectangle([x, y+h_scale, x+14, y+h_scale+20], fill=shirt_color)
+        d.ellipse([x+2, y+h_scale-14, x+12, y+h_scale], fill=skin_color)
+        d.rectangle([x+2, y+h_scale-14, x+12, y+h_scale-10], fill=hair_color)
+        d.point((x+5, y+h_scale-7), fill='#000000')
+        d.point((x+9, y+h_scale-7), fill='#000000')
+        d.rectangle([x+2, y+h_scale+20, x+5, y+h_scale+30], fill='#1e293b')
+        d.rectangle([x+9, y+h_scale+20, x+12, y+h_scale+30], fill='#1e293b')
+        if scene_type not in ["fight"]:
+            d.rectangle([x-3, y+h_scale+2, x, y+h_scale+15], fill=skin_color)
+            d.rectangle([x+14, y+h_scale+2, x+17, y+h_scale+15], fill=skin_color)
+
+    # 4. СПЕЦИАЛЬНЫЕ СЦЕНЫ ПО ДЕЙСТВИЯМ
+    if scene_type == "fight":
+        draw_character(100, 70, True, l.get("gender", "m"), '#3b82f6')
+        draw_character(180, 80, True, "m", '#ef4444')
+        d.line([(120, 85), (160, 85)], fill='#fcd34d', width=6) # Рука
+        d.ellipse([165, 80, 175, 90], fill='#fcd34d') # Кулак
+        d.polygon([(190, 70), (200, 60), (205, 75)], fill='#fbbf24') # Звездочки
+    elif scene_type == "school":
+        d.rectangle([100, 120, 220, 140], fill='#5d4037') # Парта
+        draw_character(140, 70, False, l.get("gender", "m"), '#3b82f6')
+        d.rectangle([150, 110, 180, 130], fill='#ffffff') # Лист бумаги
+    elif scene_type == "love":
+        draw_character(100, 70, True, l.get("gender", "m"), '#3b82f6')
+        draw_character(170, 70, True, "f" if l.get("gender") == "m" else "m", '#ec4899')
+        d.polygon([(135, 70), (150, 50), (165, 70), (150, 90)], fill='#ef4444')
+        d.ellipse([125, 55, 145, 75], fill='#ef4444')
+        d.ellipse([150, 55, 170, 75], fill='#ef4444')
+    elif scene_type == "money_win":
+        draw_character(140, 60, True, l.get("gender", "m"), '#3b82f6')
+        d.ellipse([80, 120, 120, 160], fill='#fbbf24')
+        d.ellipse([200, 120, 240, 160], fill='#fbbf24')
+    elif scene_type == "money_lose":
+        draw_character(140, 70, True, l.get("gender", "m"), '#3b82f6')
+        d.rectangle([130, 60, 150, 65], fill='#60a5fa') # Слеза
+        d.ellipse([150, 60, 170, 80], fill='#475569') # Пустота
+    elif scene_type == "office_angry":
+        draw_character(140, 60, True, l.get("gender", "m"), '#3b82f6')
+        d.text((120, 40), "!!!", fill='#ffffff')
+    elif scene_type == "wedding":
+        draw_character(110, 70, True, l.get("gender", "m"), '#000000')
+        draw_character(160, 70, True, "f" if l.get("gender") == "m" else "m", '#ffffff')
+        d.ellipse([135, 110, 145, 120], outline='#fbbf24', width=2)
+    elif scene_type == "police":
+        draw_character(100, 80, True, l.get("gender", "m"), '#1e3a8a')
+        d.rectangle([102, 60, 112, 65], fill='#000000') # Фуражка
+    elif scene_type == "hospital":
+        d.rectangle([100, 100, 200, 130], fill='#ffffff', outline='#9ca3af')
+        draw_character(130, 60, True, l.get("gender", "m"), '#3b82f6')
+    elif scene_type == "rich":
+        draw_character(110, 70, True, l.get("gender", "m"), '#fbbf24')
+        d.rectangle([220, 50, 300, 120], fill='#f3f4f6')
+        d.polygon([(210, 50), (260, 10), (310, 50)], fill='#b91c1c')
+    else:
+        draw_character(140, 70, True, l.get("gender", "m"), '#3b82f6')
+
+    img = img.resize((w*3, h*3), resample=Image.NEAREST)
     bio = io.BytesIO()
     img.save(bio, 'PNG')
     bio.seek(0)
@@ -253,7 +392,7 @@ def send_scene(chat_id, l, text, kb, scene_type=None):
         elif l and l["diseases"]: scene_type = "hospital"
         elif l and l.get("clean_cash", 0) > 500000: scene_type = "rich"
         elif l and l["age"] < 13: scene_type = "child"
-        elif l and l["job_type"] in ["civilian", "police", "military"] and l["job"] != "Безработный": scene_type = "office"
+        elif l and l["job_type"] in ["civilian", "police", "military"]: scene_type = "office"
         else: scene_type = "life"
     photo = generate_pixel_art(l, scene_type)
     if photo:
@@ -288,42 +427,76 @@ def weighted_country():
         if r <= 0: return c
     return COUNTRIES[0]
 
+def get_ethnicity(region):
+    r = random.random() * 100
+    cum = 0
+    for name, chance, prejudice in ETHNICITIES.get(region, [("Местный", 100, None)]):
+        cum += chance
+        if r <= cum: return name, prejudice
+    return "Местный", None
+
 def generate_neighbors(count=3):
     neighbors = []
     for _ in range(count):
         c = weighted_country(); g = random.choice(["m", "f"])
         name = random.choice(NAMES[c[2]][g])
-        death_age = int(random.gauss(c[4], 12))
-        if death_age < 1: death_age = random.randint(1, 5)
-        fate_roll = random.random()
-        
-        if fate_roll < 0.1:
-            fate = "умер(ла) в младенчестве"
-        elif fate_roll < 0.2:
-            fate = "стал богатым бизнесменом" if g == "m" else "стала богатой бизнесменшей"
-        elif fate_roll < 0.3:
-            fate = "погиб(ла) в криминальной разборке"
-        elif fate_roll < 0.4:
-            fate = "получил(а) высшее образование"
-        elif fate_roll < 0.6:
-            fate = "живет скромно, работает на заводе"
+        trajectory = random.choice(["prosperous", "criminal", "ordinary", "unfortunate"])
+        if trajectory == "criminal": death_age = random.randint(20, 45)
+        elif trajectory == "unfortunate": death_age = random.randint(1, 15)
         else:
-            fate = "обычная жизнь"
-            
-        neighbors.append({"name": name, "country": c, "gender": g, "death_age": death_age, "fate": fate})
+            death_age = int(random.gauss(c[4], 10))
+            if death_age < 1: death_age = random.randint(1, 5)
+        neighbors.append({"name": name, "country": c, "gender": g, "trajectory": trajectory, "death_age": death_age})
     return neighbors
+
+def get_neighbor_echo(n, age):
+    g_m = n["gender"] == "m"
+    if age >= n["death_age"]:
+        if n["death_age"] < 3: return "умер(ла) в младенчестве"
+        elif n["death_age"] < 18: return f"умер(ла) от болезни в {n['death_age']} лет"
+        elif n["trajectory"] == "criminal": return f"погиб(ла) в криминальной разборке в {n['death_age']} лет"
+        else: return f"умер(ла) в {n['death_age']} лет"
+    if age < 13:
+        if n["trajectory"] == "unfortunate": return "живет в бедности, помогает родителям"
+        elif n["trajectory"] == "prosperous": return "ходит в элитную школу"
+        else: return "ходит в школу, играет во дворе"
+    elif age < 25:
+        if n["trajectory"] == "criminal": return "связался с плохой компанией" if g_m else "связалась с плохой компанией"
+        elif n["trajectory"] == "prosperous": return "поступил в престижный вуз" if g_m else "поступила в престижный вуз"
+        elif n["trajectory"] == "unfortunate": return "работает с ранних лет"
+        else: return "учится в колледже"
+    elif age < 55:
+        if n["trajectory"] == "criminal": return "сидит в тюрьме"
+        elif n["trajectory"] == "prosperous": return "стал богатым бизнесменом" if g_m else "стала богатой бизнесменшей"
+        elif n["trajectory"] == "unfortunate": return "бедствует, перебивается случайными заработками"
+        else: return "работает на заводе, растит детей"
+    else:
+        if n["trajectory"] == "prosperous": return "живет в достатке, управляет компанией"
+        elif n["trajectory"] == "criminal": return "вышел из тюрьмы, живет скромно" if g_m else "вышла из тюрьмы, живет скромно"
+        else: return "на пенсии, нянчит внуков"
+
+def get_neighbor_final(n):
+    if n["death_age"] < 3: return "умер(ла) в младенчестве"
+    elif n["trajectory"] == "criminal": return f"погиб(ла) в криминальной разборке в {n['death_age']} лет"
+    elif n["trajectory"] == "prosperous": return f"умер(ла) богатым(ой) в {n['death_age']} лет"
+    elif n["trajectory"] == "unfortunate": return f"умер(ла) в бедности в {n['death_age']} лет"
+    else: return f"умер(ла) в {n['death_age']} лет"
 
 def create_life(force_country=None):
     country = force_country if force_country else weighted_country()
     gender = "m" if random.random() < 0.51 else "f"
     name = random.choice(NAMES[country[2]][gender])
+    ethnicity, prejudice = get_ethnicity(country[2])
     start_cash = int(country[7] * random.uniform(0.1, 2.0))
+    
     siblings = []
     for _ in range(random.randint(0, 4)):
         s_g = random.choice(["m", "f"])
         siblings.append({"name": random.choice(NAMES[country[2]][s_g]), "gender": s_g, "fate": "Жив(а)"})
+        
     return {
         "country": country, "gender": gender, "name": name,
+        "ethnicity": ethnicity, "prejudice": prejudice,
         "clean_cash": start_cash, "dirty_cash": 0, "in_prison": 0, "age": 0, "alive": True, "faction": "Нет",
         "education": "Нет", "job": "Безработный", "salary": 0, "job_type": "none", "career_xp": 0, "career_rank": 1,
         "married": False, "children": 0, "diseases": [], "properties": [], "cars": [], "businesses": [], "debt": 0,
@@ -347,14 +520,32 @@ def mortality_rate(l):
 
 # ================= СОБЫТИЯ =================
 def get_event(l):
-    age = l["age"]; c = l["country"]
+    age = l["age"]
     
+    # 1. Этническая предвзятость
+    if l["prejudice"] and 16 < age < 60 and random.random() < 0.15:
+        return {"title": "Столкновение с предвзятостью", "text": f"{l['prejudice']} Это мешает тебе жить.",
+                "choices": [
+                    {"text": "✊ Доказать обратное", "p": 0.4, "success": "prej_fight_win", "fail": "prej_fight_fail"},
+                    {"text": "🦊 Использовать стереотип", "p": 0.7, "success": "prej_exploit", "fail": "prej_exploit_fail"},
+                    {"text": "😔 Смириться", "p": 1, "success": "prej_accept", "fail": "none"}
+                ]}
+    
+    # 2. Карьера (Овертайм, Интриги)
     if age >= 18 and l["job_type"] in ["civilian", "police", "military"] and random.random() < 0.3:
         if random.random() < 0.5:
             return {"title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.", "choices": [{"text": "Согласиться (XP+)", "p": 0.7, "success": "career_xp_up", "fail": "none"}, {"text": "Уйти домой", "p": 1, "success": "career_xp_down", "fail": "none"}]}
         else:
             return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win", "fail": "career_grind"}, {"text": "Смириться", "p": 1, "success": "career_grind", "fail": "none"}]}
 
+    # 3. Вождение (если есть машина)
+    if age >= 18 and l["cars"] and random.random() < 0.2:
+        if not l["has_license"]:
+            return {"title": "🚨 Остановка ДПС", "text": "Инспектор просит права. У тебя их нет.", "choices": [{"text": "💵 Дать взятку", "p": 0.7, "success": "bribe_dps", "fail": "dps_jail"}, {"text": "😬 Договориться", "p": 0.2, "success": "dps_warning", "fail": "dps_jail"}]}
+        elif random.random() < 0.3:
+            return {"title": "🍻 Пьяная езда", "text": "Инспектор замечает запах перегара.", "choices": [{"text": "💵 Взятка", "p": 0.5, "success": "bribe_dps_big", "fail": "drunk_jail"}, {"text": "🚶 Отказаться от теста", "p": 0.1, "success": "dps_warning", "fail": "drunk_jail"}, {"text": "😭 Смириться", "p": 1, "success": "drunk_jail", "fail": "none"}]}
+
+    # 4. Случайные события
     if random.random() < 0.45:
         if age < 13:
             return random.choice([
@@ -378,6 +569,7 @@ def get_event(l):
             adult.append({"title": "🎰 Лотерея", "text": "Купил билет.", "choices": [{"text": "Проверить", "p": 0.05, "success": "lottery_win", "fail": "lottery_lose"}]})
             return random.choice(adult)
             
+    # 5. Выбор карьеры в 22
     if age == 22 and l["job_type"] == "none" and l["faction"] == "Нет":
         return {"title": "Выбор пути", "text": "Пора определяться.",
                 "choices": [
@@ -392,39 +584,37 @@ def next_year(user_id, chat_id):
     p = players.get(user_id); l = p["you"]
     if l["in_prison"] > 0:
         l["in_prison"] -= 1; l["age"] += 1
-        if l["in_prison"] == 0: return send_scene(chat_id, l, "⛓ <b>Ты вышел на свободу.</b>", kb_year())
+        if l["in_prison"] == 0: return send_scene(chat_id, l, "⛓ <b>Ты вышел на свободу.</b>", kb_year(), "life")
         return send_scene(chat_id, l, f"⛓ <b>Тюрьма.</b> Осталось: {l['in_prison']} лет.", kb_year(), "prison")
     
     l["age"] += 1
-    
     rent = sum(int(pr["value"] * 0.05) for pr in l["properties"])
     biz = sum(int(b["value"] * 0.15) for b in l["businesses"])
     l["clean_cash"] += rent + biz
-    
     tax = int(l["salary"] * 0.2) if l["job_type"] in ["civilian", "police", "military"] else 0
     med = sum(DISEASES[d]["cash"] for d in l["diseases"])
-    living = int(l["country"][7] * 0.2 + (500 if l["children"] else 0))
-    l["clean_cash"] += (l["salary"] - tax - med - living)
     
+    spend_mod = 1.0
+    if l["prejudice"] and ("скупым" in l["prejudice"] or "предприимчивым" in l["prejudice"]): spend_mod = 0.7
+    elif l["prejudice"] and ("беззаботным" in l["prejudice"] or "пьяницей" in l["prejudice"]): spend_mod = 1.3
+    
+    living = int(l["country"][7] * 0.2 * spend_mod + (500 if l["children"] else 0))
+    l["clean_cash"] += (l["salary"] - tax - med - living)
     if l["clean_cash"] < 0: l["debt"] += abs(l["clean_cash"]); l["clean_cash"] = 0
 
     if l["job_type"] in ["civilian", "police", "military"]:
         if l["career_xp"] >= 100:
-            l["career_xp"] = 0
-            l["career_rank"] = min(5, l["career_rank"] + 1)
-            l["salary"] = int(l["salary"] * 1.5)
+            l["career_xp"] = 0; l["career_rank"] = min(5, l["career_rank"] + 1); l["salary"] = int(l["salary"] * 1.5)
             add_to_life_map(l, f"Повышение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
         elif l["career_xp"] <= -50:
-            l["career_xp"] = 0
-            l["career_rank"] = max(1, l["career_rank"] - 1)
-            l["salary"] = int(l["salary"] * 0.7)
+            l["career_xp"] = 0; l["career_rank"] = max(1, l["career_rank"] - 1); l["salary"] = int(l["salary"] * 0.7)
             add_to_life_map(l, f"Понижение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
 
     echo_text = ""
     if l["age"] in [7, 18, 30, 50]:
         n = random.choice(p["neighbors"])
-        echo_text = f"\n\n👥 <b>Эхо:</b> Твой ровесник <b>{n['name']}</b> ({n['country'][1]}) "
-        echo_text += "умер(ла)." if n["death_age"] < l["age"] else f"жив(а) и {n['fate']}."
+        status = get_neighbor_echo(n, l["age"])
+        echo_text = f"\n\n👥 <b>Эхо:</b> Твой ровесник <b>{n['name']}</b> ({n['country'][1]}) — {status}."
 
     if random.random() < mortality_rate(l): return send_death(user_id, chat_id)
 
@@ -435,7 +625,15 @@ def next_year(user_id, chat_id):
     evt = get_event(l)
     if evt: 
         l["current_event"] = evt
-        send_scene(chat_id, l, format_event(l, evt) + echo_text, kb_event(evt["choices"]))
+        sc = "life"
+        if "Овертайм" in evt["title"] or "Интриги" in evt["title"]: sc = "office"
+        elif "Кризис" in evt["title"]: sc = "sad"
+        elif "Брак" in evt["title"]: sc = "love"
+        elif "Развод" in evt["title"]: sc = "sad"
+        elif "Мошенники" in evt["title"]: sc = "money_lose"
+        elif "Лотерея" in evt["title"]: sc = "money_win"
+        elif "ДПС" in evt["title"] or "езда" in evt["title"]: sc = "police"
+        send_scene(chat_id, l, format_event(l, evt) + echo_text, kb_event(evt["choices"]), sc)
     else: 
         send_scene(chat_id, l, format_year(l) + echo_text, kb_year())
 
@@ -445,7 +643,7 @@ def send_death(user_id, chat_id):
     msg = (f"💀 <b>Ты умер в {l['age']} лет.</b>\nИтог: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}\nДеньги: {fmt_money(l['clean_cash'], c)}\n\n{map_text}\n\n👥 <b>Соседи:</b>\n")
     kb = InlineKeyboardMarkup()
     for i, n in enumerate(p["neighbors"]):
-        msg += f"• {n['name']} ({n['country'][1]}): умер в {n['death_age']} ({n['fate']})\n"
+        msg += f"• {n['name']} ({n['country'][1]}): {get_neighbor_final(n)}\n"
         kb.add(InlineKeyboardButton(f"🎭 Прожить жизнь {n['name']}", callback_data=f"play_{i}"))
     kb.add(InlineKeyboardButton("🎲 Начать заново", callback_data="new"))
     send_scene(chat_id, l, msg, kb, "hospital")
@@ -464,16 +662,29 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
     p = players.get(user_id); l = p["you"]; test = l.get("test_data")
     if not test: return
     success = (ans_idx == test["ans"]); l["test_data"] = None
+    
+    if l["prejudice"]:
+        if "умным" in l["prejudice"] and not success:
+            if random.random() < 0.4: success = True
+        elif ("подозрением" in l["prejudice"] or "дикарем" in l["prejudice"]) and success:
+            if random.random() < 0.4: success = False
+            
     if success:
         if l["age"] == 6: l["education"] = "Начальное"; add_to_life_map(l, "Пошел в школу")
         elif l["age"] == 12: l["education"] = "Среднее"; add_to_life_map(l, "Окончил школу")
         elif l["age"] == 18: l["education"] = "Высшее"; add_to_life_map(l, "Поступил в вуз")
         msg = "✅ Экзамен сдан!"
     else: msg = "❌ Провал."
-    send_scene(chat_id, l, msg, kb_year())
+    send_scene(chat_id, l, msg, kb_year(), "school")
 
 def apply_outcome(l, outcome):
     vvp = l["country"][7]
+    if outcome == "prej_fight_win": l["clean_cash"] += 5000; l["prejudice"] = None; return "Ты сломал стереотип! Общество изменило мнение."
+    if outcome == "prej_fight_fail": l["clean_cash"] -= 2000; l["diseases"].append("ПТСР"); return "Ты потратил силы, но ничего не изменилось."
+    if outcome == "prej_exploit": l["dirty_cash"] += 15000; return "Ты использовал стереотип для обогащения."
+    if outcome == "prej_exploit_fail": l["in_prison"] = 3; return "Тебя поймали на махинации."
+    if outcome == "prej_accept": l["clean_cash"] -= 1000; return "Ты опустил голову."
+    
     if outcome == "marry": l["married"] = True; add_to_life_map(l, "Женился"); return "Вы поженились!"
     if outcome == "divorce": l["married"] = False; l["clean_cash"] = int(l["clean_cash"] / 2); return "Развод."
     if outcome == "job_civ": l["job_type"] = "civilian"; l["job"] = "Работник"; l["salary"] = int(vvp * 0.6); add_to_life_map(l, "На работу"); return "Ты на гражданке."
@@ -492,8 +703,15 @@ def apply_outcome(l, outcome):
     if outcome == "child_tell": return "Пожаловался."
     if outcome == "teen_smoke": l["diseases"].append("Рак легких"); return "Курил."
     if outcome == "teen_healthy": l["clean_cash"] += 200; return "Сэкономил."
+    if outcome == "teen_love": return "Взаимная любовь."
+    if outcome == "teen_heartbreak": l["diseases"].append("ПТСР"); return "Отказ."
     if outcome == "lottery_win": l["clean_cash"] += int(vvp * 10); return "ДЖЕКПОТ!"
     if outcome == "lottery_lose": return "Билет пустой."
+    if outcome == "bribe_dps": l["dirty_cash"] -= 1000; return "Взятка инспектору. Пронесло."
+    if outcome == "dps_jail": l["in_prison"] = 1; return "1 год тюрьмы за езду без прав."
+    if outcome == "dps_warning": return "Инспектор сделал предупреждение."
+    if outcome == "bribe_dps_big": l["dirty_cash"] -= 5000; return "Откупился от пьяной езды."
+    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; return "3 года тюрьмы + конфискация машины."
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
@@ -503,12 +721,25 @@ def resolve_choice(user_id, chat_id, i):
     outcome = c["success"] if success else c.get("fail", "none")
     text = apply_outcome(l, outcome) if outcome else "Год прошел."
     l["last_result"] = {"success": success, "text": text}
-    send_scene(chat_id, l, format_year(l), kb_year())
+    
+    scene_map = {
+        "child_fight": "fight", "child_tell": "school", "child_smart": "school", "child_walk": "child",
+        "teen_love": "love", "teen_heartbreak": "sad", "teen_smoke": "sad",
+        "career_xp_up": "office", "career_fight_win": "office_angry", "career_grind": "office_angry",
+        "marry": "wedding", "divorce": "sad", "scammed": "money_lose", "lottery_win": "money_win", "lottery_lose": "sad",
+        "job_civ": "office", "job_pol": "police", "job_mil": "military", "job_crim": "criminal",
+        "prej_fight_win": "office", "prej_fight_fail": "sad", "prej_exploit": "money_win", "prej_exploit_fail": "prison", "prej_accept": "sad",
+        "bribe_dps": "police", "dps_jail": "prison", "dps_warning": "police", "bribe_dps_big": "police", "drunk_jail": "prison"
+    }
+    sc = scene_map.get(outcome, "life")
+    send_scene(chat_id, l, format_year(l), kb_year(), sc)
 
 def format_year(l):
     c = l["country"]; parts = [f"<b>Возраст: {l['age']}</b>"]
     if l.get("last_result"): parts.append(f"{'✅' if l['last_result']['success'] else '❌'} <i>{l['last_result']['text']}</i>")
-    parts.append(f"\n💰 Баланс: <b>{fmt_money(l['clean_cash'], c)}</b>")
+    parts.append(f"\n🧬 Происхождение: <b>{l['ethnicity']}</b>")
+    if l["prejudice"]: parts.append(f"⚠️ <i>Общество: {l['prejudice']}</i>")
+    parts.append(f"💰 Баланс: <b>{fmt_money(l['clean_cash'], c)}</b>")
     if l["dirty_cash"] > 0: parts.append(f"💼 Грязные: <b>{fmt_money(l['dirty_cash'], c)}</b>")
     if l["debt"] > 0: parts.append(f"🏦 Долг: <b>{fmt_money(l['debt'], c)}</b>")
     parts.append(f"👑 Класс: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
@@ -567,28 +798,22 @@ def process_buy(user_id, chat_id, cat, name):
     if l["clean_cash"] < base: return bot.send_message(chat_id, "❌ Мало денег!", reply_markup=kb_year())
     l["clean_cash"] -= base
     if cat == "prop": l["properties"].append({"type": name, "value": base}); add_to_life_map(l, f"Купил {name}")
-    elif cat == "car": l["cars"].append({"type": name, "value": base}); add_to_life_map(l, f"Купил {name}")
+    elif cat == "car": l["cars"].append({"type": name, "value": base}); l["has_license"] = True; add_to_life_map(l, f"Купил {name}")
     else: l["businesses"].append({"type": name, "value": base}); add_to_life_map(l, f"Открыл {name}")
     bot.send_message(chat_id, f"🎉 Куплено: <b>{name}</b>!", reply_markup=kb_year(), parse_mode="HTML")
 
-# ================= ХЭНДЛЕРЫ =================
+# ================= ОБРАБОТЧИКИ =================
 @bot.message_handler(commands=["start"])
 def cmd_start(msg):
-    try:
-        text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду. Сможешь ли ты выжить и оставить след?"
-        bot.send_message(msg.chat.id, text, reply_markup=kb_intro(), parse_mode="HTML")
-    except Exception as e:
-        print(f"Error in start: {e}")
+    text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду. Сможешь ли ты выжить и оставить след?"
+    bot.send_message(msg.chat.id, text, reply_markup=kb_intro(), parse_mode="HTML")
 
 @bot.message_handler(commands=["test"])
 def cmd_test(msg):
-    try:
-        test_l = {"in_prison": 0, "diseases": [], "clean_cash": 1000000, "age": 25, "job_type": "civilian", "job": "Тест", "married": False, "gender": "m"}
-        photo = generate_pixel_art(test_l, "rich")
-        if photo: bot.send_photo(msg.chat.id, photo, caption="✅ Графика работает!")
-        else: bot.send_message(msg.chat.id, "❌ Pillow не установлен.")
-    except Exception as e:
-        bot.send_message(msg.chat.id, f"⚠️ Ошибка: {e}")
+    test_l = {"in_prison": 0, "diseases": [], "clean_cash": 1000000, "age": 25, "job_type": "civilian", "job": "Тест", "married": False, "gender": "m"}
+    photo = generate_pixel_art(test_l, "rich")
+    if photo: bot.send_photo(msg.chat.id, photo, caption="✅ Графика с действиями работает!")
+    else: bot.send_message(msg.chat.id, "❌ Pillow не установлен.")
 
 @bot.callback_query_handler(func=lambda c: True)
 def handle(call):
@@ -600,12 +825,15 @@ def handle(call):
             l = create_life(); neighbors = generate_neighbors()
             players[uid] = {"you": l, "neighbors": neighbors}
             add_to_life_map(l, "Родился")
-            msg = f"👶 <b>Ты родился!</b>\n👤 {l['name']} ({l['country'][1]} {l['country'][0]})\n\n<i>Нажми 'Следующий год'.</i>"
+            msg = f"👶 <b>Ты родился!</b>\n👤 {l['name']} ({l['country'][1]} {l['country'][0]})\n🧬 {l['ethnicity']}\n\n"
+            if l["prejudice"]: msg += f"⚠️ <b>Внимание:</b> {l['prejudice']}\n\n"
+            msg += "<i>Нажми 'Следующий год'.</i>"
             send_scene(chat_id, l, msg, kb_year(), "child")
         elif d == "year": next_year(uid, chat_id)
         elif d.startswith("job_"): 
             text = apply_outcome(players[uid]["you"], d)
-            send_scene(chat_id, players[uid]["you"], text, kb_year())
+            sc = "office" if "civ" in d else "police" if "pol" in d else "military" if "mil" in d else "criminal"
+            send_scene(chat_id, players[uid]["you"], text, kb_year(), sc)
         elif d.startswith("choice_"): resolve_choice(uid, chat_id, int(d.split("_")[1]))
         elif d.startswith("ans_"): handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
         elif d == "shop": open_shop(uid, chat_id)
@@ -624,7 +852,6 @@ def handle(call):
             send_scene(chat_id, l, msg, kb_year(), "child")
     except Exception as e:
         bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
-        print(f"Error in handle: {e}")
 
 if __name__ == "__main__":
     print("Бот запущен...")
