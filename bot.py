@@ -10,7 +10,7 @@ try:
 except ImportError:
     HAS_PIL = False
 
-BOT_TOKEN = 9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
+BOT_TOKEN = "ВСТАВЬ_СЮДА_СВОЙ_ТОКЕН"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # ================= СПРАВОЧНИКИ =================
@@ -128,7 +128,6 @@ DISEASES = {
     "Анемия": {"mort": 1.1, "cash": 200, "fert": -5}, "Бесплодие": {"mort": 1.0, "cash": 0, "fert": -100},
 }
 
-# Разделенные школы (1 - начальная, 2 - колледж, 3 - универ)
 SCHOOLS = {
     "south_asia": [["Школа Раджа Капура", "Муниципальная школа"], ["Колледж Св. Ксавьера", "Делийский колледж"], ["Университет Дели", "Индийский технологический институт"]],
     "east_asia": [["Школа №1", "Школа Хиросимы"], ["Токийский колледж", "Пекинский колледж"], ["Университет Васэда", "Пекинский университет"]],
@@ -153,15 +152,6 @@ NAMES = {
     "developed": {"m": ["Джеймс","Джон","Майкл"], "f": ["Эмили","Сара","Джессика"]},
 }
 
-ORGS = {
-    "Уличная банда": "Мелкие хулиганы. Грязные деньги.",
-    "Синдикат 'Черная Роза'": "Мафия. Кодекс чести, контрабанда.",
-    "Картель 'Сьерра'": "Наркокартель. Деньги и война.",
-    "Орден Пустыни": "Террористы. Смертники.",
-    "Полиция": "Стражи порядка. Риск и коррупция.",
-    "Армия": "Вооруженные силы. Дисциплина и риск.",
-}
-
 CAREER_TITLES = {
     "civilian": {1: "Стажер", 2: "Специалист", 3: "Старший специалист", 4: "Менеджер", 5: "Директор"},
     "police": {1: "Курсант", 2: "Сержант", 3: "Лейтенант", 4: "Капитан", 5: "Полковник"},
@@ -176,7 +166,7 @@ BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 1
 
 players = {}
 
-# ================= ГРАФИКА (УЛУЧШЕННАЯ) =================
+# ================= ГРАФИКА =================
 def generate_pixel_art(l, scene_type="life"):
     if not HAS_PIL: return None
     w, h = 256, 144
@@ -184,74 +174,71 @@ def generate_pixel_art(l, scene_type="life"):
     d = ImageDraw.Draw(img)
     
     if scene_type == "rich" or (l and l.get("clean_cash", 0) > 500000):
-        # Закат и особняк
         d.rectangle([0, 0, w, 90], fill='#fca5a5')
         d.ellipse([180, 20, 240, 80], fill='#fbbf24')
         d.polygon([(0, 90), (60, 40), (120, 90)], fill='#f87171')
-        d.rectangle([0, 90, w, h], fill='#22c55e') # Газон
-        d.rectangle([80, 40, 180, 120], fill='#f3f4f6') # Дом
-        d.polygon([(60, 40), (130, 0), (200, 40)], fill='#b91c1c') # Крыша
-        d.rectangle([110, 80, 140, 120], fill='#78350f') # Дверь
-        d.rectangle([90, 60, 105, 75], fill='#fef08a') # Окно
-        d.rectangle([160, 60, 175, 75], fill='#fef08a') # Окно
+        d.rectangle([0, 90, w, h], fill='#22c55e')
+        d.rectangle([80, 40, 180, 120], fill='#f3f4f6')
+        d.polygon([(60, 40), (130, 0), (200, 40)], fill='#b91c1c')
+        d.rectangle([110, 80, 140, 120], fill='#78350f')
+        d.rectangle([90, 60, 105, 75], fill='#fef08a')
+        d.rectangle([160, 60, 175, 75], fill='#fef08a')
     elif scene_type == "prison" or (l and l["in_prison"] > 0):
         d.rectangle([0, 0, w, h], fill='#374151')
         for i in range(20, w, 40): d.line([(i, 0), (i, h)], fill='#4b5563', width=4)
-        d.rectangle([20, 100, 100, 120], fill='#4a3b2b') # Нары
+        d.rectangle([20, 100, 100, 120], fill='#4a3b2b')
     elif scene_type == "hospital" or (l and l["diseases"]):
         d.rectangle([0, 0, w, h], fill='#e5e7eb')
-        d.rectangle([40, 40, 60, 60], fill='#ef4444') # Крест
-        d.rectangle([50, 30, 52, 70], fill='#ef4444') # Крест
-        d.rectangle([100, 90, 180, 120], fill='#ffffff', outline='#9ca3af') # Койка
+        d.rectangle([40, 40, 60, 60], fill='#ef4444')
+        d.rectangle([50, 30, 52, 70], fill='#ef4444')
+        d.rectangle([100, 90, 180, 120], fill='#ffffff', outline='#9ca3af')
     elif scene_type == "child" or (l and l["age"] < 13):
         d.rectangle([0, 0, w, 90], fill='#93c5fd')
-        d.ellipse([200, 10, 240, 50], fill='#fde047') # Солнце
-        d.ellipse([30, 20, 60, 30], fill='#ffffff') # Облако
+        d.ellipse([200, 10, 240, 50], fill='#fde047')
+        d.ellipse([30, 20, 60, 30], fill='#ffffff')
         d.ellipse([45, 15, 75, 30], fill='#ffffff')
-        d.rectangle([0, 90, w, h], fill='#66bb6a') # Трава
-        d.rectangle([80, 40, 150, 110], fill='#d97706') # Дом
-        d.polygon([(70, 40), (115, 10), (160, 40)], fill='#991b1b') # Крыша
-        d.rectangle([100, 80, 120, 110], fill='#451a03') # Дверь
+        d.rectangle([0, 90, w, h], fill='#66bb6a')
+        d.rectangle([80, 40, 150, 110], fill='#d97706')
+        d.polygon([(70, 40), (115, 10), (160, 40)], fill='#991b1b')
+        d.rectangle([100, 80, 120, 110], fill='#451a03')
     elif scene_type == "office":
         d.rectangle([0, 0, w, 90], fill='#6b7280')
-        d.rectangle([40, 20, 100, 80], fill='#3b82f6') # Окно
-        d.rectangle([150, 20, 210, 80], fill='#3b82f6') # Окно
-        d.rectangle([0, 90, w, h], fill='#9ca3af') # Пол
-        d.rectangle([80, 100, 160, 120], fill='#5d4037') # Стол
+        d.rectangle([40, 20, 100, 80], fill='#3b82f6')
+        d.rectangle([150, 20, 210, 80], fill='#3b82f6')
+        d.rectangle([0, 90, w, h], fill='#9ca3af')
+        d.rectangle([80, 100, 160, 120], fill='#5d4037')
     else:
-        # Ночь, улица
         d.rectangle([0, 0, w, 90], fill='#1e3a8a')
-        d.ellipse([200, 10, 220, 30], fill='#fef08a') # Луна
-        for x in range(20, 200, 40): d.point((x, 20), fill='#ffffff') # Звезды
-        d.rectangle([0, 90, w, h], fill='#475569') # Асфальт
-        d.rectangle([40, 60, 46, 100], fill='#6b7280') # Фонарь
+        d.ellipse([200, 10, 220, 30], fill='#fef08a')
+        for x in range(20, 200, 40): d.point((x, 20), fill='#ffffff')
+        d.rectangle([0, 90, w, h], fill='#475569')
+        d.rectangle([40, 60, 46, 100], fill='#6b7280')
         d.ellipse([35, 55, 51, 65], fill='#fef08a')
 
-    # Персонажи (рисовая функция)
     def draw_person(x, y, color_body, color_head='#fcd34d'):
-        d.rectangle([x, y+20, x+16, y+50], fill=color_body) # Тело
-        d.rectangle([x+2, y, x+14, y+20], fill=color_head) # Голова
-        d.rectangle([x+2, y+50, x+6, y+65], fill='#1f2937') # Нога
-        d.rectangle([x+10, y+50, x+14, y+65], fill='#1f2937') # Нога
-        d.point((x+5, y+8), fill='#000000') # Глаз
-        d.point((x+11, y+8), fill='#000000') # Глаз
-        d.rectangle([x+4, y+15, x+12, y+17], fill='#000000') # Улыбка
+        d.rectangle([x, y+20, x+16, y+50], fill=color_body)
+        d.rectangle([x+2, y, x+14, y+20], fill=color_head)
+        d.rectangle([x+2, y+50, x+6, y+65], fill='#1f2937')
+        d.rectangle([x+10, y+50, x+14, y+65], fill='#1f2937')
+        d.point((x+5, y+8), fill='#000000')
+        d.point((x+11, y+8), fill='#000000')
+        d.rectangle([x+4, y+15, x+12, y+17], fill='#000000')
 
     if scene_type == "rich":
-        draw_person(110, 60, '#fbbf24', '#fcd34d') # Игрок (богатый)
-        draw_person(140, 60, '#e5e7eb', '#fcd34d') # Партнер
-        draw_person(125, 75, '#93c5fd', '#fcd34d') # Ребенок
+        draw_person(110, 60, '#fbbf24', '#fcd34d')
+        draw_person(140, 60, '#e5e7eb', '#fcd34d')
+        draw_person(125, 75, '#93c5fd', '#fcd34d')
     elif scene_type == "office":
-        draw_person(110, 60, '#3b82f6', '#fcd34d') # Игрок в костюме
+        draw_person(110, 60, '#3b82f6', '#fcd34d')
     elif scene_type == "child":
-        draw_person(110, 65, '#3b82f6' if l and l["gender"]=="m" else '#ec4899') # Ребенок
-        draw_person(70, 65, '#6b7280', '#fcd34d') # Родитель
-        draw_person(150, 65, '#6b7280', '#fcd34d') # Родитель
+        draw_person(110, 65, '#3b82f6' if l and l["gender"]=="m" else '#ec4899')
+        draw_person(70, 65, '#6b7280', '#fcd34d')
+        draw_person(150, 65, '#6b7280', '#fcd34d')
     elif scene_type == "hospital":
-        d.rectangle([120, 70, 160, 85], fill='#9ca3af') # Одеяло
-        draw_person(130, 50, '#9ca3af', '#fcd34d') # Лежит
+        d.rectangle([120, 70, 160, 85], fill='#9ca3af')
+        draw_person(130, 50, '#9ca3af', '#fcd34d')
     elif scene_type == "prison":
-        draw_person(110, 60, '#212121', '#fcd34d') # Заключенный
+        draw_person(110, 60, '#212121', '#fcd34d')
     else:
         draw_person(110, 60, '#3b82f6' if l and l["gender"]=="m" else '#ec4899', '#fcd34d')
 
@@ -294,11 +281,6 @@ def get_wealth_status(clean, dirty, l=None):
     if total < 2000000: return "💎 Богач"
     return "👑 Элита"
 
-def get_faction_status(l):
-    if l["in_prison"] > 0: return f"⛓ Заключенный ({l['in_prison']} лет)"
-    if l["faction"] != "Нет": return f"🕶 {l['faction']}"
-    return "👤 Законопослушный"
-
 def weighted_country():
     r = random.random() * TOTAL_WEIGHT
     for c in COUNTRIES:
@@ -318,7 +300,7 @@ def generate_neighbors(count=3):
         if fate_roll < 0.1:
             fate = "умер(ла) в младенчестве"
         elif fate_roll < 0.2:
-            fate = "стал(а) богатым бизнесменом" if g == "m" else "стала богатой бизнесменшей"
+            fate = "стал богатым бизнесменом" if g == "m" else "стала богатой бизнесменшей"
         elif fate_roll < 0.3:
             fate = "погиб(ла) в криминальной разборке"
         elif fate_roll < 0.4:
@@ -367,45 +349,42 @@ def mortality_rate(l):
 def get_event(l):
     age = l["age"]; c = l["country"]
     
-    # Карьерные события
     if age >= 18 and l["job_type"] in ["civilian", "police", "military"] and random.random() < 0.3:
         if random.random() < 0.5:
-            return {"title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.", "choices": [{"text": "Согласиться (XP+)", "p": 0.7, "success": "career_xp_up"}, {"text": "Уйти домой", "p": 1, "success": "career_xp_down"}]}
+            return {"title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.", "choices": [{"text": "Согласиться (XP+)", "p": 0.7, "success": "career_xp_up", "fail": "none"}, {"text": "Уйти домой", "p": 1, "success": "career_xp_down", "fail": "none"}]}
         else:
-            return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win"}, {"text": "Смириться", "p": 1, "success": "career_grind"}]}
+            return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win", "fail": "career_grind"}, {"text": "Смириться", "p": 1, "success": "career_grind", "fail": "none"}]}
 
-    # Случайные события
     if random.random() < 0.45:
         if age < 13:
             return random.choice([
-                {"title": "🧸 Детский сад", "text": "Тебя обижает ребенок.", "choices": [{"text": "Дать сдачи", "p": 0.5, "success": "child_fight"}, {"text": "Пожаловаться", "p": 0.8, "success": "child_tell"}]},
-                {"title": "📚 Первая книга", "text": "Тебе подарили книгу.", "choices": [{"text": "Читать", "p": 0.8, "success": "child_smart"}, {"text": "Гулять", "p": 1, "success": "child_walk"}]}
+                {"title": "🧸 Детский сад", "text": "Тебя обижает ребенок.", "choices": [{"text": "Дать сдачи", "p": 0.5, "success": "child_fight", "fail": "none"}, {"text": "Пожаловаться", "p": 0.8, "success": "child_tell", "fail": "none"}]},
+                {"title": "📚 Первая книга", "text": "Тебе подарили книгу.", "choices": [{"text": "Читать", "p": 0.8, "success": "child_smart", "fail": "none"}, {"text": "Гулять", "p": 1, "success": "child_walk", "fail": "none"}]}
             ])
         elif age < 18:
             return random.choice([
-                {"title": "🚬 Сигарета", "text": "Старшеклассники предлагают закурить.", "choices": [{"text": "Попробовать", "p": 0.9, "success": "teen_smoke"}, {"text": "Отказаться", "p": 1, "success": "teen_healthy"}]},
-                {"title": "💔 Любовь", "text": "Тебе нравится одноклассник(ца).", "choices": [{"text": "Признаться", "p": 0.4, "success": "teen_love"}, {"text": "Скрывать", "p": 1, "success": "none"}]}
+                {"title": "🚬 Сигарета", "text": "Старшеклассники предлагают закурить.", "choices": [{"text": "Попробовать", "p": 0.9, "success": "teen_smoke", "fail": "none"}, {"text": "Отказаться", "p": 1, "success": "teen_healthy", "fail": "none"}]},
+                {"title": "💔 Любовь", "text": "Тебе нравится одноклассник(ца).", "choices": [{"text": "Признаться", "p": 0.4, "success": "teen_love", "fail": "none"}, {"text": "Скрывать", "p": 1, "success": "none", "fail": "none"}]}
             ])
         else:
-            vvp = c[7]; adult = []
+            adult = []
             if l["married"] and l["children"] > 0:
-                adult.append({"title": "👶 Кризис", "text": "Денег не хватает.", "choices": [{"text": "Вторую работу", "p": 0.7, "success": "work_extra"}, {"text": "Семью", "p": 1, "success": "family_time"}]})
+                adult.append({"title": "👶 Кризис", "text": "Денег не хватает.", "choices": [{"text": "Вторую работу", "p": 0.7, "success": "work_extra", "fail": "burnout"}, {"text": "Семью", "p": 1, "success": "family_time", "fail": "none"}]})
             elif not l["married"] and age < 45:
-                adult.append({"title": "💍 Брак", "text": "Партнер предлагает жениться.", "choices": [{"text": "Согласиться", "p": 0.8, "success": "marry"}, {"text": "Отказаться", "p": 1, "success": "none"}]})
+                adult.append({"title": "💍 Брак", "text": "Партнер предлагает жениться.", "choices": [{"text": "Согласиться", "p": 0.8, "success": "marry", "fail": "none"}, {"text": "Отказаться", "p": 1, "success": "none", "fail": "none"}]})
             elif l["married"]:
-                adult.append({"title": "💔 Развод", "text": "Супруг подает на развод.", "choices": [{"text": "Смириться", "p": 1, "success": "divorce"}]})
-            adult.append({"title": "📞 Мошенники", "text": "Звонят из 'банка'.", "choices": [{"text": "Дать код", "p": 1, "success": "scammed"}, {"text": "Бросить", "p": 1, "success": "none"}]})
-            adult.append({"title": "🎰 Лотерея", "text": "Купил билет.", "choices": [{"text": "Проверить", "p": 0.05, "success": "lottery_win"}, {"text": "Выбросить", "p": 1, "success": "none"}]})
+                adult.append({"title": "💔 Развод", "text": "Супруг подает на развод.", "choices": [{"text": "Смириться", "p": 1, "success": "divorce", "fail": "none"}]})
+            adult.append({"title": "📞 Мошенники", "text": "Звонят из 'банка'.", "choices": [{"text": "Дать код", "p": 1, "success": "scammed", "fail": "none"}, {"text": "Бросить", "p": 1, "success": "none", "fail": "none"}]})
+            adult.append({"title": "🎰 Лотерея", "text": "Купил билет.", "choices": [{"text": "Проверить", "p": 0.05, "success": "lottery_win", "fail": "lottery_lose"}]})
             return random.choice(adult)
             
     if age == 22 and l["job_type"] == "none" and l["faction"] == "Нет":
-        vvp = c[7]
         return {"title": "Выбор пути", "text": "Пора определяться.",
                 "choices": [
-                    {"text": "💼 Гражданка", "p": 1, "success": "job_civ"},
-                    {"text": "👮 Полиция", "p": 1 if l["education"] == "Высшее" else 0, "success": "job_pol"},
-                    {"text": "🎖 Армия", "p": 1 if l["education"] in ["Среднее", "Высшее"] else 0, "success": "job_mil"},
-                    {"text": "💊 Криминал", "p": 1, "success": "job_crim"}
+                    {"text": "💼 Гражданка", "p": 1, "success": "job_civ", "fail": "none"},
+                    {"text": "👮 Полиция", "p": 1 if l["education"] == "Высшее" else 0, "success": "job_pol", "fail": "none"},
+                    {"text": "🎖 Армия", "p": 1 if l["education"] in ["Среднее", "Высшее"] else 0, "success": "job_mil", "fail": "none"},
+                    {"text": "💊 Криминал", "p": 1, "success": "job_crim", "fail": "none"}
                 ]}
     return None
 
@@ -418,7 +397,6 @@ def next_year(user_id, chat_id):
     
     l["age"] += 1
     
-    # Экономика
     rent = sum(int(pr["value"] * 0.05) for pr in l["properties"])
     biz = sum(int(b["value"] * 0.15) for b in l["businesses"])
     l["clean_cash"] += rent + biz
@@ -430,22 +408,18 @@ def next_year(user_id, chat_id):
     
     if l["clean_cash"] < 0: l["debt"] += abs(l["clean_cash"]); l["clean_cash"] = 0
 
-    # Проверка на повышение
     if l["job_type"] in ["civilian", "police", "military"]:
         if l["career_xp"] >= 100:
             l["career_xp"] = 0
             l["career_rank"] = min(5, l["career_rank"] + 1)
             l["salary"] = int(l["salary"] * 1.5)
             add_to_life_map(l, f"Повышение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
-            p["promoted"] = True
         elif l["career_xp"] <= -50:
             l["career_xp"] = 0
             l["career_rank"] = max(1, l["career_rank"] - 1)
             l["salary"] = int(l["salary"] * 0.7)
             add_to_life_map(l, f"Понижение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
-            p["demoted"] = True
 
-    # Эхо
     echo_text = ""
     if l["age"] in [7, 18, 30, 50]:
         n = random.choice(p["neighbors"])
@@ -481,11 +455,7 @@ def start_exam(user_id, chat_id, level, place):
     available = [t for t in TESTS[level] if t["q"] not in [a["q"] for a in l["asked_tests"][level]]]
     if not available: l["asked_tests"][level] = []; available = TESTS[level]
     test = random.choice(available); l["asked_tests"][level].append(test); l["test_data"] = test
-    
-    # Выбор правильной школы
-    school_list = SCHOOLS[l["country"][2]][level-1]
-    school = random.choice(school_list)
-    
+    school = random.choice(SCHOOLS[l["country"][2]][level-1])
     kb = InlineKeyboardMarkup()
     for i, opt in enumerate(test["opts"]): kb.add(InlineKeyboardButton(opt, callback_data=f"ans_{i}"))
     bot.send_message(chat_id, f"📝 <b>Экзамен в {place}!</b>\n{school}\n\nВопрос: <b>{test['q']}</b>", reply_markup=kb, parse_mode="HTML")
@@ -514,12 +484,16 @@ def apply_outcome(l, outcome):
     if outcome == "career_xp_down": l["career_xp"] -= 20; return "Ушел домой. XP -20."
     if outcome == "career_fight_win": l["career_xp"] += 40; return "Отстоял место. XP +40."
     if outcome == "career_grind": l["career_xp"] -= 10; return "Проглотил обиду. XP -10."
+    if outcome == "work_extra": l["clean_cash"] += 1000; return "Вторая работа. +1000."
+    if outcome == "family_time": l["career_xp"] -= 10; return "Время с семьей. XP -10."
+    if outcome == "burnout": l["diseases"].append("Сердечная недостаточность"); return "Выгорание."
     if outcome == "scammed": loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss; return f"Украли {fmt_money(loss, l['country'])}."
     if outcome == "child_fight": l["clean_cash"] += 100; return "Дал сдачи."
     if outcome == "child_tell": return "Пожаловался."
     if outcome == "teen_smoke": l["diseases"].append("Рак легких"); return "Курил."
     if outcome == "teen_healthy": l["clean_cash"] += 200; return "Сэкономил."
     if outcome == "lottery_win": l["clean_cash"] += int(vvp * 10); return "ДЖЕКПОТ!"
+    if outcome == "lottery_lose": return "Билет пустой."
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
@@ -532,28 +506,22 @@ def resolve_choice(user_id, chat_id, i):
     send_scene(chat_id, l, format_year(l), kb_year())
 
 def format_year(l):
-    c = l["country"]
-    parts = [f"<b>Возраст: {l['age']}</b>"]
+    c = l["country"]; parts = [f"<b>Возраст: {l['age']}</b>"]
     if l.get("last_result"): parts.append(f"{'✅' if l['last_result']['success'] else '❌'} <i>{l['last_result']['text']}</i>")
-    
     parts.append(f"\n💰 Баланс: <b>{fmt_money(l['clean_cash'], c)}</b>")
     if l["dirty_cash"] > 0: parts.append(f"💼 Грязные: <b>{fmt_money(l['dirty_cash'], c)}</b>")
     if l["debt"] > 0: parts.append(f"🏦 Долг: <b>{fmt_money(l['debt'], c)}</b>")
-    
     parts.append(f"👑 Класс: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
-    
     job = l["job"]
     if l["job_type"] in ["civilian", "police", "military"]:
         job += f" ({CAREER_TITLES[l['job_type']].get(l['career_rank'], '')}, XP: {l['career_xp']}/100)"
     parts.append(f"💼 {job}")
-    
     if l["properties"]: parts.append("🏠 " + ", ".join([p["type"] for p in l["properties"]]))
     if l["cars"]: parts.append("🚗 " + ", ".join([c["type"] for c in l["cars"]]))
     if l["businesses"]: parts.append("🏢 " + ", ".join([b["type"] for b in l["businesses"]]))
     if l["diseases"]: parts.append(f"🩺 {', '.join(l['diseases'])}")
     parts.append(f"🎓 {l['education']}")
     parts.append(f"👨‍👩‍👧 Дети: {l['children']} | Брак: {'Да' if l['married'] else 'Нет'}")
-    
     return "\n".join(parts)
 
 def format_event(l, evt): return f"<b>{l['age']} лет · {evt['title']}</b>\n\n{evt['text']}"
@@ -606,15 +574,21 @@ def process_buy(user_id, chat_id, cat, name):
 # ================= ХЭНДЛЕРЫ =================
 @bot.message_handler(commands=["start"])
 def cmd_start(msg):
-    text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду. Сможешь ли ты выжить и оставить след?"
-    bot.send_message(msg.chat.id, text, reply_markup=kb_intro(), parse_mode="HTML")
+    try:
+        text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду. Сможешь ли ты выжить и оставить след?"
+        bot.send_message(msg.chat.id, text, reply_markup=kb_intro(), parse_mode="HTML")
+    except Exception as e:
+        print(f"Error in start: {e}")
 
 @bot.message_handler(commands=["test"])
 def cmd_test(msg):
-    test_l = {"in_prison": 0, "diseases": [], "clean_cash": 1000000, "age": 25, "job_type": "civilian", "job": "Тест", "married": False, "gender": "m"}
-    photo = generate_pixel_art(test_l, "rich")
-    if photo: bot.send_photo(msg.chat.id, photo, caption="✅ Графика работает!")
-    else: bot.send_message(msg.chat.id, "❌ Pillow не установлен.")
+    try:
+        test_l = {"in_prison": 0, "diseases": [], "clean_cash": 1000000, "age": 25, "job_type": "civilian", "job": "Тест", "married": False, "gender": "m"}
+        photo = generate_pixel_art(test_l, "rich")
+        if photo: bot.send_photo(msg.chat.id, photo, caption="✅ Графика работает!")
+        else: bot.send_message(msg.chat.id, "❌ Pillow не установлен.")
+    except Exception as e:
+        bot.send_message(msg.chat.id, f"⚠️ Ошибка: {e}")
 
 @bot.callback_query_handler(func=lambda c: True)
 def handle(call):
@@ -650,6 +624,7 @@ def handle(call):
             send_scene(chat_id, l, msg, kb_year(), "child")
     except Exception as e:
         bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
+        print(f"Error in handle: {e}")
 
 if __name__ == "__main__":
     print("Бот запущен...")
