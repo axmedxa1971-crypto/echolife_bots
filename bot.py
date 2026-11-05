@@ -1,17 +1,15 @@
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-import random, json, os, io, requests
-from urllib.parse import quote
+import random, json, os, io, zipfile
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageDraw, ImageStat
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
 
 # ================= НАСТРОЙКА =================
 BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
-
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True)
 
 # ================= БАЗА ДАННЫХ =================
@@ -29,9 +27,29 @@ def save_db(data):
     except: pass
 
 players_db = load_db()
+SPRITE_CACHE = {}
 
-# ================= СПРАВОЧНИКИ =================
-# (Страны, болезни, имена оставил полными, как ты просил ранее)
+# ================= ЗАГРУЗКА СПРАЙТОВ ИЗ ТВОЕГО АРХИВА =================
+def get_exact_sprite(zip_name, filename):
+    """Достает конкретный файл из архива по его точному имени"""
+    cache_key = f"{zip_name}_{filename}"
+    if cache_key in SPRITE_CACHE: return SPRITE_CACHE[cache_key]
+    if not os.path.exists(zip_name): return None
+    
+    try:
+        with zipfile.ZipFile(zip_name, 'r') as z:
+            for file_info in z.infolist():
+                # Ищем файл, который заканчивается на нужное нам имя (например, man.png)
+                if file_info.filename.lower().endswith(filename.lower()):
+                    data = z.read(file_info.filename)
+                    img = Image.open(io.BytesIO(data)).convert("RGBA")
+                    SPRITE_CACHE[cache_key] = img
+                    return img
+    except Exception as e:
+        print(f"Ошибка чтения {zip_name}: {e}")
+    return None
+
+# ================= СПРАВОЧНИКИ (85 СТРАН) =================
 COUNTRIES = [
     ("Индия", "🇮🇳", "south_asia", 23000, 70, 0.75, 0.35, 2500, 83.5, "₹"),("Пакистан", "🇵🇰", "south_asia", 6000, 66, 0.55, 0.37, 1500, 278.0, "₨"),("Бангладеш", "🇧🇩", "south_asia", 3000, 74, 0.75, 0.40, 2000, 110.0, "৳"),("Непал", "🇳🇵", "south_asia", 550, 70, 0.65, 0.21, 1200, 133.0, "₨"),("Шри-Ланка", "🇱🇰", "south_asia", 320, 77, 0.92, 0.19, 3800, 300.0, "₨"),("Афганистан", "🇦🇫", "south_asia", 1000, 65, 0.40, 0.26, 800, 70.0, "؋"),
     ("Китай", "🇨🇳", "east_asia", 9000, 78, 0.95, 0.65, 12000, 7.2, "¥"),("Япония", "🇯🇵", "east_asia", 800, 84, 0.99, 0.92, 35000, 150.0, "¥"),("Южная Корея", "🇰🇷", "east_asia", 250, 83, 0.98, 0.81, 33000, 1330.0, "₩"),("Монголия", "🇲🇳", "east_asia", 80, 70, 0.90, 0.68, 4500, 3450.0, "₮"),
@@ -48,18 +66,18 @@ TOTAL_WEIGHT = sum(c[3] for c in COUNTRIES)
 DISEASES = {
     "Астма": {"mort": 1.1, "cash": 300}, "Диабет 1 типа": {"mort": 1.4, "cash": 1500}, "Диабет 2 типа": {"mort": 1.2, "cash": 800}, "Гипертония": {"mort": 1.3, "cash": 400}, "Артрит": {"mort": 1.15, "cash": 500}, "Псориаз": {"mort": 1.05, "cash": 300}, "Эпилепсия": {"mort": 1.5, "cash": 600}, "Мигрень": {"mort": 1.05, "cash": 200},
     "Туберкулез": {"mort": 1.8, "cash": 1500}, "Сифилис": {"mort": 1.3, "cash": 500}, "Гонорея": {"mort": 1.1, "cash": 400}, "ВИЧ/СПИД": {"mort": 1.5, "cash": 2000}, "Гепатит B": {"mort": 1.5, "cash": 1200}, "Гепатит C": {"mort": 1.6, "cash": 2500}, "Холера": {"mort": 2.5, "cash": 800}, "Тиф": {"mort": 1.8, "cash": 600}, "Корь": {"mort": 1.6, "cash": 400}, "Ковид-19": {"mort": 1.4, "cash": 1000}, "Малярия": {"mort": 2.0, "cash": 600},
-    "Рак легких": {"mort": 3.0, "cash": 5000}, "Рак груди": {"mort": 2.2, "cash": 4000}, "Лейкемия": {"mort": 2.8, "cash": 8000}, "ПТСР": {"mort": 1.4, "cash": 500}, "Депрессия": {"mort": 1.3, "cash": 400}, "Биполярное расстройство": {"mort": 1.3, "cash": 700}, "Шизофрения": {"mort": 1.4, "cash": 800}, "Алкоголизм": {"mort": 1.8, "cash": 600}, "Наркомания": {"mort": 2.0, "cash": 1500},
+    "Рак легких": {"mort": 3.0, "cash": 5000}, "Рак груди": {"mort": 2.2, "cash": 4000}, "Лейкемия": {"mort": 2.8, "cash": 8000},
+    "ПТСР": {"mort": 1.4, "cash": 500}, "Депрессия": {"mort": 1.3, "cash": 400}, "Биполярное расстройство": {"mort": 1.3, "cash": 700}, "Шизофрения": {"mort": 1.4, "cash": 800}, "Алкоголизм": {"mort": 1.8, "cash": 600}, "Наркомания": {"mort": 2.0, "cash": 1500},
     "Сердечная недостаточность": {"mort": 2.2, "cash": 1500}, "Инфаркт": {"mort": 2.5, "cash": 3000}, "Инсульт": {"mort": 2.5, "cash": 3000}, "Цирроз печени": {"mort": 2.2, "cash": 1000}, "Полиомиелит": {"mort": 1.5, "cash": 500}, "Ожирение": {"mort": 1.3, "cash": 400}, "Анемия": {"mort": 1.1, "cash": 200}, "Бесплодие": {"mort": 1.0, "cash": 0}
 }
 
-# Разделяем стереотипы на позитивные и негативные
 ETHNICITIES = {
-    "south_asia": [("Хиндустанец", 35, None),("Бенгалец", 15, "Общество считает тебя бедным."),("Тамил", 10, "Общество считает тебя хитрым."),("Мусульманин", 15, "Общество считает тебя агрессивным."),("Далит", 10, "Общество считает тебя грязным."),("Сикх", 5, "Общество считает тебя воинственным.")],
-    "east_asia": [("Хань", 60, None),("Японец", 15, "Общество считает тебя трудоголиком."),("Кореец", 12, "Общество считает тебя умным."),("Монгол", 5, "Общество считает тебя дикарем."),("Уйгур", 5, "Общество считает тебя чужим.")],
-    "southeast_asia": [("Яванец", 35, None),("Тайец", 20, None),("Вьетнамец", 15, "Общество считает тебя хитрым."),("Филиппинец", 15, "Общество считает тебя беззаботным."),("Кхмер", 10, "Общество считает тебя бедным.")],
-    "africa": [("Йоруба", 20, None),("Игбо", 15, "Общество считает тебя предприимчивым."),("Хауса", 15, "Общество считает тебя фанатиком."),("Оромо", 15, "Общество считает тебя дикарем."),("Зулус", 10, "Общество считает тебя агрессивным."),("Копт", 5, "Общество считает тебя предателем."),("Белый (потомок колонистов)", 5, "Общество считает тебя угнетателем.")],
-    "arab": [("Араб", 55, None),("Египтянин", 20, None),("Бербер", 8, "Общество считает тебя дикарем."),("Курд", 5, "Общество считает тебя сепаратистом."),("Ассириец", 4, "Общество считает тебя чужим."),("Друз", 3, None)],
-    "latam": [("Метис", 45, None),("Креол", 20, "Общество считает тебя снобом."),("Мулат", 15, None),("Индеец", 10, "Общество считает тебя дикарем."),("Афро-латиноамериканец", 5, "Общество считает тебя агрессивным."),("Азиат", 3, "Общество считает тебя трудолюбивым.")],
+    "south_asia": [("Хиндустанец", 35, None),("Бенгалец", 15, "Считают тебя бедным."),("Тамил", 10, "Считают тебя хитрым."),("Мусульманин", 15, "Считают тебя агрессивным."),("Далит", 10, "Считают тебя грязным."),("Сикх", 5, "Считают тебя воинственным.")],
+    "east_asia": [("Хань", 60, None),("Японец", 15, "Считают тебя трудоголиком."),("Кореец", 12, "Считают тебя умным."),("Монгол", 5, "Считают тебя дикарем."),("Уйгур", 5, "Считают тебя чужим.")],
+    "southeast_asia": [("Яванец", 35, None),("Тайец", 20, None),("Вьетнамец", 15, "Считают тебя хитрым."),("Филиппинец", 15, "Считают тебя беззаботным."),("Кхмер", 10, "Считают тебя бедным.")],
+    "africa": [("Йоруба", 20, None),("Игбо", 15, "Считают тебя предприимчивым."),("Хауса", 15, "Считают тебя фанатиком."),("Оромо", 15, "Считают тебя дикарем."),("Зулус", 10, "Считают тебя агрессивным."),("Копт", 5, "Считают тебя предателем."),("Белый (потомок колонистов)", 5, "Считают тебя угнетателем.")],
+    "arab": [("Араб", 55, None),("Египтянин", 20, None),("Бербер", 8, "Считают тебя дикарем."),("Курд", 5, "Считают тебя сепаратистом."),("Ассириец", 4, "Считают тебя чужим."),("Друз", 3, None)],
+    "latam": [("Метис", 45, None),("Креол", 20, "Считают тебя снобом."),("Мулат", 15, None),("Индеец", 10, "Считают тебя дикарем."),("Афро-латиноамериканец", 5, "Считают тебя агрессивным."),("Азиат", 3, "Считают тебя трудолюбивым.")],
     "europe": [("Немец", 12, None),("Француз", 12, None),("Итальянец", 8, "Считают, что ты связан с мафией."),("Испанец", 8, None),("Поляк", 8, None),("Швед", 5, None),("Грек", 4, None),("Португалец", 4, None),("Еврей", 8, "Считают тебя скупым."),("Цыган", 8, "Считают тебя вором."),("Турок", 8, "Считают тебя чужаком."),("Араб (мигрант)", 8, "Считают тебя террористом."),("Африканец (мигрант)", 7, "Считают тебя нищим.")],
     "post_soviet": [("Русский", 50, None),("Украинец", 15, None),("Белорус", 5, None),("Татарин", 5, "Считают тебя хитрым."),("Кавказец", 10, "Считают тебя бандитом."),("Еврей", 4, "Считают тебя скупым."),("Среднеазиат", 8, "Считают тебя гастарбайтером."),("Цыган", 3, "Считают тебя вором.")],
     "developed": [("WASP", 35, None),("Афроамериканец", 18, "Считают тебя агрессивным."),("Латиноамериканец", 15, "Считают тебя нелегалом."),("Азиат", 12, "Считают тебя умным."),("Еврей", 5, "Считают тебя скупым."),("Коренной американец", 5, "Считают тебя алкоголиком."),("Ирландец", 5, "Считают тебя пьяницей."),("Итальянец", 5, "Считают тебя мафиози.")]
@@ -95,71 +113,118 @@ TESTS = {
     3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2},{"q": "Производная от x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1},{"q": "Сколько планет в Солнечной системе?", "opts": ["7", "8", "9"], "ans": 1},{"q": "Кто открыл тяготение?", "opts": ["Эйнштейн", "Ньютон", "Галилей"], "ans": 1},{"q": "Что такое ДНК?", "opts": ["Белок", "Кислота", "Углевод"], "ans": 1},{"q": "Столица Японии?", "opts": ["Осака", "Токио", "Киото"], "ans": 1},{"q": "log(100) по основанию 10?", "opts": ["1", "2", "10"], "ans": 1},{"q": "Интеграл от 2x dx?", "opts": ["x^2 + C", "2x^2 + C", "x + C"], "ans": 0},{"q": "Кто написал 'Преступление и наказание'?", "opts": ["Толстой", "Достоевский", "Чехов"], "ans": 1},{"q": "Что такое фотон?", "opts": ["Квант света", "Частица атома", "Волна"], "ans": 0}]
 }
 
-# ================= НЕЙРОСЕТЬ =================
-def generate_ai_image(scene_type):
-    prompts = {
-        "rich": "8-bit pixel art, a rich person in a golden suit standing in front of a huge mansion, luxury sports car, sunset, high quality",
-        "child": "8-bit pixel art, a little child playing in a village near a wooden house, green grass, sunny day",
-        "fight": "8-bit pixel art, two characters fighting, action scene, yellow impact star, street background",
-        "love": "8-bit pixel art, a man and a woman in love, red hearts floating, sunset background",
-        "hospital": "8-bit pixel art, a person lying in a hospital bed, doctor room, white walls, red cross",
-        "prison": "8-bit pixel art, a person inside a dark prison cell, iron bars, gloomy",
-        "office": "8-bit pixel art, a person working at a desk in a modern office, computer, window",
-        "office_angry": "8-bit pixel art, a very angry boss screaming at employee in office, red atmosphere",
-        "police": "8-bit pixel art, a police car with flashing lights on a night street",
-        "sad": "8-bit pixel art, a sad person standing alone in the rain, dark clouds, gloomy city",
-        "money_win": "8-bit pixel art, a happy person jumping surrounded by bags of gold money, confetti",
-        "money_lose": "8-bit pixel art, a sad person looking at an empty wallet, broken piggy bank",
-        "criminal": "8-bit pixel art, a gangster in a black suit with sunglasses, dark alley",
-        "military": "8-bit pixel art, a soldier in camouflage uniform, military base",
-        "wedding": "8-bit pixel art, a wedding ceremony, bride and groom, rings, church",
-        "school": "8-bit pixel art, children sitting at desks in a classroom, blackboard",
-        "life": "8-bit pixel art, a casual person standing on a city street, daytime"
-    }
+# ================= ГРАФИКА =================
+def tint_skin(img, region):
+    if not img: return img
+    skin_colors = {"africa": (102, 51, 0), "south_asia": (153, 102, 51), "europe": (255, 219, 172), "developed": (255, 219, 172), "post_soviet": (255, 219, 172), "east_asia": (234, 192, 134), "arab": (204, 153, 102), "latam": (204, 153, 102), "southeast_asia": (204, 153, 102)}
+    target_color = skin_colors.get(region, (255, 219, 172))
     
-    prompt = prompts.get(scene_type, prompts["life"])
-    seed = random.randint(1, 999999)
+    img = img.convert("RGBA")
+    datas = img.getdata()
+    new_data = []
+    for item in datas:
+        if item[0] > 200 and 140 < item[1] < 220 and 90 < item[2] < 200 and item[3] > 0:
+            new_data.append((*target_color, item[3]))
+        else: new_data.append(item)
+    img.putdata(new_data)
+    return img
+
+def generate_scene(l, scene_type="life"):
+    if not HAS_PIL: return None
     
-    # ИСПОЛЬЗУЕМ МОДЕЛЬ FLUX (самая лучшая и бесплатная)
-    url = f"https://image.pollinations.ai/prompt/{quote(prompt)}?width=512&height=512&nologo=true&seed={seed}&model=flux"
+    W, H = 640, 360
+    img = Image.new('RGBA', (W, H), color='#0f172a')
+    d = ImageDraw.Draw(img)
+
+    # === 1. РИСУЕМ ФОН КОДОМ ===
+    if scene_type in ["rich", "life"]:
+        d.rectangle([0, 0, W, 220], fill='#1e1b4b')
+        d.ellipse([500, 40, 560, 100], fill='#fef08a')
+        d.rectangle([0, 220, W, H], fill='#14532d')
+    elif scene_type in ["child", "school"]:
+        d.rectangle([0, 0, W, 220], fill='#93c5fd')
+        d.ellipse([500, 40, 560, 100], fill='#fde047')
+        d.rectangle([0, 220, W, H], fill='#4ade80')
+    elif scene_type in ["love", "wedding"]:
+        d.rectangle([0, 0, W, 220], fill='#fca5a5')
+        d.rectangle([0, 220, W, H], fill='#fcd34d')
+    elif scene_type in ["sad", "money_lose"]:
+        d.rectangle([0, 0, W, H], fill='#334155')
+        for i in range(20, W, 40): d.line([(i, 0), (i, H)], fill='#475569', width=2)
+    elif scene_type in ["office", "office_angry"]:
+        d.rectangle([0, 0, W, H], fill='#94a3b8')
+        d.rectangle([50, 50, 250, 200], fill='#38bdf8')
+    elif scene_type == "hospital":
+        d.rectangle([0, 0, W, H], fill='#e2e8f0')
+    elif scene_type == "prison":
+        d.rectangle([0, 0, W, H], fill='#374151')
+        for i in range(20, W, 60): d.line([(i, 0), (i, H)], fill='#4b5563', width=8)
+    elif scene_type == "police":
+        d.rectangle([0, 0, W, 220], fill='#1e3a8a')
+        d.rectangle([0, 220, W, H], fill='#1f2937')
+
+    # === 2. ЗАГРУЖАЕМ СПРАЙТЫ (ТОЧНЫЕ ИМЕНА) ===
+    hero_m = get_exact_sprite("pixel-vehicle-pack.zip", "man.png")
+    hero_f = get_exact_sprite("pixel-vehicle-pack.zip", "woman.png")
+    car_police = get_exact_sprite("pixel-vehicle-pack.zip", "police.png")
+    car_sport = get_exact_sprite("pixel-vehicle-pack.zip", "sports_red.png")
+
+    region = l["country"][2] if l else "europe"
+    if hero_m: hero_m = tint_skin(hero_m, region)
+    if hero_f: hero_f = tint_skin(hero_f, region)
+
+    player_img = hero_m if l and l.get("gender") == "m" else hero_f
     
-    try:
-        response = requests.get(url, timeout=30) # Даем 30 секунд
-        if response.status_code == 200:
-            return io.BytesIO(response.content)
-        else:
-            print(f"Ошибка Pollinations: {response.status_code}")
-    except Exception as e:
-        print(f"Ошибка сети: {e}")
-    return None
+    def paste_sprite(sprite, x, y, target_h=100):
+        if sprite:
+            w_percent = (target_h / float(sprite.size[1]))
+            w_size = int((float(sprite.size[0]) * float(w_percent)))
+            sprite_resized = sprite.resize((w_size, target_h), Image.NEAREST)
+            img.paste(sprite_resized, (x, y), sprite_resized)
+
+    if scene_type == "fight":
+        paste_sprite(player_img, 150, 180, 120)
+        paste_sprite(hero_f, 380, 180, 120)
+        d.ellipse([290, 220, 340, 270], fill='#fcd34d')
+        
+    elif scene_type == "love" or scene_type == "wedding":
+        paste_sprite(player_img, 180, 180, 120)
+        paste_sprite(hero_f if l.get("gender")=="m" else hero_m, 340, 180, 120)
+        d.polygon([(260, 160), (280, 120), (300, 160), (280, 200)], fill='#ef4444')
+        d.ellipse([240, 130, 280, 170], fill='#ef4444')
+        d.ellipse([280, 130, 320, 170], fill='#ef4444')
+
+    elif scene_type == "police":
+        paste_sprite(player_img, 150, 180, 120)
+        paste_sprite(car_police, 350, 220, 80)
+
+    elif scene_type == "rich":
+        paste_sprite(player_img, 150, 180, 120)
+        paste_sprite(car_sport, 350, 220, 80)
+
+    elif scene_type == "hospital":
+        paste_sprite(player_img, 260, 200, 100)
+
+    else:
+        paste_sprite(player_img, 260, 180, 120)
+
+    bio = io.BytesIO()
+    img.save(bio, 'PNG')
+    bio.seek(0)
+    return bio
 
 def send_scene(chat_id, l, text, kb, scene_type="life"):
-    # Отправляем сообщение "Рисую..." чтобы игрок не думал, что бот завис
-    status_msg = bot.send_message(chat_id, "📸 <i>Нейросеть рисует сцену...</i>", parse_mode="HTML")
-    
-    # Вызываем нейросеть
-    photo = generate_ai_image(scene_type)
-    
-    # Удаляем сообщение "Рисую..."
-    try: 
-        bot.delete_message(chat_id, status_msg.message_id)
-    except: 
-        pass
-
-    # Если картинка сгенерировалась - отправляем её с текстом и кнопками
+    photo = generate_scene(l, scene_type)
     if photo:
         try:
             bot.send_photo(chat_id, photo, caption=text, reply_markup=kb, parse_mode="HTML")
             return
-        except: 
-            pass
-            
-    # Если нейросеть упала или вернула пустоту - отправляем просто текст
+        except: pass
     bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
+
 # ================= УТИЛИТЫ =================
 def fmt_money(amount_usd, country):
-    rate = country[8]; symbol = country[9]
-    return f"{int(amount_usd * rate):,} {symbol}".replace(",", " ")
+    return f"{int(amount_usd * country[8]):,} {country[9]}".replace(",", " ")
 
 def get_wealth_status(clean, dirty, l=None):
     total = clean + dirty
@@ -182,8 +247,7 @@ def weighted_country():
     return COUNTRIES[0]
 
 def get_ethnicity(region):
-    r = random.random() * 100
-    cum = 0
+    r = random.random() * 100; cum = 0
     for name, chance, prejudice in ETHNICITIES.get(region, [("Местный", 100, None)]):
         cum += chance
         if r <= cum: return name, prejudice
@@ -243,7 +307,7 @@ def create_life(force_country=None):
         "clean_cash": start_cash, "dirty_cash": 0, "in_prison": 0, "age": 0, "alive": True, "faction": "Нет",
         "education": "Нет", "job": "Безработный", "salary": 0, "job_type": "none", "career_xp": 0, "career_rank": 1,
         "married": False, "children": 0, "diseases": [], "properties": [], "cars": [], "businesses": [], "debt": 0,
-        "life_map": [], "neighbors": generate_neighbors(), "test_data": None, "asked_tests": {1: [], 2: [], 3: []}, "current_event": None, "has_license": False
+        "life_map": [], "neighbors": generate_neighbors(), "test_data": None, "asked_tests": {1: [], 2: [], 3: []}, "current_event": None
     }
 
 def add_to_life_map(l, text):
@@ -263,6 +327,7 @@ def mortality_rate(l):
 # ================= СОБЫТИЯ =================
 def get_event(l):
     age = l["age"]
+    
     if l["prejudice"] and 16 < age < 60 and random.random() < 0.15:
         return {"title": "Столкновение с предвзятостью", "text": f"{l['prejudice']}",
                 "choices": [{"text": "✊ Доказать обратное", "p": 0.4, "success": "prej_fight_win", "fail": "prej_fight_fail"},{"text": "🦊 Использовать стереотип", "p": 0.7, "success": "prej_exploit", "fail": "prej_exploit_fail"},{"text": "😔 Смириться", "p": 1, "success": "prej_accept", "fail": "none"}]}
@@ -274,7 +339,7 @@ def get_event(l):
             return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win", "fail": "career_grind"}, {"text": "Смириться", "p": 1, "success": "career_grind", "fail": "none"}]}
 
     if age >= 18 and l["cars"] and random.random() < 0.2:
-        if not l["has_license"]:
+        if not l.get("has_license"):
             return {"title": "🚨 Остановка ДПС", "text": "Инспектор просит права. У тебя их нет.", "choices": [{"text": "💵 Дать взятку", "p": 0.7, "success": "bribe_dps", "fail": "dps_jail"}, {"text": "😬 Договориться", "p": 0.2, "success": "dps_warning", "fail": "dps_jail"}]}
         elif random.random() < 0.3:
             return {"title": "🍻 Пьяная езда", "text": "Инспектор замечает запах перегара.", "choices": [{"text": "💵 Взятка", "p": 0.5, "success": "bribe_dps_big", "fail": "drunk_jail"}, {"text": "🚶 Отказ от теста", "p": 0.1, "success": "dps_warning", "fail": "drunk_jail"}, {"text": "😭 Смириться", "p": 1, "success": "drunk_jail", "fail": "none"}]}
@@ -314,9 +379,7 @@ def get_event(l):
 
 def next_year(user_id, chat_id):
     uid_str = str(user_id)
-    if uid_str not in players_db:
-        return bot.send_message(chat_id, "Игра не найдена. Начни заново: /start")
-        
+    if uid_str not in players_db: return bot.send_message(chat_id, "Начни заново: /start")
     l = players_db[uid_str]
     if not l["alive"]: return bot.send_message(chat_id, "Ты уже умер. Начни заново: /start")
         
@@ -420,7 +483,6 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
 
 def apply_outcome(l, outcome):
     vvp = l["country"][7]
-    # ПРОВЕРКА: хороший или плохой стереотип
     BAD_TRAITS = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
     is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS)
 
@@ -428,21 +490,12 @@ def apply_outcome(l, outcome):
     if outcome == "prej_fight_fail": l["clean_cash"] -= 2000; l["diseases"].append("ПТСР"); return "Ты потратил силы."
     
     if outcome == "prej_exploit":
-        if is_bad:
-            l["dirty_cash"] += 15000
-            return "Ты использовал негативный стереотип для незаконного обогащения."
-        else:
-            l["clean_cash"] += 10000
-            l["career_xp"] += 20
-            return "Ты оседлал позитивный стереотип! Тебя повысили и дали премию."
+        if is_bad: l["dirty_cash"] += 15000; return "Ты использовал негативный стереотип для обогащения."
+        else: l["clean_cash"] += 10000; l["career_xp"] += 20; return "Ты оседлал позитивный стереотип! Тебя повысили."
             
     if outcome == "prej_exploit_fail":
-        if is_bad:
-            l["in_prison"] = 3
-            return "Ты пытался провернуть махинацию на негативном стереотипе и сел в тюрьму."
-        else:
-            l["clean_cash"] -= 2000
-            return "Ты слишком сильно старался соответствовать хорошему стереотипу и выгорел на работе."
+        if is_bad: l["in_prison"] = 3; return "Ты пытался провернуть махинацию и сел."
+        else: l["clean_cash"] -= 2000; return "Ты слишком старался соответствовать и выгорел."
             
     if outcome == "prej_accept": l["clean_cash"] -= 1000; return "Ты смирился."
     
@@ -493,7 +546,6 @@ def resolve_choice(user_id, chat_id, i):
         "bribe_dps": "police", "dps_jail": "prison", "dps_warning": "police", "bribe_dps_big": "police", "drunk_jail": "prison"
     }
     
-    # Если использовали хороший стереотип, показываем офис/успех, а не тюрьму
     if outcome in ["prej_exploit", "prej_exploit_fail"]:
         BAD_TRAITS = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
         is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS)
