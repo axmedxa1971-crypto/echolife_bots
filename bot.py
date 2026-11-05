@@ -133,6 +133,29 @@ def generate_ai_image(scene_type):
         print(f"Ошибка сети: {e}")
     return None
 
+def send_scene(chat_id, l, text, kb, scene_type="life"):
+    # Отправляем сообщение "Рисую..." чтобы игрок не думал, что бот завис
+    status_msg = bot.send_message(chat_id, "📸 <i>Нейросеть рисует сцену...</i>", parse_mode="HTML")
+    
+    # Вызываем нейросеть
+    photo = generate_ai_image(scene_type)
+    
+    # Удаляем сообщение "Рисую..."
+    try: 
+        bot.delete_message(chat_id, status_msg.message_id)
+    except: 
+        pass
+
+    # Если картинка сгенерировалась - отправляем её с текстом и кнопками
+    if photo:
+        try:
+            bot.send_photo(chat_id, photo, caption=text, reply_markup=kb, parse_mode="HTML")
+            return
+        except: 
+            pass
+            
+    # Если нейросеть упала или вернула пустоту - отправляем просто текст
+    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 # ================= УТИЛИТЫ =================
 def fmt_money(amount_usd, country):
     rate = country[8]; symbol = country[9]
