@@ -10,7 +10,7 @@ try:
 except ImportError:
     HAS_PIL = False
 
-BOT_TOKEN = "ВСТАВЬ_СЮДА_СВОЙ_ТОКЕН"
+BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # ================= СПРАВОЧНИКИ =================
