@@ -10,23 +10,8 @@ try:
 except ImportError:
     HAS_PIL = False
 
-# ================= НАСТРОЙКА =================
-BOT_TOKEN = "9280691375:AAFKE--UbHjtBr4MBI6sWavaUFwWhXO9arc"
+BOT_TOKEN = "ВСТАВЬ_СЮДА_СВОЙ_ТОКЕН"
 bot = telebot.TeleBot(BOT_TOKEN)
-
-# ================= СТАТИСТИКА =================
-STATS_FILE = "stats.json"
-def load_stats():
-    if os.path.exists(STATS_FILE):
-        try:
-            with open(STATS_FILE, "r", encoding="utf-8") as f: return json.load(f)
-        except: pass
-    return {"total_lives": 0}
-def save_stats(stats):
-    try:
-        with open(STATS_FILE, "w", encoding="utf-8") as f: json.dump(stats, f, ensure_ascii=False)
-    except: pass
-GLOBAL_STATS = load_stats()
 
 # ================= СПРАВОЧНИКИ =================
 COUNTRIES = [
@@ -123,102 +108,59 @@ COUNTRIES = [
 TOTAL_WEIGHT = sum(c[3] for c in COUNTRIES)
 
 DISEASES = {
-    "Астма": {"desc": "Хроническое воспаление дыхательных путей.", "mort": 1.1, "cash": 300, "fert": 0},
-    "Диабет 1 типа": {"desc": "Инсулинозависимый диабет.", "mort": 1.4, "cash": 1500, "fert": -15},
-    "Диабет 2 типа": {"desc": "Нарушение обмена веществ.", "mort": 1.2, "cash": 800, "fert": -10},
-    "Гипертония": {"desc": "Повышенное давление. Риск инфаркта.", "mort": 1.3, "cash": 400, "fert": 0},
-    "Артрит": {"desc": "Воспаление суставов.", "mort": 1.15, "cash": 500, "fert": 0},
-    "Псориаз": {"desc": "Кожное заболевание.", "mort": 1.05, "cash": 300, "fert": 0},
-    "Эпилепсия": {"desc": "Судорожные приступы.", "mort": 1.5, "cash": 600, "fert": -10},
-    "Мигрень": {"desc": "Сильные головные боли.", "mort": 1.05, "cash": 200, "fert": 0},
-    "Туберкулез": {"desc": "Инфекция легких.", "mort": 1.8, "cash": 1500, "fert": -20},
-    "Сифилис": {"desc": "Венерическое заболевание.", "mort": 1.3, "cash": 500, "fert": -50},
-    "Гонорея": {"desc": "Венерическое заболевание.", "mort": 1.1, "cash": 400, "fert": -30},
-    "ВИЧ/СПИД": {"desc": "Вирус иммунодефицита.", "mort": 1.5, "cash": 2000, "fert": -30},
-    "Гепатит B": {"desc": "Вирусное поражение печени.", "mort": 1.5, "cash": 1200, "fert": -15},
-    "Гепатит C": {"desc": "Хроническое поражение печени.", "mort": 1.6, "cash": 2500, "fert": -20},
-    "Холера": {"desc": "Острая кишечная инфекция.", "mort": 2.5, "cash": 800, "fert": 0},
-    "Тиф": {"desc": "Инфекция через воду.", "mort": 1.8, "cash": 600, "fert": 0},
-    "Корь": {"desc": "Острая вирусная инфекция.", "mort": 1.6, "cash": 400, "fert": 0},
-    "Ковид-19": {"desc": "Респираторная инфекция.", "mort": 1.4, "cash": 1000, "fert": 0},
-    "Малярия": {"desc": "Передается через комаров.", "mort": 2.0, "cash": 600, "fert": -10},
-    "Рак легких": {"desc": "Опухоль легких.", "mort": 3.0, "cash": 5000, "fert": -100},
-    "Рак груди": {"desc": "Опухоль молочной железы.", "mort": 2.2, "cash": 4000, "fert": -100},
-    "Лейкемия": {"desc": "Рак крови.", "mort": 2.8, "cash": 8000, "fert": -100},
-    "ПТСР": {"desc": "Посттравматическое расстройство.", "mort": 1.4, "cash": 500, "fert": 0},
-    "Депрессия": {"desc": "Стойкое снижение настроения.", "mort": 1.3, "cash": 400, "fert": 0},
-    "Биполярное расстройство": {"desc": "Резкие перепады настроения.", "mort": 1.3, "cash": 700, "fert": -5},
-    "Шизофрения": {"desc": "Психическое расстройство.", "mort": 1.4, "cash": 800, "fert": -10},
-    "Алкоголизм": {"desc": "Зависимость от алкоголя.", "mort": 1.8, "cash": 600, "fert": -20},
-    "Наркомания": {"desc": "Зависимость от наркотиков.", "mort": 2.0, "cash": 1500, "fert": -30},
-    "Сердечная недостаточность": {"desc": "Сердце не справляется.", "mort": 2.2, "cash": 1500, "fert": 0},
-    "Инфаркт": {"desc": "Омертвение участка сердца.", "mort": 2.5, "cash": 3000, "fert": 0},
-    "Инсульт": {"desc": "Нарушение кровоснабжения мозга.", "mort": 2.5, "cash": 3000, "fert": -20},
-    "Цирроз печени": {"desc": "Печень разрушена.", "mort": 2.2, "cash": 1000, "fert": -20},
-    "Полиомиелит": {"desc": "Паралич.", "mort": 1.5, "cash": 500, "fert": -30},
-    "Ожирение": {"desc": "Избыточный вес.", "mort": 1.3, "cash": 400, "fert": -10},
-    "Анемия": {"desc": "Малокровие.", "mort": 1.1, "cash": 200, "fert": -5},
-    "Бесплодие": {"desc": "Неспособность иметь детей.", "mort": 1.0, "cash": 0, "fert": -100},
+    "Астма": {"mort": 1.1, "cash": 300, "fert": 0}, "Диабет 1 типа": {"mort": 1.4, "cash": 1500, "fert": -15},
+    "Диабет 2 типа": {"mort": 1.2, "cash": 800, "fert": -10}, "Гипертония": {"mort": 1.3, "cash": 400, "fert": 0},
+    "Артрит": {"mort": 1.15, "cash": 500, "fert": 0}, "Псориаз": {"mort": 1.05, "cash": 300, "fert": 0},
+    "Эпилепсия": {"mort": 1.5, "cash": 600, "fert": -10}, "Мигрень": {"mort": 1.05, "cash": 200, "fert": 0},
+    "Туберкулез": {"mort": 1.8, "cash": 1500, "fert": -20}, "Сифилис": {"mort": 1.3, "cash": 500, "fert": -50},
+    "Гонорея": {"mort": 1.1, "cash": 400, "fert": -30}, "ВИЧ/СПИД": {"mort": 1.5, "cash": 2000, "fert": -30},
+    "Гепатит B": {"mort": 1.5, "cash": 1200, "fert": -15}, "Гепатит C": {"mort": 1.6, "cash": 2500, "fert": -20},
+    "Холера": {"mort": 2.5, "cash": 800, "fert": 0}, "Тиф": {"mort": 1.8, "cash": 600, "fert": 0},
+    "Корь": {"mort": 1.6, "cash": 400, "fert": 0}, "Ковид-19": {"mort": 1.4, "cash": 1000, "fert": 0},
+    "Малярия": {"mort": 2.0, "cash": 600, "fert": -10}, "Рак легких": {"mort": 3.0, "cash": 5000, "fert": -100},
+    "Рак груди": {"mort": 2.2, "cash": 4000, "fert": -100}, "Лейкемия": {"mort": 2.8, "cash": 8000, "fert": -100},
+    "ПТСР": {"mort": 1.4, "cash": 500, "fert": 0}, "Депрессия": {"mort": 1.3, "cash": 400, "fert": 0},
+    "Биполярное расстройство": {"mort": 1.3, "cash": 700, "fert": -5}, "Шизофрения": {"mort": 1.4, "cash": 800, "fert": -10},
+    "Алкоголизм": {"mort": 1.8, "cash": 600, "fert": -20}, "Наркомания": {"mort": 2.0, "cash": 1500, "fert": -30},
+    "Сердечная недостаточность": {"mort": 2.2, "cash": 1500, "fert": 0}, "Инфаркт": {"mort": 2.5, "cash": 3000, "fert": 0},
+    "Инсульт": {"mort": 2.5, "cash": 3000, "fert": -20}, "Цирроз печени": {"mort": 2.2, "cash": 1000, "fert": -20},
+    "Полиомиелит": {"mort": 1.5, "cash": 500, "fert": -30}, "Ожирение": {"mort": 1.3, "cash": 400, "fert": -10},
+    "Анемия": {"mort": 1.1, "cash": 200, "fert": -5}, "Бесплодие": {"mort": 1.0, "cash": 0, "fert": -100},
 }
 
-ETHNICITIES = {
-    "south_asia": [("Хиндустанец", 35, None),("Бенгалец", 15, "Общество считает тебя бедным."),("Тамил", 10, "Общество считает тебя хитрым."),("Мусульманин", 15, "Общество считает тебя агрессивным."),("Далит", 10, "Общество считает тебя грязным.")],
-    "east_asia": [("Хань", 60, None),("Японец", 15, "Общество считает тебя трудоголиком."),("Кореец", 12, "Общество считает тебя умным."),("Монгол", 5, "Общество считает тебя дикарем.")],
-    "southeast_asia": [("Яванец", 35, None),("Тайец", 20, None),("Вьетнамец", 15, "Общество считает тебя хитрым."),("Филиппинец", 15, "Общество считает тебя беззаботным.")],
-    "africa": [("Йоруба", 20, None),("Игбо", 15, "Общество считает тебя предприимчивым."),("Хауса", 15, "Общество считает тебя фанатиком."),("Зулус", 10, "Общество считает тебя агрессивным.")],
-    "arab": [("Араб", 55, None),("Египтянин", 20, None),("Бербер", 8, "Общество считает тебя дикарем."),("Курд", 5, "Общество считает тебя сепаратистом.")],
-    "latam": [("Метис", 45, None),("Креол", 20, "Общество считает тебя снобом."),("Мулат", 15, None),("Индеец", 10, "Общество считает тебя дикарем.")],
-    "europe": [("Немец", 12, None),("Француз", 12, None),("Итальянец", 8, "Считают, что ты связан с мафией."),("Еврей", 8, "Считают тебя скупым."),("Цыган", 8, "Считают тебя вором."),("Турок", 8, "Считают тебя чужаком.")],
-    "post_soviet": [("Русский", 50, None),("Украинец", 15, None),("Белорус", 5, None),("Кавказец", 10, "Считают тебя бандитом."),("Еврей", 4, "Считают тебя скупым."),("Среднеазиат", 8, "Считают тебя гастарбайтером.")],
-    "developed": [("WASP", 35, None),("Афроамериканец", 18, "Считают тебя агрессивным."),("Латиноамериканец", 15, "Считают тебя нелегалом."),("Азиат", 12, "Считают тебя умным."),("Еврей", 5, "Считают тебя скупым.")],
+# Разделенные школы (1 - начальная, 2 - колледж, 3 - универ)
+SCHOOLS = {
+    "south_asia": [["Школа Раджа Капура", "Муниципальная школа"], ["Колледж Св. Ксавьера", "Делийский колледж"], ["Университет Дели", "Индийский технологический институт"]],
+    "east_asia": [["Школа №1", "Школа Хиросимы"], ["Токийский колледж", "Пекинский колледж"], ["Университет Васэда", "Пекинский университет"]],
+    "southeast_asia": [["Государственная школа", "Школа Бангкока"], ["Политехникум", "Колледж Манилы"], ["Университет Индонезии", "Университет Малайя"]],
+    "africa": [["Деревенская школа", "Школа Найроби"], ["Технический колледж", "Колледж Лагоса"], ["Университет Кейптауна", "Университет Найроби"]],
+    "arab": [["Школа Аль-Фараби", "Школа Каира"], ["Исламский колледж", "Колледж Дубая"], ["Университет Каира", "Университет короля Сауда"]],
+    "latam": [["Школа Святой Марии", "Школа Рио"], ["Колледж Сан-Паулу", "Колледж Мехико"], ["Национальный Университет", "Университет Буэнос-Айреса"]],
+    "europe": [["Гимназия им. Гёте", "Школа Сен-Жермен"], ["Лицей Вольтера", "Колледж Лондона"], ["Оксфордский Университет", "Сорбонна", "Болонский университет"]],
+    "post_soviet": [["Средняя школа №15", "Гимназия №1"], ["Колледж связи", "Политехнический колледж"], ["МГУ им. Ломоносова", "СПбГУ", "Киевский политех"]],
+    "developed": [["High School", "Public School"], ["Community College", "State College"], ["MIT / Гарвард", "Стэнфорд", "Йель"]],
 }
 
 NAMES = {
-    "south_asia": {"m": ["Арджун","Раджеш","Викрам","Адитья","Рохан","Кабир","Амир","Сунил","Деван"], "f": ["Прия","Айша","Рани","Дивья","Ниша","Приянка","Фатима","Сита","Лакшми"]},
-    "east_asia": {"m": ["Вэй","Мин","Хиро","Джун","Кай","Тао","Юта","Хару","Чен"], "f": ["Юки","Сакура","Мэй","Ли","Линь","Хана","Ёко","Суа","Мина"]},
-    "southeast_asia": {"m": ["Агус","Буди","Димас","Хуан","Хосе","Карло","Мигель","Анвар"], "f": ["Дези","Сри","Вина","Аю","Мария","Роза","Луз","Карла","Нур"]},
-    "africa": {"m": ["Чинеду","Эмека","Кваме","Кофи","Аде","Олу","Муса","Абдул","Джамал"], "f": ["Нгози","Амара","Айша","Фатима","Амина","Зейнаб","Грейс","Мери","Танди"]},
-    "arab": {"m": ["Мухаммед","Ахмед","Али","Омар","Хасан","Хусейн","Юсуф","Ибрагим","Халид"], "f": ["Фатима","Айша","Лейла","Марьям","Нур","Зейнаб","Сальма","Рания","Лина"]},
-    "latam": {"m": ["Хуан","Карлос","Хосе","Педро","Луис","Мигель","Антонио","Франсиско","Диего"], "f": ["Мария","Кармен","Изабель","Лусия","Ана","София","Валентина","Камила","Марта"]},
-    "europe": {"m": ["Томас","Лукас","Феликс","Пол","Пьер","Люк","Джеймс","Джек","Марко"], "f": ["Анна","Эмилия","Софи","Клара","Шарлотта","Мария","Лея","Луиза","Эмма"]},
-    "post_soviet": {"m": ["Иван","Дмитрий","Александр","Сергей","Андрей","Михаил","Никита","Артём","Тимур"], "f": ["Анна","Мария","Елена","Ольга","Наташа","Катя","София","Даша","Алина"]},
-    "developed": {"m": ["Джеймс","Джон","Майкл","Дэвид","Крис","Мэтт","Тайлер","Джек","Ноа"], "f": ["Эмили","Сара","Джессика","Эмма","Оливия","София","Ханна","Эбигейл","Миа"]},
+    "south_asia": {"m": ["Арджун","Раджеш","Викрам"], "f": ["Прия","Айша","Рани"]},
+    "east_asia": {"m": ["Вэй","Мин","Хиро"], "f": ["Юки","Сакура","Мэй"]},
+    "southeast_asia": {"m": ["Агус","Буди","Димас"], "f": ["Дези","Сри","Вина"]},
+    "africa": {"m": ["Чинеду","Эмека","Кваме"], "f": ["Нгози","Амара","Айша"]},
+    "arab": {"m": ["Мухаммед","Ахмед","Али"], "f": ["Фатима","Лейла","Марьям"]},
+    "latam": {"m": ["Хуан","Карлос","Хосе"], "f": ["Мария","Кармен","Изабель"]},
+    "europe": {"m": ["Томас","Лукас","Феликс"], "f": ["Анна","Эмилия","Софи"]},
+    "post_soviet": {"m": ["Иван","Дмитрий","Сергей"], "f": ["Анна","Мария","Елена"]},
+    "developed": {"m": ["Джеймс","Джон","Майкл"], "f": ["Эмили","Сара","Джессика"]},
 }
 
 ORGS = {
     "Уличная банда": "Мелкие хулиганы. Грязные деньги.",
     "Синдикат 'Черная Роза'": "Мафия. Кодекс чести, контрабанда.",
     "Картель 'Сьерра'": "Наркокартель. Деньги и война.",
-    "Братство Дракона": "Триада. Теневые схемы.",
-    "Цифровой Синдикат": "Хакеры. Кража крипты.",
     "Орден Пустыни": "Террористы. Смертники.",
-    "Красный Молот": "Экстремисты. Саботаж.",
-    "Эко-Фронт": "Радикалы-экологи. Поджоги.",
     "Полиция": "Стражи порядка. Риск и коррупция.",
     "Армия": "Вооруженные силы. Дисциплина и риск.",
 }
-
-SCHOOLS = {
-    "south_asia": ["Начальная школа Раджа Капура", "Колледж Св. Ксавьера", "Университет Дели"],
-    "east_asia": ["Школа №1", "Токийский колледж", "Университет Васэда"],
-    "southeast_asia": ["Государственная школа", "Политехникум", "Университет Индонезии"],
-    "africa": ["Деревенская школа", "Технический колледж", "Университет Кейптауна"],
-    "arab": ["Школа Аль-Фараби", "Исламский колледж", "Университет Каира"],
-    "latam": ["Школа Святой Марии", "Колледж Сан-Паулу", "Национальный Университет"],
-    "europe": ["Гимназия им. Гёте", "Лицей Вольтера", "Оксфордский Университет"],
-    "post_soviet": ["Средняя школа №15", "Колледж связи", "МГУ им. Ломоносова"],
-    "developed": ["High School", "Community College", "MIT / Гарвард"],
-}
-
-TESTS = {
-    1: [{"q": "5 + 7?", "opts": ["10", "12", "13"], "ans": 1},{"q": "Сколько цветов у радуги?", "opts": ["5", "7", "9"], "ans": 1},{"q": "Сколько дней в неделе?", "opts": ["5", "7", "10"], "ans": 1}],
-    2: [{"q": "x - 4 = 10, x?", "opts": ["6", "14", "40"], "ans": 1},{"q": "Столица Франции?", "opts": ["Лондон", "Париж", "Берлин"], "ans": 1},{"q": "Корень из 144?", "opts": ["10", "12", "14"], "ans": 1}],
-    3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2},{"q": "Производная x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1},{"q": "log(100) по осн 10?", "opts": ["1", "2", "10"], "ans": 1}],
-}
-
-PROPERTIES = {"Общага": 3000, "Квартира": 30000, "Дом": 200000, "Особняк": 1500000, "Остров": 50000000}
-CARS = {"Скутер": 800, "Седан": 15000, "Внедорожник": 40000, "Спорткар": 200000, "Гиперкар": 2000000}
-BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 150000, "Завод": 2000000, "Корпорация": 10000000}
 
 CAREER_TITLES = {
     "civilian": {1: "Стажер", 2: "Специалист", 3: "Старший специалист", 4: "Менеджер", 5: "Директор"},
@@ -228,83 +170,91 @@ CAREER_TITLES = {
 }
 
 INCOME_LABELS = ["Бедная семья", "Средний класс", "Богатая семья"]
-REACTIONS = ["🎲 Судьба сегодня была не в духе.", "🌧 Иногда кубик просто падает не туда.", "🕯 Мир несправедлив. Но ты был здесь.", "✨ Ты прожил жизнь. Это уже немало.", "💀 Смерть — единственное, что гарантировано."]
+PROPERTIES = {"Общага": 3000, "Квартира": 30000, "Дом": 200000, "Особняк": 1500000, "Остров": 50000000}
+CARS = {"Скутер": 800, "Седан": 15000, "Внедорожник": 40000, "Спорткар": 200000}
+BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 150000, "Завод": 2000000}
 
 players = {}
 
-# ================= ГРАФИКА =================
+# ================= ГРАФИКА (УЛУЧШЕННАЯ) =================
 def generate_pixel_art(l, scene_type="life"):
     if not HAS_PIL: return None
-    w, h = 128, 64
-    img = Image.new('RGB', (w, h), color='#0f172a')
+    w, h = 256, 144
+    img = Image.new('RGB', (w, h), color='#1a1a2e')
     d = ImageDraw.Draw(img)
     
     if scene_type == "rich" or (l and l.get("clean_cash", 0) > 500000):
-        d.rectangle([0, 0, w, 40], fill='#fca5a5')
-        d.ellipse([90, 10, 110, 30], fill='#fbbf24')
-        d.polygon([(0, 40), (30, 20), (60, 40)], fill='#f87171')
+        # Закат и особняк
+        d.rectangle([0, 0, w, 90], fill='#fca5a5')
+        d.ellipse([180, 20, 240, 80], fill='#fbbf24')
+        d.polygon([(0, 90), (60, 40), (120, 90)], fill='#f87171')
+        d.rectangle([0, 90, w, h], fill='#22c55e') # Газон
+        d.rectangle([80, 40, 180, 120], fill='#f3f4f6') # Дом
+        d.polygon([(60, 40), (130, 0), (200, 40)], fill='#b91c1c') # Крыша
+        d.rectangle([110, 80, 140, 120], fill='#78350f') # Дверь
+        d.rectangle([90, 60, 105, 75], fill='#fef08a') # Окно
+        d.rectangle([160, 60, 175, 75], fill='#fef08a') # Окно
     elif scene_type == "prison" or (l and l["in_prison"] > 0):
         d.rectangle([0, 0, w, h], fill='#374151')
+        for i in range(20, w, 40): d.line([(i, 0), (i, h)], fill='#4b5563', width=4)
+        d.rectangle([20, 100, 100, 120], fill='#4a3b2b') # Нары
     elif scene_type == "hospital" or (l and l["diseases"]):
         d.rectangle([0, 0, w, h], fill='#e5e7eb')
-        d.rectangle([50, 20, 70, 30], fill='#ef4444')
-        d.rectangle([60, 10, 62, 40], fill='#ef4444')
+        d.rectangle([40, 40, 60, 60], fill='#ef4444') # Крест
+        d.rectangle([50, 30, 52, 70], fill='#ef4444') # Крест
+        d.rectangle([100, 90, 180, 120], fill='#ffffff', outline='#9ca3af') # Койка
     elif scene_type == "child" or (l and l["age"] < 13):
-        d.rectangle([0, 0, w, 40], fill='#93c5fd')
-        d.ellipse([100, 5, 120, 25], fill='#fde047')
-        d.ellipse([10, 10, 20, 15], fill='#ffffff')
-        d.ellipse([15, 8, 25, 15], fill='#ffffff')
-        d.polygon([(0, 40), (40, 25), (80, 40)], fill='#60a5fa')
-    else:
-        d.rectangle([0, 0, w, 40], fill='#1e3a8a')
-        d.ellipse([100, 5, 115, 20], fill='#fef08a')
-        for x in range(10, 100, 20):
-            d.point((x, 10), fill='#ffffff')
-            d.point((x+5, 15), fill='#ffffff')
-
-    if scene_type == "office": d.rectangle([0, 40, w, h], fill='#6b7280')
-    elif scene_type == "rich": d.rectangle([0, 40, w, h], fill='#22c55e')
-    else: d.rectangle([0, 40, w, h], fill='#475569')
-
-    if scene_type == "rich":
-        d.rectangle([40, 15, 90, 50], fill='#f3f4f6')
-        d.polygon([(30, 15), (65, 0), (100, 15)], fill='#b91c1c')
-        d.rectangle([60, 35, 70, 50], fill='#78350f')
-        d.rectangle([45, 25, 55, 35], fill='#fef08a')
-        d.rectangle([75, 25, 85, 35], fill='#fef08a')
-    elif scene_type == "child":
-        d.rectangle([40, 20, 70, 50], fill='#d97706')
-        d.polygon([(35, 20), (55, 5), (75, 20)], fill='#991b1b')
-        d.rectangle([50, 35, 60, 50], fill='#451a03')
+        d.rectangle([0, 0, w, 90], fill='#93c5fd')
+        d.ellipse([200, 10, 240, 50], fill='#fde047') # Солнце
+        d.ellipse([30, 20, 60, 30], fill='#ffffff') # Облако
+        d.ellipse([45, 15, 75, 30], fill='#ffffff')
+        d.rectangle([0, 90, w, h], fill='#66bb6a') # Трава
+        d.rectangle([80, 40, 150, 110], fill='#d97706') # Дом
+        d.polygon([(70, 40), (115, 10), (160, 40)], fill='#991b1b') # Крыша
+        d.rectangle([100, 80, 120, 110], fill='#451a03') # Дверь
     elif scene_type == "office":
-        d.rectangle([20, 20, 100, 50], fill='#9ca3af')
-        d.rectangle([30, 25, 50, 40], fill='#3b82f6')
-        d.rectangle([60, 25, 80, 40], fill='#3b82f6')
+        d.rectangle([0, 0, w, 90], fill='#6b7280')
+        d.rectangle([40, 20, 100, 80], fill='#3b82f6') # Окно
+        d.rectangle([150, 20, 210, 80], fill='#3b82f6') # Окно
+        d.rectangle([0, 90, w, h], fill='#9ca3af') # Пол
+        d.rectangle([80, 100, 160, 120], fill='#5d4037') # Стол
+    else:
+        # Ночь, улица
+        d.rectangle([0, 0, w, 90], fill='#1e3a8a')
+        d.ellipse([200, 10, 220, 30], fill='#fef08a') # Луна
+        for x in range(20, 200, 40): d.point((x, 20), fill='#ffffff') # Звезды
+        d.rectangle([0, 90, w, h], fill='#475569') # Асфальт
+        d.rectangle([40, 60, 46, 100], fill='#6b7280') # Фонарь
+        d.ellipse([35, 55, 51, 65], fill='#fef08a')
 
+    # Персонажи (рисовая функция)
     def draw_person(x, y, color_body, color_head='#fcd34d'):
-        d.rectangle([x, y, x+6, y+12], fill=color_body)
-        d.rectangle([x+1, y-6, x+5, y], fill=color_head)
-        d.rectangle([x+1, y+12, x+2, y+16], fill='#1f2937')
-        d.rectangle([x+4, y+12, x+5, y+16], fill='#1f2937')
-        d.point((x+2, y-4), fill='#000000')
-        d.point((x+4, y-4), fill='#000000')
+        d.rectangle([x, y+20, x+16, y+50], fill=color_body) # Тело
+        d.rectangle([x+2, y, x+14, y+20], fill=color_head) # Голова
+        d.rectangle([x+2, y+50, x+6, y+65], fill='#1f2937') # Нога
+        d.rectangle([x+10, y+50, x+14, y+65], fill='#1f2937') # Нога
+        d.point((x+5, y+8), fill='#000000') # Глаз
+        d.point((x+11, y+8), fill='#000000') # Глаз
+        d.rectangle([x+4, y+15, x+12, y+17], fill='#000000') # Улыбка
 
     if scene_type == "rich":
-        draw_person(65, 34, '#fbbf24'); draw_person(80, 34, '#e5e7eb'); draw_person(75, 40, '#93c5fd')
+        draw_person(110, 60, '#fbbf24', '#fcd34d') # Игрок (богатый)
+        draw_person(140, 60, '#e5e7eb', '#fcd34d') # Партнер
+        draw_person(125, 75, '#93c5fd', '#fcd34d') # Ребенок
     elif scene_type == "office":
-        draw_person(40, 34, '#3b82f6')
+        draw_person(110, 60, '#3b82f6', '#fcd34d') # Игрок в костюме
     elif scene_type == "child":
-        draw_person(55, 34, '#3b82f6' if l and l["gender"]=="m" else '#ec4899')
-        draw_person(35, 34, '#6b7280'); draw_person(75, 34, '#6b7280')
+        draw_person(110, 65, '#3b82f6' if l and l["gender"]=="m" else '#ec4899') # Ребенок
+        draw_person(70, 65, '#6b7280', '#fcd34d') # Родитель
+        draw_person(150, 65, '#6b7280', '#fcd34d') # Родитель
     elif scene_type == "hospital":
-        d.rectangle([50, 35, 78, 50], fill='#ffffff', outline='#9ca3af')
-        draw_person(60, 26, '#9ca3af')
+        d.rectangle([120, 70, 160, 85], fill='#9ca3af') # Одеяло
+        draw_person(130, 50, '#9ca3af', '#fcd34d') # Лежит
     elif scene_type == "prison":
-        draw_person(60, 34, '#212121')
+        draw_person(110, 60, '#212121', '#fcd34d') # Заключенный
     else:
-        draw_person(60, 34, '#3b82f6' if l and l["gender"]=="m" else '#ec4899')
+        draw_person(110, 60, '#3b82f6' if l and l["gender"]=="m" else '#ec4899', '#fcd34d')
 
-    img = img.resize((w*4, h*4), resample=Image.NEAREST)
     bio = io.BytesIO()
     img.save(bio, 'PNG')
     bio.seek(0)
@@ -356,13 +306,6 @@ def weighted_country():
         if r <= 0: return c
     return COUNTRIES[0]
 
-def get_ethnicity(region):
-    r = random.random() * 100; cum = 0
-    for name, chance, prejudice in ETHNICITIES.get(region, [("Местный", 100, None)]):
-        cum += chance
-        if r <= cum: return name, prejudice
-    return "Местный", None
-
 def generate_neighbors(count=3):
     neighbors = []
     for _ in range(count):
@@ -371,12 +314,20 @@ def generate_neighbors(count=3):
         death_age = int(random.gauss(c[4], 12))
         if death_age < 1: death_age = random.randint(1, 5)
         fate_roll = random.random()
-        if fate_roll < 0.1: fate = "умер(ла) в младенчестве"
-        elif fate_roll < 0.2: fate = "стал(а) богатым бизнесменом"
-        elif fate_roll < 0.3: fate = "погиб(ла) в криминальной разборке"
-        elif fate_roll < 0.4: fate = "получил(а) высшее образование"
-        elif fate_roll < 0.6: fate = "живет скромно, работает на заводе"
-        else: fate = "обычная жизнь"
+        
+        if fate_roll < 0.1:
+            fate = "умер(ла) в младенчестве"
+        elif fate_roll < 0.2:
+            fate = "стал(а) богатым бизнесменом" if g == "m" else "стала богатой бизнесменшей"
+        elif fate_roll < 0.3:
+            fate = "погиб(ла) в криминальной разборке"
+        elif fate_roll < 0.4:
+            fate = "получил(а) высшее образование"
+        elif fate_roll < 0.6:
+            fate = "живет скромно, работает на заводе"
+        else:
+            fate = "обычная жизнь"
+            
         neighbors.append({"name": name, "country": c, "gender": g, "death_age": death_age, "fate": fate})
     return neighbors
 
@@ -384,18 +335,18 @@ def create_life(force_country=None):
     country = force_country if force_country else weighted_country()
     gender = "m" if random.random() < 0.51 else "f"
     name = random.choice(NAMES[country[2]][gender])
-    ethnicity, prejudice = get_ethnicity(country[2])
     start_cash = int(country[7] * random.uniform(0.1, 2.0))
     siblings = []
     for _ in range(random.randint(0, 4)):
         s_g = random.choice(["m", "f"])
         siblings.append({"name": random.choice(NAMES[country[2]][s_g]), "gender": s_g, "fate": "Жив(а)"})
     return {
-        "country": country, "gender": gender, "name": name, "ethnicity": ethnicity, "prejudice": prejudice,
+        "country": country, "gender": gender, "name": name,
         "clean_cash": start_cash, "dirty_cash": 0, "in_prison": 0, "age": 0, "alive": True, "faction": "Нет",
         "education": "Нет", "job": "Безработный", "salary": 0, "job_type": "none", "career_xp": 0, "career_rank": 1,
         "married": False, "children": 0, "diseases": [], "properties": [], "cars": [], "businesses": [], "debt": 0,
-        "life_map": [], "siblings": siblings, "test_data": None, "asked_tests": {1: [], 2: [], 3: []}, "current_event": None
+        "life_map": [], "siblings": siblings, "test_data": None, "asked_tests": {1: [], 2: [], 3: []}, "current_event": None,
+        "has_license": False
     }
 
 def add_to_life_map(l, text):
@@ -415,6 +366,15 @@ def mortality_rate(l):
 # ================= СОБЫТИЯ =================
 def get_event(l):
     age = l["age"]; c = l["country"]
+    
+    # Карьерные события
+    if age >= 18 and l["job_type"] in ["civilian", "police", "military"] and random.random() < 0.3:
+        if random.random() < 0.5:
+            return {"title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.", "choices": [{"text": "Согласиться (XP+)", "p": 0.7, "success": "career_xp_up"}, {"text": "Уйти домой", "p": 1, "success": "career_xp_down"}]}
+        else:
+            return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win"}, {"text": "Смириться", "p": 1, "success": "career_grind"}]}
+
+    # Случайные события
     if random.random() < 0.45:
         if age < 13:
             return random.choice([
@@ -435,8 +395,9 @@ def get_event(l):
             elif l["married"]:
                 adult.append({"title": "💔 Развод", "text": "Супруг подает на развод.", "choices": [{"text": "Смириться", "p": 1, "success": "divorce"}]})
             adult.append({"title": "📞 Мошенники", "text": "Звонят из 'банка'.", "choices": [{"text": "Дать код", "p": 1, "success": "scammed"}, {"text": "Бросить", "p": 1, "success": "none"}]})
-            adult.append({"title": "💼 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win"}, {"text": "Смириться", "p": 1, "success": "career_grind"}]})
+            adult.append({"title": "🎰 Лотерея", "text": "Купил билет.", "choices": [{"text": "Проверить", "p": 0.05, "success": "lottery_win"}, {"text": "Выбросить", "p": 1, "success": "none"}]})
             return random.choice(adult)
+            
     if age == 22 and l["job_type"] == "none" and l["faction"] == "Нет":
         vvp = c[7]
         return {"title": "Выбор пути", "text": "Пора определяться.",
@@ -456,19 +417,39 @@ def next_year(user_id, chat_id):
         return send_scene(chat_id, l, f"⛓ <b>Тюрьма.</b> Осталось: {l['in_prison']} лет.", kb_year(), "prison")
     
     l["age"] += 1
+    
+    # Экономика
     rent = sum(int(pr["value"] * 0.05) for pr in l["properties"])
     biz = sum(int(b["value"] * 0.15) for b in l["businesses"])
     l["clean_cash"] += rent + biz
+    
     tax = int(l["salary"] * 0.2) if l["job_type"] in ["civilian", "police", "military"] else 0
     med = sum(DISEASES[d]["cash"] for d in l["diseases"])
     living = int(l["country"][7] * 0.2 + (500 if l["children"] else 0))
     l["clean_cash"] += (l["salary"] - tax - med - living)
+    
     if l["clean_cash"] < 0: l["debt"] += abs(l["clean_cash"]); l["clean_cash"] = 0
 
+    # Проверка на повышение
+    if l["job_type"] in ["civilian", "police", "military"]:
+        if l["career_xp"] >= 100:
+            l["career_xp"] = 0
+            l["career_rank"] = min(5, l["career_rank"] + 1)
+            l["salary"] = int(l["salary"] * 1.5)
+            add_to_life_map(l, f"Повышение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
+            p["promoted"] = True
+        elif l["career_xp"] <= -50:
+            l["career_xp"] = 0
+            l["career_rank"] = max(1, l["career_rank"] - 1)
+            l["salary"] = int(l["salary"] * 0.7)
+            add_to_life_map(l, f"Понижение до {CAREER_TITLES[l['job_type']][l['career_rank']]}")
+            p["demoted"] = True
+
+    # Эхо
     echo_text = ""
     if l["age"] in [7, 18, 30, 50]:
         n = random.choice(p["neighbors"])
-        echo_text = f"\n\n👥 <b>Эхо:</b> Твой ровесник <b>{n['name']}</b> из {n['country'][1]}... "
+        echo_text = f"\n\n👥 <b>Эхо:</b> Твой ровесник <b>{n['name']}</b> ({n['country'][1]}) "
         echo_text += "умер(ла)." if n["death_age"] < l["age"] else f"жив(а) и {n['fate']}."
 
     if random.random() < mortality_rate(l): return send_death(user_id, chat_id)
@@ -500,7 +481,11 @@ def start_exam(user_id, chat_id, level, place):
     available = [t for t in TESTS[level] if t["q"] not in [a["q"] for a in l["asked_tests"][level]]]
     if not available: l["asked_tests"][level] = []; available = TESTS[level]
     test = random.choice(available); l["asked_tests"][level].append(test); l["test_data"] = test
-    school = random.choice(SCHOOLS[l["country"][2]])
+    
+    # Выбор правильной школы
+    school_list = SCHOOLS[l["country"][2]][level-1]
+    school = random.choice(school_list)
+    
     kb = InlineKeyboardMarkup()
     for i, opt in enumerate(test["opts"]): kb.add(InlineKeyboardButton(opt, callback_data=f"ans_{i}"))
     bot.send_message(chat_id, f"📝 <b>Экзамен в {place}!</b>\n{school}\n\nВопрос: <b>{test['q']}</b>", reply_markup=kb, parse_mode="HTML")
@@ -525,32 +510,50 @@ def apply_outcome(l, outcome):
     if outcome == "job_pol": l["job_type"] = "police"; l["faction"] = "Полиция"; l["job"] = "Полицейский"; l["salary"] = int(vvp * 0.5); add_to_life_map(l, "В полиции"); return "Ты в полиции."
     if outcome == "job_mil": l["job_type"] = "military"; l["faction"] = "Армия"; l["job"] = "Военный"; l["salary"] = int(vvp * 0.4); add_to_life_map(l, "В армии"); return "Ты в армии."
     if outcome == "job_crim": l["job_type"] = "criminal"; l["faction"] = "Уличная банда"; l["job"] = "Бандит"; l["dirty_cash"] += 5000; add_to_life_map(l, "Криминал"); return "Криминал."
+    if outcome == "career_xp_up": l["career_xp"] += 30; return "Переработал. XP +30."
+    if outcome == "career_xp_down": l["career_xp"] -= 20; return "Ушел домой. XP -20."
+    if outcome == "career_fight_win": l["career_xp"] += 40; return "Отстоял место. XP +40."
+    if outcome == "career_grind": l["career_xp"] -= 10; return "Проглотил обиду. XP -10."
     if outcome == "scammed": loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss; return f"Украли {fmt_money(loss, l['country'])}."
     if outcome == "child_fight": l["clean_cash"] += 100; return "Дал сдачи."
     if outcome == "child_tell": return "Пожаловался."
     if outcome == "teen_smoke": l["diseases"].append("Рак легких"); return "Курил."
     if outcome == "teen_healthy": l["clean_cash"] += 200; return "Сэкономил."
+    if outcome == "lottery_win": l["clean_cash"] += int(vvp * 10); return "ДЖЕКПОТ!"
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
     p = players.get(user_id); l = p["you"]; evt = l.get("current_event")
     if not evt: return
     c = evt["choices"][i]; success = random.random() < c["p"]
-    outcome = c["success"] if success else c["fail"]
+    outcome = c["success"] if success else c.get("fail", "none")
     text = apply_outcome(l, outcome) if outcome else "Год прошел."
     l["last_result"] = {"success": success, "text": text}
     send_scene(chat_id, l, format_year(l), kb_year())
 
 def format_year(l):
-    c = l["country"]; parts = [f"<b>Возраст: {l['age']}</b>"]
+    c = l["country"]
+    parts = [f"<b>Возраст: {l['age']}</b>"]
     if l.get("last_result"): parts.append(f"{'✅' if l['last_result']['success'] else '❌'} <i>{l['last_result']['text']}</i>")
+    
     parts.append(f"\n💰 Баланс: <b>{fmt_money(l['clean_cash'], c)}</b>")
+    if l["dirty_cash"] > 0: parts.append(f"💼 Грязные: <b>{fmt_money(l['dirty_cash'], c)}</b>")
+    if l["debt"] > 0: parts.append(f"🏦 Долг: <b>{fmt_money(l['debt'], c)}</b>")
+    
     parts.append(f"👑 Класс: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
+    
     job = l["job"]
-    if l["job_type"] in ["civilian", "police", "military"]: job += f" ({CAREER_TITLES[l['job_type']].get(l['career_rank'], '')})"
+    if l["job_type"] in ["civilian", "police", "military"]:
+        job += f" ({CAREER_TITLES[l['job_type']].get(l['career_rank'], '')}, XP: {l['career_xp']}/100)"
     parts.append(f"💼 {job}")
+    
+    if l["properties"]: parts.append("🏠 " + ", ".join([p["type"] for p in l["properties"]]))
+    if l["cars"]: parts.append("🚗 " + ", ".join([c["type"] for c in l["cars"]]))
+    if l["businesses"]: parts.append("🏢 " + ", ".join([b["type"] for b in l["businesses"]]))
     if l["diseases"]: parts.append(f"🩺 {', '.join(l['diseases'])}")
     parts.append(f"🎓 {l['education']}")
+    parts.append(f"👨‍👩‍👧 Дети: {l['children']} | Брак: {'Да' if l['married'] else 'Нет'}")
+    
     return "\n".join(parts)
 
 def format_event(l, evt): return f"<b>{l['age']} лет · {evt['title']}</b>\n\n{evt['text']}"
@@ -617,33 +620,36 @@ def cmd_test(msg):
 def handle(call):
     uid = call.from_user.id; chat_id = call.message.chat.id
     bot.answer_callback_query(call.id); d = call.data
-
-    if d == "new":
-        l = create_life(); neighbors = generate_neighbors()
-        players[uid] = {"you": l, "neighbors": neighbors}
-        add_to_life_map(l, "Родился")
-        msg = f"👶 <b>Ты родился!</b>\n👤 {l['name']} ({l['country'][1]} {l['country'][0]})\n👨‍👩‍👧 {INCOME_LABELS[random.randint(0,2)]}\n\n<i>Нажми 'Следующий год'.</i>"
-        send_scene(chat_id, l, msg, kb_year(), "child")
-    elif d == "year": next_year(uid, chat_id)
-    elif d.startswith("job_"): 
-        text = apply_outcome(players[uid]["you"], d)
-        send_scene(chat_id, players[uid]["you"], text, kb_year())
-    elif d.startswith("choice_"): resolve_choice(uid, chat_id, int(d.split("_")[1]))
-    elif d.startswith("ans_"): handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
-    elif d == "shop": open_shop(uid, chat_id)
-    elif d == "shop_prop": shop_prop_menu(uid, chat_id)
-    elif d == "shop_car": shop_car_menu(uid, chat_id)
-    elif d == "shop_biz": shop_biz_menu(uid, chat_id)
-    elif d.startswith("buy_prop_"): process_buy(uid, chat_id, "prop", d.replace("buy_prop_", ""))
-    elif d.startswith("buy_car_"): process_buy(uid, chat_id, "car", d.replace("buy_car_", ""))
-    elif d.startswith("buy_biz_"): process_buy(uid, chat_id, "biz", d.replace("buy_biz_", ""))
-    elif d.startswith("play_"):
-        idx = int(d.split("_")[1]); n = players[uid]["neighbors"][idx]
-        l = create_life(force_country=n["country"]); l["name"] = n["name"]
-        players[uid] = {"you": l, "neighbors": generate_neighbors()}
-        add_to_life_map(l, "Родился (смена судьбы)")
-        msg = f"🎭 <b>Новая судьба!</b>\nТы теперь {l['name']} ({l['country'][1]})."
-        send_scene(chat_id, l, msg, kb_year(), "child")
+    
+    try:
+        if d == "new":
+            l = create_life(); neighbors = generate_neighbors()
+            players[uid] = {"you": l, "neighbors": neighbors}
+            add_to_life_map(l, "Родился")
+            msg = f"👶 <b>Ты родился!</b>\n👤 {l['name']} ({l['country'][1]} {l['country'][0]})\n\n<i>Нажми 'Следующий год'.</i>"
+            send_scene(chat_id, l, msg, kb_year(), "child")
+        elif d == "year": next_year(uid, chat_id)
+        elif d.startswith("job_"): 
+            text = apply_outcome(players[uid]["you"], d)
+            send_scene(chat_id, players[uid]["you"], text, kb_year())
+        elif d.startswith("choice_"): resolve_choice(uid, chat_id, int(d.split("_")[1]))
+        elif d.startswith("ans_"): handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
+        elif d == "shop": open_shop(uid, chat_id)
+        elif d == "shop_prop": shop_prop_menu(uid, chat_id)
+        elif d == "shop_car": shop_car_menu(uid, chat_id)
+        elif d == "shop_biz": shop_biz_menu(uid, chat_id)
+        elif d.startswith("buy_prop_"): process_buy(uid, chat_id, "prop", d.replace("buy_prop_", ""))
+        elif d.startswith("buy_car_"): process_buy(uid, chat_id, "car", d.replace("buy_car_", ""))
+        elif d.startswith("buy_biz_"): process_buy(uid, chat_id, "biz", d.replace("buy_biz_", ""))
+        elif d.startswith("play_"):
+            idx = int(d.split("_")[1]); n = players[uid]["neighbors"][idx]
+            l = create_life(force_country=n["country"]); l["name"] = n["name"]
+            players[uid] = {"you": l, "neighbors": generate_neighbors()}
+            add_to_life_map(l, "Родился (смена судьбы)")
+            msg = f"🎭 <b>Новая судьба!</b>\nТы теперь {l['name']} ({l['country'][1]})."
+            send_scene(chat_id, l, msg, kb_year(), "child")
+    except Exception as e:
+        bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
 
 if __name__ == "__main__":
     print("Бот запущен...")
