@@ -3,7 +3,7 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import random, json, os, io, zipfile
 
 try:
-    from PIL import Image, ImageDraw, ImageStat
+    from PIL import Image, ImageDraw
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
@@ -29,27 +29,38 @@ def save_db(data):
 players_db = load_db()
 SPRITE_CACHE = {}
 
-# ================= ЗАГРУЗКА СПРАЙТОВ ИЗ ТВОЕГО АРХИВА =================
-def get_exact_sprite(zip_name, filename):
-    """Достает конкретный файл из архива по его точному имени"""
-    cache_key = f"{zip_name}_{filename}"
+# ================= ЗАГРУЗКА АССЕТОВ =================
+def get_sprite(filename, zip_options):
+    cache_key = f"{filename}"
     if cache_key in SPRITE_CACHE: return SPRITE_CACHE[cache_key]
-    if not os.path.exists(zip_name): return None
-    
+    for zip_name in zip_options:
+        if not os.path.exists(zip_name): continue
+        try:
+            with zipfile.ZipFile(zip_name, 'r') as z:
+                for file_info in z.infolist():
+                    if file_info.filename.lower().endswith(filename.lower()):
+                        data = z.read(file_info.filename)
+                        img = Image.open(io.BytesIO(data)).convert("RGBA")
+                        SPRITE_CACHE[cache_key] = img
+                        return img
+        except: pass
+    return None
+
+def load_tiles_from_zip(zip_name):
+    tiles = []
+    if not os.path.exists(zip_name): return tiles
     try:
         with zipfile.ZipFile(zip_name, 'r') as z:
             for file_info in z.infolist():
-                # Ищем файл, который заканчивается на нужное нам имя (например, man.png)
-                if file_info.filename.lower().endswith(filename.lower()):
+                if file_info.filename.lower().endswith('.png') and "tile_" in file_info.filename:
                     data = z.read(file_info.filename)
                     img = Image.open(io.BytesIO(data)).convert("RGBA")
-                    SPRITE_CACHE[cache_key] = img
-                    return img
-    except Exception as e:
-        print(f"Ошибка чтения {zip_name}: {e}")
-    return None
+                    img = img.resize((32, 32), Image.NEAREST) # Унифицируем размер
+                    tiles.append(img)
+    except: pass
+    return tiles
 
-# ================= СПРАВОЧНИКИ (85 СТРАН) =================
+# ================= СПРАВОЧНИКИ =================
 COUNTRIES = [
     ("Индия", "🇮🇳", "south_asia", 23000, 70, 0.75, 0.35, 2500, 83.5, "₹"),("Пакистан", "🇵🇰", "south_asia", 6000, 66, 0.55, 0.37, 1500, 278.0, "₨"),("Бангладеш", "🇧🇩", "south_asia", 3000, 74, 0.75, 0.40, 2000, 110.0, "৳"),("Непал", "🇳🇵", "south_asia", 550, 70, 0.65, 0.21, 1200, 133.0, "₨"),("Шри-Ланка", "🇱🇰", "south_asia", 320, 77, 0.92, 0.19, 3800, 300.0, "₨"),("Афганистан", "🇦🇫", "south_asia", 1000, 65, 0.40, 0.26, 800, 70.0, "؋"),
     ("Китай", "🇨🇳", "east_asia", 9000, 78, 0.95, 0.65, 12000, 7.2, "¥"),("Япония", "🇯🇵", "east_asia", 800, 84, 0.99, 0.92, 35000, 150.0, "¥"),("Южная Корея", "🇰🇷", "east_asia", 250, 83, 0.98, 0.81, 33000, 1330.0, "₩"),("Монголия", "🇲🇳", "east_asia", 80, 70, 0.90, 0.68, 4500, 3450.0, "₮"),
@@ -118,7 +129,6 @@ def tint_skin(img, region):
     if not img: return img
     skin_colors = {"africa": (102, 51, 0), "south_asia": (153, 102, 51), "europe": (255, 219, 172), "developed": (255, 219, 172), "post_soviet": (255, 219, 172), "east_asia": (234, 192, 134), "arab": (204, 153, 102), "latam": (204, 153, 102), "southeast_asia": (204, 153, 102)}
     target_color = skin_colors.get(region, (255, 219, 172))
-    
     img = img.convert("RGBA")
     datas = img.getdata()
     new_data = []
@@ -136,38 +146,39 @@ def generate_scene(l, scene_type="life"):
     img = Image.new('RGBA', (W, H), color='#0f172a')
     d = ImageDraw.Draw(img)
 
-    # === 1. РИСУЕМ ФОН КОДОМ ===
-    if scene_type in ["rich", "life"]:
-        d.rectangle([0, 0, W, 220], fill='#1e1b4b')
+    # 1. НЕБО
+    if scene_type in ["rich", "life", "police"]:
+        d.rectangle([0, 0, W, 180], fill='#1e1b4b')
         d.ellipse([500, 40, 560, 100], fill='#fef08a')
-        d.rectangle([0, 220, W, H], fill='#14532d')
     elif scene_type in ["child", "school"]:
-        d.rectangle([0, 0, W, 220], fill='#93c5fd')
+        d.rectangle([0, 0, W, 180], fill='#93c5fd')
         d.ellipse([500, 40, 560, 100], fill='#fde047')
-        d.rectangle([0, 220, W, H], fill='#4ade80')
-    elif scene_type in ["love", "wedding"]:
-        d.rectangle([0, 0, W, 220], fill='#fca5a5')
-        d.rectangle([0, 220, W, H], fill='#fcd34d')
-    elif scene_type in ["sad", "money_lose"]:
-        d.rectangle([0, 0, W, H], fill='#334155')
-        for i in range(20, W, 40): d.line([(i, 0), (i, H)], fill='#475569', width=2)
-    elif scene_type in ["office", "office_angry"]:
-        d.rectangle([0, 0, W, H], fill='#94a3b8')
-        d.rectangle([50, 50, 250, 200], fill='#38bdf8')
-    elif scene_type == "hospital":
-        d.rectangle([0, 0, W, H], fill='#e2e8f0')
-    elif scene_type == "prison":
-        d.rectangle([0, 0, W, H], fill='#374151')
-        for i in range(20, W, 60): d.line([(i, 0), (i, H)], fill='#4b5563', width=8)
-    elif scene_type == "police":
-        d.rectangle([0, 0, W, 220], fill='#1e3a8a')
-        d.rectangle([0, 220, W, H], fill='#1f2937')
+    else:
+        d.rectangle([0, 0, W, 180], fill='#334155')
 
-    # === 2. ЗАГРУЖАЕМ СПРАЙТЫ (ТОЧНЫЕ ИМЕНА) ===
-    hero_m = get_exact_sprite("pixel-vehicle-pack.zip", "man.png")
-    hero_f = get_exact_sprite("pixel-vehicle-pack.zip", "woman.png")
-    car_police = get_exact_sprite("pixel-vehicle-pack.zip", "police.png")
-    car_sport = get_exact_sprite("pixel-vehicle-pack.zip", "sports_red.png")
+    # 2. АВТОМАТИЧЕСКАЯ СБОРКА ГОРОДА ИЗ ТАЙЛОВ
+    tiles = load_tiles_from_zip("kenney_tiny-city.zip") or load_tiles_from_zip("kenney_roguelike-modern-city.zip")
+    
+    if tiles:
+        for y in range(180, H, 32):
+            for x in range(0, W, 32):
+                tile = random.choice(tiles)
+                img.paste(tile, (x, y), tile)
+        for x in range(0, W, 32):
+            if random.random() < 0.7:
+                height = random.randint(2, 4)
+                for y in range(180 - height * 32, 180, 32):
+                    tile = random.choice(tiles)
+                    img.paste(tile, (x, y), tile)
+    else:
+        d.rectangle([0, 180, W, H], fill='#14532d')
+
+    # 3. ПЕРСОНАЖИ (из архива машин)
+    zip_name = "kenney_pixel-vehicle-pack.zip"
+    hero_m = get_sprite("man.png", [zip_name])
+    hero_f = get_sprite("woman.png", [zip_name])
+    car_police = get_sprite("police.png", [zip_name])
+    car_sport = get_sprite("sports_red.png", [zip_name])
 
     region = l["country"][2] if l else "europe"
     if hero_m: hero_m = tint_skin(hero_m, region)
@@ -175,36 +186,32 @@ def generate_scene(l, scene_type="life"):
 
     player_img = hero_m if l and l.get("gender") == "m" else hero_f
     
-    def paste_sprite(sprite, x, y, target_h=100):
+    def paste_sprite(sprite, x, y, target_h=120):
         if sprite:
             w_percent = (target_h / float(sprite.size[1]))
             w_size = int((float(sprite.size[0]) * float(w_percent)))
             sprite_resized = sprite.resize((w_size, target_h), Image.NEAREST)
             img.paste(sprite_resized, (x, y), sprite_resized)
 
+    # 4. РАССТАНОВКА
     if scene_type == "fight":
         paste_sprite(player_img, 150, 180, 120)
         paste_sprite(hero_f, 380, 180, 120)
         d.ellipse([290, 220, 340, 270], fill='#fcd34d')
-        
     elif scene_type == "love" or scene_type == "wedding":
         paste_sprite(player_img, 180, 180, 120)
         paste_sprite(hero_f if l.get("gender")=="m" else hero_m, 340, 180, 120)
         d.polygon([(260, 160), (280, 120), (300, 160), (280, 200)], fill='#ef4444')
         d.ellipse([240, 130, 280, 170], fill='#ef4444')
         d.ellipse([280, 130, 320, 170], fill='#ef4444')
-
     elif scene_type == "police":
         paste_sprite(player_img, 150, 180, 120)
         paste_sprite(car_police, 350, 220, 80)
-
     elif scene_type == "rich":
         paste_sprite(player_img, 150, 180, 120)
         paste_sprite(car_sport, 350, 220, 80)
-
     elif scene_type == "hospital":
         paste_sprite(player_img, 260, 200, 100)
-
     else:
         paste_sprite(player_img, 260, 180, 120)
 
