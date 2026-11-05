@@ -12,12 +12,10 @@ def load_db():
             with open(DB_FILE, "r", encoding="utf-8") as f: return json.load(f)
         except: pass
     return {}
-
 def save_db(data):
     try:
         with open(DB_FILE, "w", encoding="utf-8") as f: json.dump(data, f, ensure_ascii=False)
     except: pass
-
 players_db = load_db()
 
 # ================= СПРАВОЧНИКИ =================
@@ -73,10 +71,13 @@ CAREER_TITLES = {
     "criminal": {1: "Шестерка", 2: "Боец", 3: "Бригадир", 4: "Авторитет", 5: "Босс"},
 }
 
-INCOME_LABELS = ["Бедная семья", "Средний класс", "Богатая семья"]
 PROPERTIES = {"Общага": 3000, "Квартира": 30000, "Дом": 200000, "Особняк": 1500000, "Остров": 50000000}
 CARS = {"Скутер": 800, "Седан": 15000, "Внедорожник": 40000, "Спорткар": 200000}
 BUSINESSES = {"Ларёк": 5000, "Кофейня": 25000, "Ресторан": 150000, "Завод": 2000000}
+
+BAD_TRAITS_LOCAL = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным",
+                    "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией",
+                    "сепаратистом", "предателем"]
 
 TESTS = {
     1: [{"q": "Сколько будет 5 + 7?", "opts": ["10", "12", "13"], "ans": 1},{"q": "Сколько букв в слове 'МАМА'?", "opts": ["2", "4", "6"], "ans": 1},{"q": "Сколько цветов у радуги?", "opts": ["5", "7", "9"], "ans": 1},{"q": "Что больше: 3×3 или 2×5?", "opts": ["3×3", "2×5", "Равны"], "ans": 1},{"q": "Сколько месяцев в году?", "opts": ["10", "12", "14"], "ans": 1},{"q": "Какое животное мяукает?", "opts": ["Собака", "Кошка", "Корова"], "ans": 1},{"q": "Сколько ног у паука?", "opts": ["6", "8", "10"], "ans": 1},{"q": "Что тает на солнце?", "opts": ["Камень", "Снег", "Песок"], "ans": 1},{"q": "Сколько дней в неделе?", "opts": ["5", "7", "10"], "ans": 1},{"q": "Какого цвета трава?", "opts": ["Красная", "Зеленая", "Синяя"], "ans": 1}],
@@ -84,183 +85,315 @@ TESTS = {
     3: [{"q": "Столица Австралии?", "opts": ["Сидней", "Мельбурн", "Канберра"], "ans": 2},{"q": "Производная от x^2?", "opts": ["x", "2x", "x^3/3"], "ans": 1},{"q": "Сколько планет в Солнечной системе?", "opts": ["7", "8", "9"], "ans": 1},{"q": "Кто открыл тяготение?", "opts": ["Эйнштейн", "Ньютон", "Галилей"], "ans": 1},{"q": "Что такое ДНК?", "opts": ["Белок", "Кислота", "Углевод"], "ans": 1},{"q": "Столица Японии?", "opts": ["Осака", "Токио", "Киото"], "ans": 1},{"q": "log(100) по основанию 10?", "opts": ["1", "2", "10"], "ans": 1},{"q": "Интеграл от 2x dx?", "opts": ["x^2 + C", "2x^2 + C", "x + C"], "ans": 0},{"q": "Кто написал 'Преступление и наказание'?", "opts": ["Толстой", "Достоевский", "Чехов"], "ans": 1},{"q": "Что такое фотон?", "opts": ["Квант света", "Частица атома", "Волна"], "ans": 0}]
 }
 
-# ================= СОБЫТИЯ ФОКУСОВ (С ВОЗРАСТНЫМИ РАМКАМИ) =================
+# ================= СОБЫТИЯ ФОКУСОВ (возрастные рамки) =================
 FOCUS_EVENTS = {
     "health": [
-        {"id": "h1", "title": "🏥 Плановый медосмотр", "text": "Врач советует проверить здоровье.", "min_age": 5,
-         "choices": [
-            {"text": "💵 Пройти обследование", "p": 0.95, "success_effect": {"health": 10, "cash": -500, "text": "Обследование показало хорошие результаты. Здоровье +10."}},
-            {"text": "😬 Отложить", "p": 1, "success_effect": {"text": "Ты отложил медосмотр."}}]},
-        {"id": "h2", "title": "🏋️ Спортзал", "text": "Пора заняться спортом.", "min_age": 12,
-         "choices": [
-            {"text": "💵 Купить абонемент", "p": 0.9, "success_effect": {"health": 15, "happiness": 5, "cash": -1000, "text": "Спортзал пошёл на пользу. Здоровье +15."}},
-            {"text": "🆓 Бегать по утрам", "p": 0.7, "success_effect": {"health": 7, "text": "Пробежка взбодрила. Здоровье +7."}, "fail_effect": {"health": -3, "text": "Простудился на пробежке. Здоровье -3."}}]},
-        {"id": "h3", "title": "😴 Режим сна", "text": "Сон влияет на всё.", "min_age": 8,
-         "choices": [
-            {"text": "🛌 Ложиться раньше", "p": 1, "success_effect": {"health": 8, "happiness": 3, "text": "Нормальный сон. Здоровье +8."}},
-            {"text": "🌙 Гулять до утра", "p": 1, "success_effect": {"health": -10, "happiness": 6, "text": "Весело, но организм страдает. Здоровье -10."}}]},
-        {"id": "h4", "title": "🥗 Диета", "text": "Врач советует пересмотреть питание.", "min_age": 12,
-         "choices": [
-            {"text": "💵 Правильное питание", "p": 0.85, "success_effect": {"health": 12, "happiness": -3, "cash": -800, "text": "Диета даёт результат. Здоровье +12."}},
-            {"text": "🍔 Фастфуд", "p": 1, "success_effect": {"health": -8, "happiness": 5, "text": "Вкусно, но вредно. Здоровье -8."}}]},
-        {"id": "h5", "title": "🦷 Стоматолог", "text": "Зуб ноет уже неделю.", "min_age": 4,
-         "choices": [
-            {"text": "💵 Пойти к врачу", "p": 0.95, "success_effect": {"health": 6, "cash": -400, "text": "Зуб вылечен. Здоровье +6."}},
-            {"text": "😣 Терпеть", "p": 1, "success_effect": {"health": -6, "text": "Зуб разболелся сильнее. Здоровье -6."}}]},
-        {"id": "h6", "title": "💊 Витамины", "text": "Аптека предлагает курс.", "min_age": 5,
-         "choices": [
-            {"text": "💵 Купить курс", "p": 0.9, "success_effect": {"health": 8, "cash": -250, "text": "Витамины укрепили иммунитет. Здоровье +8."}},
-            {"text": "🚶 Пройти мимо", "p": 1, "success_effect": {"text": "Решил обойтись без витаминов."}}]},
-        {"id": "h7", "title": "🏊 Бассейн", "text": "Рядом открылся бассейн.", "min_age": 6,
-         "choices": [
-            {"text": "💵 Купить абонемент", "p": 0.9, "success_effect": {"health": 10, "happiness": 5, "cash": -400, "text": "Плавание укрепляет. Здоровье +10."}},
-            {"text": "🏠 Остаться дома", "p": 1, "success_effect": {"text": "Остался дома."}}]},
-        {"id": "h8", "title": "🧘 Йога и медитация", "text": "Друг советует попробовать.", "min_age": 10,
-         "choices": [
-            {"text": "💵 Записаться на курс", "p": 0.9, "success_effect": {"health": 7, "happiness": 10, "cash": -300, "text": "Гармония тела и духа. Здоровье +7."}},
-            {"text": "🤨 Скептически", "p": 1, "success_effect": {"text": "Не поверил в пользу йоги."}}]},
-        {"id": "h9", "title": "💆 Массаж", "text": "Спина устала.", "min_age": 12,
-         "choices": [
-            {"text": "💵 Записаться к массажисту", "p": 0.95, "success_effect": {"health": 9, "happiness": 10, "cash": -700, "text": "Массаж расслабил. Здоровье +9."}},
-            {"text": "🖐 Самомассаж", "p": 1, "success_effect": {"health": 3, "text": "Немного помогло. Здоровье +3."}}]},
-        {"id": "h10", "title": "🤧 Простуда", "text": "Ты почувствовал недомогание.", "min_age": 3,
-         "choices": [
-            {"text": "💵 Лечиться дома", "p": 0.9, "success_effect": {"health": 4, "cash": -200, "text": "Отлежался. Здоровье +4."}},
-            {"text": "💼 На ногах", "p": 0.6, "success_effect": {"career_xp": 8, "health": -10, "text": "Дошёл до работы, но подорвал здоровье. XP +8, Здоровье -10."}, "fail_effect": {"health": -15, "text": "Свалился с температурой. Здоровье -15."}}]},
+        {"id":"h1","title":"🏥 Плановый медосмотр","text":"Врач советует проверить здоровье.","min_age":5,
+         "choices":[{"text":"💵 Пройти обследование","p":0.95,"success_effect":{"health":10,"cash":-500,"text":"Обследование показало хорошие результаты. Здоровье +10."}},
+                    {"text":"😬 Отложить","p":1,"success_effect":{"text":"Ты отложил медосмотр."}}]},
+        {"id":"h2","title":"🏋️ Спортзал","text":"Пора заняться спортом.","min_age":12,
+         "choices":[{"text":"💵 Купить абонемент","p":0.9,"success_effect":{"health":15,"happiness":5,"cash":-1000,"text":"Спортзал пошёл на пользу. Здоровье +15."}},
+                    {"text":"🆓 Бегать по утрам","p":0.7,"success_effect":{"health":7,"text":"Пробежка взбодрила. Здоровье +7."},"fail_effect":{"health":-3,"text":"Простудился на пробежке."}}]},
+        {"id":"h3","title":"😴 Режим сна","text":"Сон влияет на всё.","min_age":8,
+         "choices":[{"text":"🛌 Ложиться раньше","p":1,"success_effect":{"health":8,"happiness":3,"text":"Нормальный сон. Здоровье +8."}},
+                    {"text":"🌙 Гулять до утра","p":1,"success_effect":{"health":-10,"happiness":6,"text":"Весело, но организм страдает."}}]},
+        {"id":"h4","title":"🥗 Диета","text":"Врач советует пересмотреть питание.","min_age":12,
+         "choices":[{"text":"💵 Правильное питание","p":0.85,"success_effect":{"health":12,"happiness":-3,"cash":-800,"text":"Диета даёт результат."}},
+                    {"text":"🍔 Фастфуд","p":1,"success_effect":{"health":-8,"happiness":5,"text":"Вкусно, но вредно."}}]},
+        {"id":"h5","title":"🦷 Стоматолог","text":"Зуб ноет уже неделю.","min_age":4,
+         "choices":[{"text":"💵 Пойти к врачу","p":0.95,"success_effect":{"health":6,"cash":-400,"text":"Зуб вылечен."}},
+                    {"text":"😣 Терпеть","p":1,"success_effect":{"health":-6,"text":"Зуб разболелся сильнее."}}]},
+        {"id":"h6","title":"💊 Витамины","text":"Аптека предлагает курс.","min_age":5,
+         "choices":[{"text":"💵 Купить курс","p":0.9,"success_effect":{"health":8,"cash":-250,"text":"Витамины укрепили иммунитет."}},
+                    {"text":"🚶 Пройти мимо","p":1,"success_effect":{"text":"Решил обойтись без витаминов."}}]},
+        {"id":"h7","title":"🏊 Бассейн","text":"Рядом открылся бассейн.","min_age":6,
+         "choices":[{"text":"💵 Купить абонемент","p":0.9,"success_effect":{"health":10,"happiness":5,"cash":-400,"text":"Плавание укрепляет."}},
+                    {"text":"🏠 Остаться дома","p":1,"success_effect":{"text":"Остался дома."}}]},
+        {"id":"h8","title":"🧘 Йога и медитация","text":"Друг советует попробовать.","min_age":10,
+         "choices":[{"text":"💵 Записаться на курс","p":0.9,"success_effect":{"health":7,"happiness":10,"cash":-300,"text":"Гармония тела и духа."}},
+                    {"text":"🤨 Скептически","p":1,"success_effect":{"text":"Не поверил в пользу йоги."}}]},
+        {"id":"h9","title":"💆 Массаж","text":"Спина устала.","min_age":12,
+         "choices":[{"text":"💵 Записаться к массажисту","p":0.95,"success_effect":{"health":9,"happiness":10,"cash":-700,"text":"Массаж расслабил."}},
+                    {"text":"🖐 Самомассаж","p":1,"success_effect":{"health":3,"text":"Немного помогло."}}]},
+        {"id":"h10","title":"🤧 Простуда","text":"Ты почувствовал недомогание.","min_age":3,
+         "choices":[{"text":"💵 Лечиться дома","p":0.9,"success_effect":{"health":4,"cash":-200,"text":"Отлежался."}},
+                    {"text":"💼 На ногах","p":0.6,"success_effect":{"career_xp":8,"health":-10,"text":"Дошёл до работы, но подорвал здоровье."},"fail_effect":{"health":-15,"text":"Свалился с температурой."}}]},
     ],
     "knowledge": [
-        {"id": "k1", "title": "🎓 Онлайн-курс", "text": "Попался курс по специальности.", "min_age": 14,
-         "choices": [
-            {"text": "💵 Записаться", "p": 0.85, "success_effect": {"knowledge": 15, "career_xp": 15, "cash": -2000, "text": "Курс пройден! Знания +15, XP +15."}},
-            {"text": "⬅️ Пропустить", "p": 1, "success_effect": {"text": "Пропустил курс."}}]},
-        {"id": "k2", "title": "📖 Библиотека", "text": "На полке редкая книга.", "min_age": 7,
-         "choices": [
-            {"text": "📚 Прочитать", "p": 0.9, "success_effect": {"knowledge": 8, "text": "Книга расширила кругозор. Знания +8."}},
-            {"text": "🚶 Пройти мимо", "p": 1, "success_effect": {"text": "Не стал брать книгу."}}]},
-        {"id": "k3", "title": "🎤 Публичная лекция", "text": "Известный учёный читает лекцию.", "min_age": 10,
-         "choices": [
-            {"text": "💵 Сходить", "p": 0.9, "success_effect": {"knowledge": 10, "happiness": 5, "cash": -200, "text": "Лекция вдохновила. Знания +10."}},
-            {"text": "⬅️ Пропустить", "p": 1, "success_effect": {"text": "Пропустил лекцию."}}]},
-        {"id": "k4", "title": "🌍 Иностранный язык", "text": "Знание языка открывает двери.", "min_age": 6,
-         "choices": [
-            {"text": "📱 Учить по приложению", "p": 0.7, "success_effect": {"knowledge": 6, "career_xp": 5, "text": "Базовый уровень. Знания +6."}},
-            {"text": "💵 Нанять репетитора", "p": 0.95, "success_effect": {"knowledge": 18, "career_xp": 15, "cash": -3000, "text": "Быстрый прогресс! Знания +18."}}]},
-        {"id": "k5", "title": "🧑‍🏫 Наставник", "text": "Опытный коллега готов помочь.", "min_age": 18,
-         "choices": [
-            {"text": "💵 Нанять ментора", "p": 0.9, "success_effect": {"knowledge": 10, "career_xp": 25, "relationships": 5, "cash": -1500, "text": "Ментор дал ценные советы. XP +25."}},
-            {"text": "🤷 Сам разберусь", "p": 1, "success_effect": {"text": "Решил разобраться сам."}}]},
-        {"id": "k6", "title": "🎬 Документальный фильм", "text": "Вечер, есть время.", "min_age": 8,
-         "choices": [
-            {"text": "🧠 Посмотреть документалку", "p": 1, "success_effect": {"knowledge": 5, "happiness": 5, "text": "Узнал много нового. Знания +5."}},
-            {"text": "🍿 Сериал", "p": 1, "success_effect": {"happiness": 5, "text": "Расслабился под сериал."}}]},
-        {"id": "k7", "title": "🎧 Подкаст", "text": "Дорога на работу занимает час.", "min_age": 14,
-         "choices": [
-            {"text": "📻 Образовательный подкаст", "p": 1, "success_effect": {"knowledge": 4, "text": "Час с пользой. Знания +4."}},
-            {"text": "🎵 Музыка", "p": 1, "success_effect": {"happiness": 4, "text": "Настроение поднялось."}}]},
-        {"id": "k8", "title": "💻 Конференция", "text": "Крупное мероприятие в городе.", "min_age": 18,
-         "choices": [
-            {"text": "💵 Участвовать", "p": 0.85, "success_effect": {"knowledge": 12, "career_xp": 20, "relationships": 8, "cash": -500, "text": "Конференция дала многое. XP +20."}},
-            {"text": "⬅️ Пропустить", "p": 1, "success_effect": {"text": "Пропустил конференцию."}}]},
-        {"id": "k9", "title": "👨‍🏫 Репетитор", "text": "Родители предлагают нанять репетитора.", "min_age": 8, "max_age": 25,
-         "choices": [
-            {"text": "💵 Нанять", "p": 0.9, "success_effect": {"knowledge": 15, "cash": -2500, "text": "Занятия дали результат. Знания +15."}},
-            {"text": "📚 Самому", "p": 0.6, "success_effect": {"knowledge": 4, "text": "Немного позанимался. Знания +4."}}]},
-        {"id": "k10", "title": "🌙 Ночное самообразование", "text": "Ночью хорошо думается.", "min_age": 12,
-         "choices": [
-            {"text": "📚 Учиться до утра", "p": 1, "success_effect": {"knowledge": 10, "health": -5, "text": "Многое выучил, но не выспался. Знания +10."}},
-            {"text": "🛌 Спать", "p": 1, "success_effect": {"health": 4, "text": "Выспался. Здоровье +4."}}]},
+        {"id":"k1","title":"🎓 Онлайн-курс","text":"Попался курс по специальности.","min_age":14,
+         "choices":[{"text":"💵 Записаться","p":0.85,"success_effect":{"knowledge":15,"career_xp":15,"cash":-2000,"text":"Курс пройден!"}},
+                    {"text":"⬅️ Пропустить","p":1,"success_effect":{"text":"Пропустил курс."}}]},
+        {"id":"k2","title":"📖 Библиотека","text":"На полке редкая книга.","min_age":7,
+         "choices":[{"text":"📚 Прочитать","p":0.9,"success_effect":{"knowledge":8,"text":"Книга расширила кругозор."}},
+                    {"text":"🚶 Пройти мимо","p":1,"success_effect":{"text":"Не стал брать книгу."}}]},
+        {"id":"k3","title":"🎤 Публичная лекция","text":"Известный учёный читает лекцию.","min_age":10,
+         "choices":[{"text":"💵 Сходить","p":0.9,"success_effect":{"knowledge":10,"happiness":5,"cash":-200,"text":"Лекция вдохновила."}},
+                    {"text":"⬅️ Пропустить","p":1,"success_effect":{"text":"Пропустил лекцию."}}]},
+        {"id":"k4","title":"🌍 Иностранный язык","text":"Знание языка открывает двери.","min_age":6,
+         "choices":[{"text":"📱 Учить по приложению","p":0.7,"success_effect":{"knowledge":6,"career_xp":5,"text":"Базовый уровень."}},
+                    {"text":"💵 Нанять репетитора","p":0.95,"success_effect":{"knowledge":18,"career_xp":15,"cash":-3000,"text":"Быстрый прогресс!"}}]},
+        {"id":"k5","title":"🧑‍🏫 Наставник","text":"Опытный коллега готов помочь.","min_age":18,
+         "choices":[{"text":"💵 Нанять ментора","p":0.9,"success_effect":{"knowledge":10,"career_xp":25,"relationships":5,"cash":-1500,"text":"Ментор дал ценные советы."}},
+                    {"text":"🤷 Сам разберусь","p":1,"success_effect":{"text":"Решил разобраться сам."}}]},
+        {"id":"k6","title":"🎬 Документальный фильм","text":"Вечер, есть время.","min_age":8,
+         "choices":[{"text":"🧠 Посмотреть документалку","p":1,"success_effect":{"knowledge":5,"happiness":5,"text":"Узнал много нового."}},
+                    {"text":"🍿 Сериал","p":1,"success_effect":{"happiness":5,"text":"Расслабился под сериал."}}]},
+        {"id":"k7","title":"🎧 Подкаст","text":"Дорога на работу занимает час.","min_age":14,
+         "choices":[{"text":"📻 Образовательный подкаст","p":1,"success_effect":{"knowledge":4,"text":"Час с пользой."}},
+                    {"text":"🎵 Музыка","p":1,"success_effect":{"happiness":4,"text":"Настроение поднялось."}}]},
+        {"id":"k8","title":"💻 Конференция","text":"Крупное мероприятие в городе.","min_age":18,
+         "choices":[{"text":"💵 Участвовать","p":0.85,"success_effect":{"knowledge":12,"career_xp":20,"relationships":8,"cash":-500,"text":"Конференция дала многое."}},
+                    {"text":"⬅️ Пропустить","p":1,"success_effect":{"text":"Пропустил конференцию."}}]},
+        {"id":"k9","title":"👨‍🏫 Репетитор","text":"Родители предлагают нанять репетитора.","min_age":8,"max_age":25,
+         "choices":[{"text":"💵 Нанять","p":0.9,"success_effect":{"knowledge":15,"cash":-2500,"text":"Занятия дали результат."}},
+                    {"text":"📚 Самому","p":0.6,"success_effect":{"knowledge":4,"text":"Немного позанимался."}}]},
+        {"id":"k10","title":"🌙 Ночное самообразование","text":"Ночью хорошо думается.","min_age":12,
+         "choices":[{"text":"📚 Учиться до утра","p":1,"success_effect":{"knowledge":10,"health":-5,"text":"Многое выучил, но не выспался."}},
+                    {"text":"🛌 Спать","p":1,"success_effect":{"health":4,"text":"Выспался."}}]},
     ],
     "relationships": [
-        {"id": "r1", "title": "☕ Встреча с другом", "text": "Друг зовёт на кофе.", "min_age": 6,
-         "choices": [
-            {"text": "💵 Пойти", "p": 0.95, "success_effect": {"relationships": 10, "happiness": 8, "cash": -300, "text": "Приятная встреча. Отношения +10."}},
-            {"text": "⬅️ Отказаться", "p": 1, "success_effect": {"relationships": -3, "text": "Друг обиделся. Отношения -3."}}]},
-        {"id": "r2", "title": "🎉 Вечеринка", "text": "Знакомые приглашают.", "min_age": 16,
-         "choices": [
-            {"text": "💵 Пойти", "p": 0.85, "success_effect": {"relationships": 12, "happiness": 10, "cash": -500, "text": "Отличная вечеринка! Отношения +12."}, "fail_effect": {"health": -5, "happiness": -3, "text": "Перебрал. Плохо весь день."}},
-            {"text": "🏠 Остаться", "p": 1, "success_effect": {"text": "Остался дома."}}]},
-        {"id": "r3", "title": "💕 Свидание", "text": "Понравившийся человек свободен.", "min_age": 16,
-         "choices": [
-            {"text": "💵 Пригласить", "p": 0.7, "success_effect": {"relationships": 15, "happiness": 12, "cash": -400, "text": "Свидание удалось! Отношения +15."}, "fail_effect": {"happiness": -5, "text": "Отказ. Грустно."}},
-            {"text": "😶 Промолчать", "p": 1, "success_effect": {"text": "Промолчал."}}]},
-        {"id": "r4", "title": "📞 Звонок родителям", "text": "Давно не общался с семьёй.", "min_age": 14,
-         "choices": [
-            {"text": "📱 Позвонить", "p": 1, "success_effect": {"relationships": 8, "happiness": 5, "text": "Тёплый разговор. Отношения +8."}},
-            {"text": "🤷 Забыть", "p": 1, "success_effect": {"relationships": -5, "text": "Родители расстроились."}}]},
-        {"id": "r5", "title": "🤝 Помощь соседу", "text": "Сосед просит помочь с переездом.", "min_age": 8,
-         "choices": [
-            {"text": "💪 Помочь", "p": 1, "success_effect": {"relationships": 6, "happiness": 3, "text": "Сосед благодарен. Отношения +6."}},
-            {"text": "😐 Игнорировать", "p": 1, "success_effect": {"relationships": -3, "text": "Сосед запомнил."}}]},
-        {"id": "r6", "title": "❤️ Волонтёрство", "text": "Местный приют ищет добровольцев.", "min_age": 12,
-         "choices": [
-            {"text": "🤲 Участвовать", "p": 0.9, "success_effect": {"relationships": 10, "happiness": 8, "knowledge": 3, "text": "Помощь другим окрыляет. Отношения +10."}},
-            {"text": "⬅️ Пропустить", "p": 1, "success_effect": {"text": "Решил не участвовать."}}]},
-        {"id": "r7", "title": "👨‍👩‍👧‍👦 Воссоединение семьи", "text": "Родственники собираются вместе.", "min_age": 20,
-         "choices": [
-            {"text": "💵 Организовать", "p": 0.9, "success_effect": {"relationships": 20, "happiness": 15, "cash": -1000, "text": "Семья воссоединилась. Отношения +20."}},
-            {"text": "🕐 Не сейчас", "p": 1, "success_effect": {"relationships": -4, "text": "Родные расстроились."}}]},
-        {"id": "r8", "title": "🕊 Примирение", "text": "Вы поссорились с другом.", "min_age": 6,
-         "choices": [
-            {"text": "🙏 Извиниться", "p": 0.85, "success_effect": {"relationships": 12, "happiness": 5, "text": "Помирились. Отношения +12."}},
-            {"text": "😤 Ждать извинений", "p": 1, "success_effect": {"relationships": -8, "text": "Ссора затянулась."}}]},
-        {"id": "r9", "title": "👋 Новое знакомство", "text": "Интересный человек рядом.", "min_age": 8,
-         "choices": [
-            {"text": "🙋 Подойти", "p": 0.65, "success_effect": {"relationships": 8, "happiness": 5, "text": "Завязался разговор. Отношения +8."}, "fail_effect": {"text": "Неловко получилось."}},
-            {"text": "😳 Стесняться", "p": 1, "success_effect": {"text": "Промолчал."}}]},
-        {"id": "r10", "title": "💒 Свадьба друга", "text": "Друг женится.", "min_age": 18,
-         "choices": [
-            {"text": "💵 Пойти с подарком", "p": 0.95, "success_effect": {"relationships": 12, "happiness": 10, "cash": -800, "text": "Отличная свадьба. Отношения +12."}},
-            {"text": "⬅️ Не пойти", "p": 1, "success_effect": {"relationships": -6, "text": "Друг обижен."}}]},
+        {"id":"r1","title":"☕ Встреча с другом","text":"Друг зовёт на кофе.","min_age":6,
+         "choices":[{"text":"💵 Пойти","p":0.95,"success_effect":{"relationships":10,"happiness":8,"cash":-300,"text":"Приятная встреча."}},
+                    {"text":"⬅️ Отказаться","p":1,"success_effect":{"relationships":-3,"text":"Друг обиделся."}}]},
+        {"id":"r2","title":"🎉 Вечеринка","text":"Знакомые приглашают.","min_age":16,
+         "choices":[{"text":"💵 Пойти","p":0.85,"success_effect":{"relationships":12,"happiness":10,"cash":-500,"text":"Отличная вечеринка!"},"fail_effect":{"health":-5,"happiness":-3,"text":"Перебрал."}},
+                    {"text":"🏠 Остаться","p":1,"success_effect":{"text":"Остался дома."}}]},
+        {"id":"r3","title":"💕 Свидание","text":"Понравившийся человек свободен.","min_age":16,
+         "choices":[{"text":"💵 Пригласить","p":0.7,"success_effect":{"relationships":15,"happiness":12,"cash":-400,"text":"Свидание удалось!"},"fail_effect":{"happiness":-5,"text":"Отказ."}},
+                    {"text":"😶 Промолчать","p":1,"success_effect":{"text":"Промолчал."}}]},
+        {"id":"r4","title":"📞 Звонок родителям","text":"Давно не общался с семьёй.","min_age":14,
+         "choices":[{"text":"📱 Позвонить","p":1,"success_effect":{"relationships":8,"happiness":5,"text":"Тёплый разговор."}},
+                    {"text":"🤷 Забыть","p":1,"success_effect":{"relationships":-5,"text":"Родители расстроились."}}]},
+        {"id":"r5","title":"🤝 Помощь соседу","text":"Сосед просит помочь с переездом.","min_age":8,
+         "choices":[{"text":"💪 Помочь","p":1,"success_effect":{"relationships":6,"happiness":3,"text":"Сосед благодарен."}},
+                    {"text":"😐 Игнорировать","p":1,"success_effect":{"relationships":-3,"text":"Сосед запомнил."}}]},
+        {"id":"r6","title":"❤️ Волонтёрство","text":"Местный приют ищет добровольцев.","min_age":12,
+         "choices":[{"text":"🤲 Участвовать","p":0.9,"success_effect":{"relationships":10,"happiness":8,"knowledge":3,"text":"Помощь другим окрыляет."}},
+                    {"text":"⬅️ Пропустить","p":1,"success_effect":{"text":"Решил не участвовать."}}]},
+        {"id":"r7","title":"👨‍👩‍👧‍👦 Воссоединение семьи","text":"Родственники собираются вместе.","min_age":20,
+         "choices":[{"text":"💵 Организовать","p":0.9,"success_effect":{"relationships":20,"happiness":15,"cash":-1000,"text":"Семья воссоединилась."}},
+                    {"text":"🕐 Не сейчас","p":1,"success_effect":{"relationships":-4,"text":"Родные расстроились."}}]},
+        {"id":"r8","title":"🕊 Примирение","text":"Вы поссорились с другом.","min_age":6,
+         "choices":[{"text":"🙏 Извиниться","p":0.85,"success_effect":{"relationships":12,"happiness":5,"text":"Помирились."}},
+                    {"text":"😤 Ждать извинений","p":1,"success_effect":{"relationships":-8,"text":"Ссора затянулась."}}]},
+        {"id":"r9","title":"👋 Новое знакомство","text":"Интересный человек рядом.","min_age":8,
+         "choices":[{"text":"🙋 Подойти","p":0.65,"success_effect":{"relationships":8,"happiness":5,"text":"Завязался разговор."},"fail_effect":{"text":"Неловко получилось."}},
+                    {"text":"😳 Стесняться","p":1,"success_effect":{"text":"Промолчал."}}]},
+        {"id":"r10","title":"💒 Свадьба друга","text":"Друг женится.","min_age":18,
+         "choices":[{"text":"💵 Пойти с подарком","p":0.95,"success_effect":{"relationships":12,"happiness":10,"cash":-800,"text":"Отличная свадьба."}},
+                    {"text":"⬅️ Не пойти","p":1,"success_effect":{"relationships":-6,"text":"Друг обижен."}}]},
     ],
     "happiness": [
-        {"id": "p1", "title": "🎬 Кино", "text": "В кинотеатре премьера.", "min_age": 5,
-         "choices": [
-            {"text": "💵 Сходить", "p": 1, "success_effect": {"happiness": 10, "cash": -300, "text": "Хороший фильм. Счастье +10."}},
-            {"text": "🏠 Дома", "p": 1, "success_effect": {"happiness": 3, "text": "Посмотрел кино дома."}}]},
-        {"id": "p2", "title": "🏖 Отпуск", "text": "Пора отдохнуть.", "min_age": 5,
-         "choices": [
-            {"text": "✈️ Поехать", "p": 0.8, "success_effect": {"happiness": 20, "health": 5, "cash": -5000, "text": "Отпуск удался! Счастье +20."}, "fail_effect": {"happiness": -5, "cash": -5000, "text": "Отпуск испорчен. Счастье -5."}},
-            {"text": "🛋 Остаться", "p": 1, "success_effect": {"text": "Остался дома."}}]},
-        {"id": "p3", "title": "🎨 Хобби", "text": "Давно хотел заняться чем-то для души.", "min_age": 6,
-         "choices": [
-            {"text": "💵 Купить материалы", "p": 0.9, "success_effect": {"happiness": 12, "knowledge": 3, "cash": -500, "text": "Хобби радует. Счастье +12."}},
-            {"text": "🆓 Начать с малого", "p": 1, "success_effect": {"happiness": 5, "text": "Попробовал. Счастье +5."}}]},
-        {"id": "p4", "title": "🎸 Концерт", "text": "Любимая группа приезжает.", "min_age": 14,
-         "choices": [
-            {"text": "💵 Купить билет", "p": 0.9, "success_effect": {"happiness": 15, "relationships": 5, "cash": -800, "text": "Незабываемый концерт! Счастье +15."}},
-            {"text": "⬅️ Пропустить", "p": 1, "success_effect": {"happiness": -3, "text": "Жалеешь, что не пошёл."}}]},
-        {"id": "p5", "title": "🧺 Пикник", "text": "Хорошая погода.", "min_age": 5,
-         "choices": [
-            {"text": "💵 Собрать друзей", "p": 0.9, "success_effect": {"happiness": 12, "relationships": 8, "health": 3, "cash": -200, "text": "Пикник удался! Счастье +12."}},
-            {"text": "🏠 Дома", "p": 1, "success_effect": {"text": "Остался дома."}}]},
-        {"id": "p6", "title": "🐶 Домашний питомец", "text": "В приюте ждёт питомец.", "min_age": 8,
-         "choices": [
-            {"text": "💵 Завести", "p": 0.85, "success_effect": {"happiness": 15, "health": 3, "cash": -1000, "text": "Питомец радует! Счастье +15."}, "fail_effect": {"happiness": -5, "cash": -1000, "text": "Не справился с уходом. Счастье -5."}},
-            {"text": "⬅️ Не сейчас", "p": 1, "success_effect": {"text": "Решил подождать."}}]},
-        {"id": "p7", "title": "🎮 Видеоигры", "text": "Вышла новая игра.", "min_age": 6,
-         "choices": [
-            {"text": "💵 Купить игру", "p": 1, "success_effect": {"happiness": 10, "health": -3, "cash": -400, "text": "Заигрался. Счастье +10."}},
-            {"text": "🆓 Бесплатная игра", "p": 1, "success_effect": {"happiness": 5, "text": "Неплохо провёл время."}}]},
-        {"id": "p8", "title": "🛍 Шопинг", "text": "Скидки в магазине.", "min_age": 10,
-         "choices": [
-            {"text": "💵 Купить вещь", "p": 0.95, "success_effect": {"happiness": 12, "cash": -700, "text": "Новая вещь радует. Счастье +12."}},
-            {"text": "👀 Поглазеть", "p": 1, "success_effect": {"happiness": 3, "text": "Погулял по магазинам."}}]},
-        {"id": "p9", "title": "💆 Спа и релакс", "text": "Нужен перерыв.", "min_age": 16,
-         "choices": [
-            {"text": "💵 Пойти в спа", "p": 0.95, "success_effect": {"happiness": 18, "health": 8, "cash": -1200, "text": "Полный релакс! Счастье +18."}},
-            {"text": "🛁 Ванна дома", "p": 1, "success_effect": {"happiness": 5, "text": "Немного расслабился."}}]},
-        {"id": "p10", "title": "🧘 Медитация", "text": "Попробовать практику осознанности?", "min_age": 12,
-         "choices": [
-            {"text": "🧠 Практиковать", "p": 0.9, "success_effect": {"happiness": 10, "health": 3, "text": "Внутренний покой. Счастье +10."}},
-            {"text": "⏰ Некогда", "p": 1, "success_effect": {"happiness": -3, "text": "Стресс накопился."}}]},
+        {"id":"p1","title":"🎬 Кино","text":"В кинотеатре премьера.","min_age":5,
+         "choices":[{"text":"💵 Сходить","p":1,"success_effect":{"happiness":10,"cash":-300,"text":"Хороший фильм."}},
+                    {"text":"🏠 Дома","p":1,"success_effect":{"happiness":3,"text":"Посмотрел кино дома."}}]},
+        {"id":"p2","title":"🏖 Отпуск","text":"Пора отдохнуть.","min_age":5,
+         "choices":[{"text":"✈️ Поехать","p":0.8,"success_effect":{"happiness":20,"health":5,"cash":-5000,"text":"Отпуск удался!"},"fail_effect":{"happiness":-5,"cash":-5000,"text":"Отпуск испорчен."}},
+                    {"text":"🛋 Остаться","p":1,"success_effect":{"text":"Остался дома."}}]},
+        {"id":"p3","title":"🎨 Хобби","text":"Давно хотел заняться чем-то для души.","min_age":6,
+         "choices":[{"text":"💵 Купить материалы","p":0.9,"success_effect":{"happiness":12,"knowledge":3,"cash":-500,"text":"Хобби радует."}},
+                    {"text":"🆓 Начать с малого","p":1,"success_effect":{"happiness":5,"text":"Попробовал."}}]},
+        {"id":"p4","title":"🎸 Концерт","text":"Любимая группа приезжает.","min_age":14,
+         "choices":[{"text":"💵 Купить билет","p":0.9,"success_effect":{"happiness":15,"relationships":5,"cash":-800,"text":"Незабываемый концерт!"}},
+                    {"text":"⬅️ Пропустить","p":1,"success_effect":{"happiness":-3,"text":"Жалеешь, что не пошёл."}}]},
+        {"id":"p5","title":"🧺 Пикник","text":"Хорошая погода.","min_age":5,
+         "choices":[{"text":"💵 Собрать друзей","p":0.9,"success_effect":{"happiness":12,"relationships":8,"health":3,"cash":-200,"text":"Пикник удался!"}},
+                    {"text":"🏠 Дома","p":1,"success_effect":{"text":"Остался дома."}}]},
+        {"id":"p6","title":"🐶 Домашний питомец","text":"В приюте ждёт питомец.","min_age":8,
+         "choices":[{"text":"💵 Завести","p":0.85,"success_effect":{"happiness":15,"health":3,"cash":-1000,"text":"Питомец радует!"},"fail_effect":{"happiness":-5,"cash":-1000,"text":"Не справился с уходом."}},
+                    {"text":"⬅️ Не сейчас","p":1,"success_effect":{"text":"Решил подождать."}}]},
+        {"id":"p7","title":"🎮 Видеоигры","text":"Вышла новая игра.","min_age":6,
+         "choices":[{"text":"💵 Купить игру","p":1,"success_effect":{"happiness":10,"health":-3,"cash":-400,"text":"Заигрался."}},
+                    {"text":"🆓 Бесплатная игра","p":1,"success_effect":{"happiness":5,"text":"Неплохо провёл время."}}]},
+        {"id":"p8","title":"🛍 Шопинг","text":"Скидки в магазине.","min_age":10,
+         "choices":[{"text":"💵 Купить вещь","p":0.95,"success_effect":{"happiness":12,"cash":-700,"text":"Новая вещь радует."}},
+                    {"text":"👀 Поглазеть","p":1,"success_effect":{"happiness":3,"text":"Погулял по магазинам."}}]},
+        {"id":"p9","title":"💆 Спа и релакс","text":"Нужен перерыв.","min_age":16,
+         "choices":[{"text":"💵 Пойти в спа","p":0.95,"success_effect":{"happiness":18,"health":8,"cash":-1200,"text":"Полный релакс!"}},
+                    {"text":"🛁 Ванна дома","p":1,"success_effect":{"happiness":5,"text":"Немного расслабился."}}]},
+        {"id":"p10","title":"🧘 Медитация","text":"Попробовать практику осознанности?","min_age":12,
+         "choices":[{"text":"🧠 Практиковать","p":0.9,"success_effect":{"happiness":10,"health":3,"text":"Внутренний покой."}},
+                    {"text":"⏰ Некогда","p":1,"success_effect":{"happiness":-3,"text":"Стресс накопился."}}]},
     ],
 }
+
+# ================= ДЕТСКИЕ СОБЫТИЯ (1–12) =================
+CHILD_EVENTS = [
+    {"id":"c1","title":"🍼 Первое слово","text":"Ты пытаешься говорить.","min_age":1,"max_age":2,
+     "choices":[{"text":"«Мама»","p":1,"success":"toddler_mama","fail":"none"},
+                {"text":"«Папа»","p":1,"success":"toddler_papa","fail":"none"}]},
+    {"id":"c2","title":"👣 Первый шаг","text":"Ты пытаешься встать на ноги.","min_age":1,"max_age":3,
+     "choices":[{"text":"Шагнуть","p":0.7,"success":"toddler_walk","fail":"toddler_fall"},
+                {"text":"Ползти","p":1,"success":"toddler_crawl","fail":"none"}]},
+    {"id":"c3","title":"🧸 Любимая игрушка","text":"Ты нашёл плюшевого мишку.","min_age":2,"max_age":5,
+     "choices":[{"text":"Обнять","p":1,"success":"toddler_hug","fail":"none"},
+                {"text":"Разобрать","p":1,"success":"toddler_break","fail":"none"}]},
+    {"id":"c4","title":"🧸 Детский сад","text":"Тебя обижает ребёнок.","min_age":3,"max_age":7,
+     "choices":[{"text":"Дать сдачи","p":0.5,"success":"child_fight","fail":"none"},
+                {"text":"Пожаловаться","p":0.8,"success":"child_tell","fail":"none"}]},
+    {"id":"c5","title":"📚 Книга","text":"Тебе подарили книгу.","min_age":5,"max_age":12,
+     "choices":[{"text":"Читать","p":0.8,"success":"child_smart","fail":"none"},
+                {"text":"Гулять","p":1,"success":"child_walk","fail":"none"}]},
+    {"id":"c6","title":"⚽ Футбол во дворе","text":"Ребята зовут играть.","min_age":8,"max_age":12,
+     "choices":[{"text":"Играть","p":0.85,"success":"child_sport","fail":"child_injury"},
+                {"text":"Домой","p":1,"success":"none","fail":"none"}]},
+    {"id":"c7","title":"🎂 День рождения","text":"У тебя день рождения!","min_age":4,"max_age":12,
+     "choices":[{"text":"🎉 Позвать всех друзей","p":0.9,"success":"child_bday_big","fail":"child_bday_bad"},
+                {"text":"👨‍👩‍👧 Только семья","p":1,"success":"child_bday_small","fail":"none"}]},
+    {"id":"c8","title":"🎪 Цирк","text":"Родители зовут в цирк.","min_age":3,"max_age":10,
+     "choices":[{"text":"Пойти","p":1,"success":"child_circus","fail":"none"},
+                {"text":"Остаться играть","p":1,"success":"none","fail":"none"}]},
+    {"id":"c9","title":"🏊 Урок плавания","text":"В школе урок плавания.","min_age":6,"max_age":12,
+     "choices":[{"text":"Плавать","p":0.7,"success":"child_swim_good","fail":"child_swim_fear"},
+                {"text":"Пропустить","p":1,"success":"none","fail":"none"}]},
+    {"id":"c10","title":"🤒 Ветрянка","text":"Ты покрылся пятнами.","min_age":2,"max_age":10,
+     "choices":[{"text":"Лечиться дома","p":1,"success":"child_sick_treat","fail":"none"},
+                {"text":"Гулять","p":0.3,"success":"child_sick_walk_ok","fail":"child_sick_walk_bad"}]},
+    {"id":"c11","title":"🎨 Рисование","text":"В школе конкурс рисунков.","min_age":5,"max_age":11,
+     "choices":[{"text":"Участвовать","p":0.6,"success":"child_draw_win","fail":"child_draw_lose"},
+                {"text":"Не участвовать","p":1,"success":"none","fail":"none"}]},
+    {"id":"c12","title":"🚲 Велосипед","text":"Тебе подарили велосипед.","min_age":5,"max_age":12,
+     "choices":[{"text":"Кататься","p":0.8,"success":"child_bike_ok","fail":"child_bike_fall"},
+                {"text":"Осторожно","p":1,"success":"child_bike_learn","fail":"none"}]},
+    {"id":"c13","title":"🐕 Собака во дворе","text":"Бродячая собака подошла к тебе.","min_age":4,"max_age":11,
+     "choices":[{"text":"Погладить","p":0.6,"success":"child_dog_ok","fail":"child_dog_bite"},
+                {"text":"Убежать","p":1,"success":"child_dog_run","fail":"none"}]},
+    {"id":"c14","title":"🎭 Школьный спектакль","text":"В школе ставят спектакль.","min_age":7,"max_age":12,
+     "choices":[{"text":"Участвовать","p":0.7,"success":"child_theater_good","fail":"child_theater_shy"},
+                {"text":"За кулисами","p":1,"success":"child_theater_tech","fail":"none"}]},
+]
+
+# ================= ПОДРОСТКОВЫЕ СОБЫТИЯ (13–17) =================
+TEEN_EVENTS = [
+    {"id":"t1","title":"🚬 Сигарета","text":"Старшеклассники предлагают закурить.","min_age":13,"max_age":17,
+     "choices":[{"text":"Попробовать","p":0.9,"success":"teen_smoke","fail":"none"},
+                {"text":"Отказаться","p":1,"success":"teen_healthy","fail":"none"}]},
+    {"id":"t2","title":"💔 Любовь","text":"Тебе нравится одноклассник(ца).","min_age":13,"max_age":17,
+     "choices":[{"text":"Признаться","p":0.4,"success":"teen_love","fail":"teen_heartbreak"},
+                {"text":"Скрывать","p":1,"success":"none","fail":"none"}]},
+    {"id":"t3","title":"🏃 Спорт-секция","text":"Тренер зовёт в школьную команду.","min_age":13,"max_age":17,
+     "choices":[{"text":"Записаться","p":0.8,"success":"teen_sport_good","fail":"teen_sport_hurt"},
+                {"text":"Отказаться","p":1,"success":"none","fail":"none"}]},
+    {"id":"t4","title":"🎮 Компьютерный клуб","text":"Друзья зовут на турнир по игре.","min_age":13,"max_age":17,
+     "choices":[{"text":"Пойти","p":0.85,"success":"teen_games_win","fail":"teen_games_lose"},
+                {"text":"Учить уроки","p":1,"success":"teen_study","fail":"none"}]},
+    {"id":"t5","title":"👊 Драка в школе","text":"Обидчик задирает тебя.","min_age":13,"max_age":17,
+     "choices":[{"text":"Дать сдачи","p":0.5,"success":"teen_fight_win","fail":"teen_fight_lose"},
+                {"text":"Пожаловаться учителю","p":0.8,"success":"teen_tell_teacher","fail":"none"}]},
+    {"id":"t6","title":"🎸 Школьная группа","text":"Ребята ищут гитариста.","min_age":14,"max_age":17,
+     "choices":[{"text":"Присоединиться","p":0.7,"success":"teen_band","fail":"none"},
+                {"text":"Отказаться","p":1,"success":"none","fail":"none"}]},
+    {"id":"t7","title":"💰 Подработка","text":"Сосед предлагает подработать.","min_age":15,"max_age":17,
+     "choices":[{"text":"Согласиться","p":0.85,"success_effect":{"cash":500,"career_xp":5,"text":"Подработал. +500 в карман."}},
+                {"text":"Отдыхать","p":1,"success_effect":{"happiness":5,"text":"Отдохнул."}}]},
+    {"id":"t8","title":"📱 Первый смартфон","text":"Родители готовы купить телефон.","min_age":13,"max_age":16,
+     "choices":[{"text":"Дорогой","p":0.5,"success_effect":{"happiness":15,"cash":-1500,"text":"Крутой телефон!"},"fail_effect":{"cash":-1500,"happiness":-3,"text":"Не заслужил."}},
+                {"text":"Бюджетный","p":1,"success_effect":{"happiness":8,"cash":-500,"text":"Есть телефон."}}]},
+    {"id":"t9","title":"🎓 Подготовка к экзаменам","text":"Скоро выпускные.","min_age":15,"max_age":17,
+     "choices":[{"text":"Усердно готовиться","p":0.7,"success_effect":{"knowledge":12,"health":-5,"text":"Много выучил."},"fail_effect":{"knowledge":4,"health":-8,"text":"Выгорел."}},
+                {"text":"Забить","p":1,"success_effect":{"happiness":6,"knowledge":-3,"text":"Отдохнул."}}]},
+    {"id":"t10","title":"🎉 Тусовка","text":"Друзья зовут на вечеринку.","min_age":15,"max_age":17,
+     "choices":[{"text":"Пойти","p":0.8,"success_effect":{"happiness":10,"relationships":8,"text":"Хорошо повеселился."},"fail_effect":{"health":-5,"text":"Перебрал."}},
+                {"text":"Домой","p":1,"success_effect":{"text":"Пропустил."}}]},
+    {"id":"t11","title":"🚗 Уроки вождения","text":"Можно получить права.","min_age":16,"max_age":17,
+     "choices":[{"text":"Учиться","p":0.7,"success":"teen_license_ok","fail":"teen_license_fail"},
+                {"text":"Позже","p":1,"success":"none","fail":"none"}]},
+    {"id":"t12","title":"🛍 Карманные деньги","text":"Родители дают деньги на неделю.","min_age":13,"max_age":17,
+     "choices":[{"text":"Копить","p":1,"success_effect":{"cash":300,"text":"Сэкономил."}},
+                {"text":"Потратить","p":1,"success_effect":{"happiness":6,"text":"Потратил на себя."}}]},
+]
+
+# ================= ВЗРОСЛЫЕ СОБЫТИЯ (генератор с учётом состояния) =================
+def adult_events_for(l):
+    pool = []
+    # Семейные
+    if l["married"] and l["children"] > 0:
+        pool.append({"id":"a_fam1","title":"👶 Кризис","text":"Денег не хватает.",
+                     "choices":[{"text":"Вторую работу","p":0.7,"success":"work_extra","fail":"burnout"},
+                                {"text":"Семью","p":1,"success":"family_time","fail":"none"}]})
+        pool.append({"id":"a_fam2","title":"🧸 Детский праздник","text":"Нужно организовать праздник ребёнку.",
+                     "choices":[{"text":"💵 Устроить","p":1,"success_effect":{"happiness":10,"relationships":8,"cash":-600,"text":"Ребёнок счастлив."}},
+                                {"text":"Скромно","p":1,"success_effect":{"happiness":3,"cash":-100,"text":"Отметили дома."}}]})
+    if not l["married"] and 18 <= l["age"] < 45:
+        pool.append({"id":"a_marry","title":"💍 Брак","text":"Партнёр предлагает жениться.",
+                     "choices":[{"text":"Согласиться","p":0.8,"success":"marry","fail":"none"},
+                                {"text":"Отказаться","p":1,"success":"none","fail":"none"}]})
+    if l["married"]:
+        pool.append({"id":"a_div","title":"💔 Развод","text":"Супруг подаёт на развод.",
+                     "choices":[{"text":"Смириться","p":1,"success":"divorce","fail":"none"}]})
+    # Универсальные
+    pool += [
+        {"id":"a1","title":"📞 Мошенники","text":"Звонят из «банка».",
+         "choices":[{"text":"Дать код","p":1,"success":"scammed","fail":"none"},
+                    {"text":"Бросить","p":1,"success":"none","fail":"none"}]},
+        {"id":"a2","title":"🍺 Бар с друзьями","text":"Друзья зовут в бар.",
+         "choices":[{"text":"💵 Пойти","p":0.9,"success_effect":{"happiness":10,"relationships":8,"health":-5,"cash":-500,"text":"Хорошо посидели, но здоровье -5."}},
+                    {"text":"Домой","p":1,"success_effect":{"text":"Пропустил."}}]},
+        {"id":"a3","title":"🛒 Большая покупка","text":"Нужно обновить бытовую технику.",
+         "choices":[{"text":"💵 Купить","p":1,"success_effect":{"happiness":8,"cash":-1000,"text":"Обновил технику."}},
+                    {"text":"Потерпит","p":1,"success_effect":{"happiness":-3,"text":"Ходит старая."}}]},
+        {"id":"a4","title":"🏥 Больничный","text":"Плохо себя чувствуешь.",
+         "choices":[{"text":"Взять больничный","p":0.9,"success_effect":{"health":6,"career_xp":-5,"text":"Подлечился, XP -5."}},
+                    {"text":"Работать","p":0.5,"success_effect":{"career_xp":8,"health":-8,"text":"Вышел на работу, но здоровье -8."}}]},
+        {"id":"a5","title":"🎂 Юбилей друга","text":"У друга день рождения.",
+         "choices":[{"text":"💵 С подарком","p":1,"success_effect":{"relationships":10,"happiness":5,"cash":-500,"text":"Друг тронут."}},
+                    {"text":"Пропустить","p":1,"success_effect":{"relationships":-5,"text":"Друг обиделся."}}]},
+        {"id":"a6","title":"🚕 Случайный попутчик","text":"В такси разговорился с попутчиком.",
+         "choices":[{"text":"Поддержать разговор","p":0.7,"success_effect":{"relationships":4,"knowledge":3,"text":"Интересный разговор."}},
+                    {"text":"Молчать","p":1,"success_effect":{"text":"Доехал молча."}}]},
+        {"id":"a7","title":"📺 Сериал весь вечер","text":"Вышел новый сезон.",
+         "choices":[{"text":"Смотреть","p":1,"success_effect":{"happiness":8,"health":-2,"text":"Отдохнул под сериал."}},
+                    {"text":"Лечь спать","p":1,"success_effect":{"health":4,"text":"Выспался."}}]},
+        {"id":"a8","title":"🍕 Доставка еды","text":"Лень готовить.",
+         "choices":[{"text":"Заказать","p":1,"success_effect":{"happiness":5,"health":-2,"cash":-300,"text":"Вкусно поел."}},
+                    {"text":"Приготовить","p":0.8,"success_effect":{"health":4,"cash":-100,"text":"Домашняя еда."},"fail_effect":{"health":-2,"cash":-200,"text":"Сгорело — заказал пиццу."}}]},
+        {"id":"a9","title":"💊 Аптека","text":"Кончились лекарства.",
+         "choices":[{"text":"💵 Купить","p":1,"success_effect":{"health":3,"cash":-200,"text":"Закупился."}},
+                    {"text":"Отложить","p":1,"success_effect":{"health":-2,"text":"Пока терпит."}}]},
+        {"id":"a10","title":"🏠 Ремонт","text":"Что-то сломалось дома.",
+         "choices":[{"text":"💵 Вызвать мастера","p":0.95,"success_effect":{"happiness":5,"cash":-800,"text":"Починили."}},
+                    {"text":"Самому","p":0.5,"success_effect":{"happiness":3,"cash":-200,"text":"Починил сам."},"fail_effect":{"health":-5,"cash":-1000,"text":"Сломал ещё больше."}}]},
+        {"id":"a11","title":"📚 Книга","text":"Купил интересную книгу.",
+         "choices":[{"text":"Прочитать","p":1,"success_effect":{"knowledge":6,"happiness":3,"text":"Прочитал с удовольствием."}},
+                    {"text":"На полку","p":1,"success_effect":{"text":"Пусть стоит."}}]},
+        {"id":"a12","title":"🎯 Собеседование","text":"Нашёл вакансию мечты.",
+         "choices":[{"text":"Сходить","p":0.6,"success_effect":{"career_xp":15,"cash":200,"text":"Прошёл собеседование, но место заняли."},"fail_effect":{"happiness":-5,"text":"Отказ."}},
+                    {"text":"Не идти","p":1,"success_effect":{"text":"Не рискнул."}}]},
+    ]
+    if l["cars"]:
+        pool.append({"id":"a_car","title":"🔧 Поломка машины","text":"Машина сломалась.",
+                     "choices":[{"text":"💵 Починить","p":0.9,"success_effect":{"cash":-800,"text":"Починил."}},
+                                {"text":"Отложить","p":1,"success_effect":{"happiness":-5,"text":"Ходит пешком."}}]})
+    if l["clean_cash"] >= 100:
+        pool.append({"id":"a_lot","title":"🎰 Лотерея","text":"Купил билет за 100.",
+                     "choices":[{"text":"Проверить","p":0.05,"success":"lottery_win","fail":"lottery_lose"}]})
+    if l["properties"]:
+        pool.append({"id":"a_prop","title":"🏠 Ремонт у соседей","text":"Соседи затеяли ремонт.",
+                     "choices":[{"text":"Потерпеть","p":1,"success_effect":{"happiness":-3,"text":"Шумно."}},
+                                {"text":"Поговорить","p":0.6,"success_effect":{"relationships":3,"text":"Договорились."},"fail_effect":{"relationships":-5,"text":"Поссорились."}}]})
+    return pool
 
 # ================= УТИЛИТЫ =================
 def get_age_str(age):
     if age % 10 == 1 and age % 100 != 11: return f"{age} год"
     elif age % 10 in (2, 3, 4) and age % 100 not in (12, 13, 14): return f"{age} года"
     return f"{age} лет"
+
+def pick_rotating(l, pool, max_recent=4):
+    """Выбирает событие, не попавшее в последние max_recent увиденных."""
+    if not pool:
+        return {"id":"fallback","title":"📅 Обычный год","text":"Ничего особенного не случилось.",
+                "choices":[{"text":"Продолжить","p":1,"success_effect":{"text":"Год прошёл спокойно."}}]}
+    seen = l.setdefault("seen_regular_events", [])
+    recent = seen[-max_recent:] if len(seen) >= max_recent else seen
+    available = [e for e in pool if e.get("id") not in recent]
+    if not available:
+        available = pool
+    evt = random.choice(available)
+    if evt.get("id"):
+        seen.append(evt["id"])
+        if len(seen) > 60: l["seen_regular_events"] = seen[-40:]
+    return evt
 
 def play_cutscene(chat_id, frames, final_text, kb=None):
     msg = bot.send_message(chat_id, frames[0], parse_mode="HTML")
@@ -274,9 +407,9 @@ def play_cutscene(chat_id, frames, final_text, kb=None):
 
 def get_cutscene_frames(event_type):
     if event_type == "birth": return ["🏥 👨‍⚕️ 🤰\n<i>Врачи готовятся...</i>", "👶 ✨ 👨‍👩‍👦\n<i>Раздается первый крик!</i>", "🎉 🍼 🧸\n<i>Новая жизнь началась!</i>"]
-    elif event_type == "marry": return ["💐 🍷 👩‍❤️‍👨\n<i>Романтический ужин...</i>", "🤵 👰 💍\n<i>Предложение руки и сердца!</i>", "🥂 🎉 💖\n<i>Свадьба!</i>"]
-    elif event_type == "prison": return ["🚔 🚨 🏃‍♂️\n<i>Погоня...</i>", "👮‍♂️ 🔗 👨\n<i>Задержание...</i>", "⛓ 🧱 🚪\n<i>Дверь камеры захлопнулась.</i>"]
-    elif event_type == "death": return ["🏥 🛌 💔\n<i>Здоровье подводит...</i>", "🕯️ ☁️\n<i>Последний вздох...</i>", "🪦 🥀 🕊️\n<i>Жизнь окончена.</i>"]
+    if event_type == "marry": return ["💐 🍷 👩‍❤️‍👨\n<i>Романтический ужин...</i>", "🤵 👰 💍\n<i>Предложение руки и сердца!</i>", "🥂 🎉 💖\n<i>Свадьба!</i>"]
+    if event_type == "prison": return ["🚔 🚨 🏃‍♂️\n<i>Погоня...</i>", "👮‍♂️ 🔗 👨\n<i>Задержание...</i>", "⛓ 🧱 🚪\n<i>Дверь камеры захлопнулась.</i>"]
+    if event_type == "death": return ["🏥 🛌 💔\n<i>Здоровье подводит...</i>", "🕯️ ☁️\n<i>Последний вздох...</i>", "🪦 🥀 🕊️\n<i>Жизнь окончена.</i>"]
     return []
 
 def get_scene_visuals(scene_type, gender):
@@ -284,14 +417,14 @@ def get_scene_visuals(scene_type, gender):
     female = ["👧", "👩", "👩‍🦰", "👩‍🦱", "👩‍💼", "👩‍💻", "👩‍🎓"]
     player = random.choice(male) if gender == "m" else random.choice(female)
     scenes = {
-        "child": f"🏠 🌳 {player} 🧸 ☀️", "school": f"🏫 {player} 📚 🎒 🍎",
-        "rich": f"🏰 🚗 💰 {player} 🥂 🛥", "office": f"🏢 🧑‍💻 {player} 📊 ☕",
-        "office_angry": f"🏢 😡 {player} 💢 📉", "hospital": f"🏥 🛌 {player} 💉 🩺",
-        "prison": f"⛓ 🧱 {player} 🚔 🕶", "fight": f"👊 💥 {player} 🥊 🤕",
-        "love": f"❤️ {player} 🌹 💑 💐", "wedding": f"💍 🤵 👰 {player} 🎉",
-        "sad": f"🌧 {player} ☂️ 😔 💧", "police": f"🚔 💵 {player} 🚨 😰",
-        "money_win": f"💰 🤑 {player} 💎 🎰", "money_lose": f"💸 😭 {player} 🕳 📉",
-        "toddler": f"🍼 🧸 {player} 🎈 🌟"
+        "child": f"🏠 🌳 {player} 🧸 ☀️", "toddler": f"🍼 🧸 {player} 🎈 🌟",
+        "school": f"🏫 {player} 📚 🎒 🍎", "rich": f"🏰 🚗 💰 {player} 🥂 🛥",
+        "office": f"🏢 🧑‍💻 {player} 📊 ☕", "office_angry": f"🏢 😡 {player} 💢 📉",
+        "hospital": f"🏥 🛌 {player} 💉 🩺", "prison": f"⛓ 🧱 {player} 🚔 🕶",
+        "fight": f"👊 💥 {player} 🥊 🤕", "love": f"❤️ {player} 🌹 💑 💐",
+        "wedding": f"💍 🤵 👰 {player} 🎉", "sad": f"🌧 {player} ☂️ 😔 💧",
+        "police": f"🚔 💵 {player} 🚨 😰", "money_win": f"💰 🤑 {player} 💎 🎰",
+        "money_lose": f"💸 😭 {player} 🕳 📉",
     }
     return scenes.get(scene_type, f"🌆 {player} 🏙 🚶")
 
@@ -380,9 +513,9 @@ def create_life(force_country=None):
         "education": "Нет", "job": "Безработный", "salary": 0, "job_type": "none", "career_xp": 0, "career_rank": 1,
         "married": False, "children": 0, "diseases": [], "properties": [], "cars": [], "businesses": [], "debt": 0,
         "life_map": [], "neighbors": generate_neighbors(), "test_data": None, "asked_tests": {1: [], 2: [], 3: []},
-        "current_event": None, "has_license": False, "job_years": 0,
-        "books_read": 0,
+        "current_event": None, "has_license": False, "job_years": 0, "books_read": 0,
         "seen_focus_events": {"health": [], "knowledge": [], "relationships": [], "happiness": []},
+        "seen_regular_events": [],
     }
 
 def add_to_life_map(l, text):
@@ -404,156 +537,104 @@ def mortality_rate(l):
 def apply_direct_effect(l, effect):
     for key, val in effect.items():
         if key == "text": continue
-        if key in ("health", "happiness", "knowledge", "relationships"):
+        if key in ("health","happiness","knowledge","relationships"):
             l[key] = max(0, min(100, l[key] + val))
         elif key == "cash": l["clean_cash"] += val
         elif key == "dirty": l["dirty_cash"] += val
         elif key == "career_xp": l["career_xp"] += val
     return effect.get("text", "Год прошел.")
 
-# ================= СОБЫТИЯ =================
+# ================= ГЛАВНОЕ: get_event =================
 def get_event(l):
     age = l["age"]
-    g_m = l["gender"] == "m"
 
-    # ===== СОБЫТИЯ ФОКУСОВ =====
-    lf = l.get("last_focus")
-    if lf and lf in FOCUS_EVENTS and random.random() < 0.55:
-        seen = l.setdefault("seen_focus_events", {}).setdefault(lf, [])
-        # Сначала — непросмотренные в диапазоне возраста
-        pool = [e for e in FOCUS_EVENTS[lf]
-                if e["id"] not in seen
-                and e.get("min_age", 0) <= age <= e.get("max_age", 999)]
-        if not pool:
-            # Все доступные для возраста уже просмотрены — разрешаем повтор,
-            # но НЕ сбрасываем seen (сохраняем историю)
-            age_pool = [e for e in FOCUS_EVENTS[lf]
-                        if e.get("min_age", 0) <= age <= e.get("max_age", 999)]
-            if age_pool:
-                pool = age_pool
-        if pool:
-            evt = random.choice(pool)
-            if evt["id"] not in seen:
-                seen.append(evt["id"])
-            return evt
-
-    if l["prejudice"] and 16 < age < 60 and random.random() < 0.15:
-        return {"title": "Столкновение с предвзятостью", "text": f"{l['prejudice']}",
-                "choices": [{"text": "✊ Доказать обратное", "p": 0.4, "success": "prej_fight_win", "fail": "prej_fight_fail"},
-                            {"text": "🦊 Использовать стереотип", "p": 0.7, "success": "prej_exploit", "fail": "prej_exploit_fail"},
-                            {"text": "😔 Смириться", "p": 1, "success": "prej_accept", "fail": "none"}]}
-    
-    if age >= 18 and l["job_type"] in ["civilian", "police", "military"] and random.random() < 0.3:
-        if random.random() < 0.5:
-            return {"title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.", "choices": [{"text": "Согласиться", "p": 0.7, "success": "career_xp_up", "fail": "none"}, {"text": "Уйти", "p": 1, "success": "career_xp_down", "fail": "none"}]}
-        else:
-            return {"title": "📉 Интриги", "text": "Коллега подставил тебя.", "choices": [{"text": "Скандал", "p": 0.3, "success": "career_fight_win", "fail": "career_grind"}, {"text": "Смириться", "p": 1, "success": "career_grind", "fail": "none"}]}
-
-    if age >= 18 and l["cars"] and random.random() < 0.2:
-        if not l.get("has_license"):
-            return {"title": "🚨 Остановка ДПС", "text": "Инспектор просит права. У тебя их нет.", "choices": [{"text": "💵 Дать взятку", "p": 0.7, "success": "bribe_dps", "fail": "dps_jail"}, {"text": "😬 Договориться", "p": 0.2, "success": "dps_warning", "fail": "dps_jail"}]}
-        elif random.random() < 0.3:
-            return {"title": "🍻 Пьяная езда", "text": "Инспектор замечает запах перегара.", "choices": [{"text": "💵 Взятка", "p": 0.5, "success": "bribe_dps_big", "fail": "drunk_jail"}, {"text": "🚶 Отказ от теста", "p": 0.1, "success": "dps_warning", "fail": "drunk_jail"}, {"text": "😭 Смириться", "p": 1, "success": "drunk_jail", "fail": "none"}]}
-
-    if random.random() < 0.45:
-        # ===== РЕБЁНОК (1–12) С ВОЗРАСТНОЙ ФИЛЬТРАЦИЕЙ =====
-        if age < 13:
-            book_num = l.get("books_read", 0) + 1
-            book_titles = {1: "Первая книга", 2: "Вторая книга", 3: "Третья книга",
-                           4: "Четвёртая книга", 5: "Пятая книга", 6: "Шестая книга",
-                           7: "Седьмая книга", 8: "Восьмая книга", 9: "Девятая книга", 10: "Десятая книга"}
-            book_title = f"📚 {book_titles.get(book_num, f'{book_num}-я книга')}"
-
-            child_events = [
-                {"title": "🍼 Первое слово", "text": "Ты пытаешься говорить.", "min_age": 1, "max_age": 2,
-                 "choices": [{"text": "«Мама»", "p": 1, "success": "toddler_mama", "fail": "none"},
-                             {"text": "«Папа»", "p": 1, "success": "toddler_papa", "fail": "none"}]},
-                {"title": "👣 Первый шаг", "text": "Ты пытаешься встать на ноги.", "min_age": 1, "max_age": 3,
-                 "choices": [{"text": "Шагнуть", "p": 0.7, "success": "toddler_walk", "fail": "toddler_fall"},
-                             {"text": "Ползти", "p": 1, "success": "toddler_crawl", "fail": "none"}]},
-                {"title": "🧸 Любимая игрушка", "text": "Ты нашёл плюшевого мишку.", "min_age": 2, "max_age": 5,
-                 "choices": [{"text": "Обнять", "p": 1, "success": "toddler_hug", "fail": "none"},
-                             {"text": "Разобрать", "p": 1, "success": "toddler_break", "fail": "none"}]},
-                {"title": "🧸 Детский сад", "text": "Тебя обижает ребёнок.", "min_age": 3, "max_age": 7,
-                 "choices": [{"text": "Дать сдачи", "p": 0.5, "success": "child_fight", "fail": "none"},
-                             {"text": "Пожаловаться", "p": 0.8, "success": "child_tell", "fail": "none"}]},
-                {"title": book_title, "text": "Тебе подарили книгу.", "min_age": 5, "max_age": 12,
-                 "choices": [{"text": "Читать", "p": 0.8, "success": "child_smart", "fail": "none"},
-                             {"text": "Гулять", "p": 1, "success": "child_walk", "fail": "none"}]},
-                {"title": "⚽ Футбол во дворе", "text": "Ребята зовут играть.", "min_age": 8, "max_age": 12,
-                 "choices": [{"text": "Играть", "p": 0.85, "success": "child_sport", "fail": "child_injury"},
-                             {"text": "Домой", "p": 1, "success": "none", "fail": "none"}]},
-            ]
-            pool = [e for e in child_events if e["min_age"] <= age <= e["max_age"]]
-            if pool: return random.choice(pool)
-            return None  # fallback, хотя для 1–12 всегда найдётся
-
-        # ===== ПОДРОСТОК (13–17) =====
-        elif age < 18:
-            return random.choice([
-                {"title": "🚬 Сигарета", "text": "Старшеклассники предлагают закурить.", "choices": [{"text": "Попробовать", "p": 0.9, "success": "teen_smoke", "fail": "none"}, {"text": "Отказаться", "p": 1, "success": "teen_healthy", "fail": "none"}]},
-                {"title": "💔 Любовь", "text": "Тебе нравится одноклассник(ца).", "choices": [{"text": "Признаться", "p": 0.4, "success": "teen_love", "fail": "teen_heartbreak"}, {"text": "Скрывать", "p": 1, "success": "none", "fail": "none"}]}
-            ])
-        # ===== ВЗРОСЛЫЙ (18+) =====
-        else:
-            adult = []
-            if l["married"] and l["children"] > 0:
-                adult.append({"title": "👶 Кризис", "text": "Денег не хватает.", "choices": [{"text": "Вторую работу", "p": 0.7, "success": "work_extra", "fail": "burnout"}, {"text": "Семью", "p": 1, "success": "family_time", "fail": "none"}]})
-            elif not l["married"] and 18 <= age < 45:
-                adult.append({"title": "💍 Брак", "text": "Партнер предлагает жениться.", "choices": [{"text": "Согласиться", "p": 0.8, "success": "marry", "fail": "none"}, {"text": "Отказаться", "p": 1, "success": "none", "fail": "none"}]})
-            elif l["married"]:
-                adult.append({"title": "💔 Развод", "text": "Супруг подает на развод.", "choices": [{"text": "Смириться", "p": 1, "success": "divorce", "fail": "none"}]})
-            
-            adult.append({"title": "📞 Мошенники", "text": "Звонят из 'банка'.", "choices": [{"text": "Дать код", "p": 1, "success": "scammed", "fail": "none"}, {"text": "Бросить", "p": 1, "success": "none", "fail": "none"}]})
-            
-            if l["clean_cash"] >= 100:
-                adult.append({"title": "🎰 Лотерея", "text": "Купил билет за 100.", "choices": [{"text": "Проверить", "p": 0.05, "success": "lottery_win", "fail": "lottery_lose"}]})
-            
-            return random.choice(adult)
-            
+    # 1. ВЫБОР ПУТИ — приоритет №1
     if age >= 22 and l["job_type"] == "none" and l["faction"] == "Нет" and l["in_prison"] == 0:
-        return {"title": "Выбор пути", "text": "Пора определяться.",
+        return {"id":"path","title": "⚡ Выбор пути", "text": "Пора определяться с жизненным путём.",
                 "choices": [
                     {"text": "💼 Гражданка", "p": 1, "success": "job_civ", "fail": "none"},
                     {"text": "👮 Полиция", "p": 1 if l["education"] == "Высшее" else 0, "success": "job_pol", "fail": "none"},
-                    {"text": "🎖 Армия", "p": 1 if l["education"] in ["Среднее", "Высшее"] else 0, "success": "job_mil", "fail": "none"},
-                    {"text": "💊 Криминал", "p": 1, "success": "job_crim", "fail": "none"}
-                ]}
-    return None
+                    {"text": "🎖 Армия", "p": 1 if l["education"] in ["Среднее","Высшее"] else 0, "success": "job_mil", "fail": "none"},
+                    {"text": "💊 Криминал", "p": 1, "success": "job_crim", "fail": "none"}]}
 
+    # 2. Фокус-событие (30%)
+    lf = l.get("last_focus")
+    if lf and lf in FOCUS_EVENTS and random.random() < 0.30:
+        seen = l.setdefault("seen_focus_events", {}).setdefault(lf, [])
+        pool = [e for e in FOCUS_EVENTS[lf]
+                if e["id"] not in seen and e.get("min_age",0) <= age <= e.get("max_age",999)]
+        if not pool:
+            age_pool = [e for e in FOCUS_EVENTS[lf] if e.get("min_age",0) <= age <= e.get("max_age",999)]
+            if age_pool: pool = age_pool
+        if pool:
+            evt = random.choice(pool)
+            if evt["id"] not in seen: seen.append(evt["id"])
+            return evt
+
+    # 3. Предвзятость (15%)
+    if l["prejudice"] and 16 < age < 60 and random.random() < 0.15:
+        return {"id":"prej","title": "Столкновение с предвзятостью", "text": f"{l['prejudice']}",
+                "choices": [
+                    {"text": "✊ Доказать обратное","p":0.4,"success":"prej_fight_win","fail":"prej_fight_fail"},
+                    {"text": "🦊 Использовать стереотип","p":0.7,"success":"prej_exploit","fail":"prej_exploit_fail"},
+                    {"text": "😔 Смириться","p":1,"success":"prej_accept","fail":"none"}]}
+
+    # 4. Рабочие события (25%)
+    if age >= 18 and l["job_type"] in ["civilian","police","military"] and random.random() < 0.25:
+        if random.random() < 0.5:
+            return {"id":"work_ot","title": "💼 Овертайм", "text": "Горящий проект. Начальник просит остаться.",
+                    "choices": [{"text":"Согласиться","p":0.7,"success":"career_xp_up","fail":"none"},
+                                {"text":"Уйти","p":1,"success":"career_xp_down","fail":"none"}]}
+        else:
+            return {"id":"work_int","title": "📉 Интриги", "text": "Коллега подставил тебя.",
+                    "choices": [{"text":"Скандал","p":0.3,"success":"career_fight_win","fail":"career_grind"},
+                                {"text":"Смириться","p":1,"success":"career_grind","fail":"none"}]}
+
+    # 5. ДПС (15%)
+    if age >= 18 and l["cars"] and random.random() < 0.15:
+        if not l.get("has_license"):
+            return {"id":"dps1","title": "🚨 Остановка ДПС", "text": "Инспектор просит права. У тебя их нет.",
+                    "choices": [{"text":"💵 Дать взятку","p":0.7,"success":"bribe_dps","fail":"dps_jail"},
+                                {"text":"😬 Договориться","p":0.2,"success":"dps_warning","fail":"dps_jail"}]}
+        elif random.random() < 0.3:
+            return {"id":"dps2","title": "🍻 Пьяная езда", "text": "Инспектор замечает запах перегара.",
+                    "choices": [{"text":"💵 Взятка","p":0.5,"success":"bribe_dps_big","fail":"drunk_jail"},
+                                {"text":"🚶 Отказ от теста","p":0.1,"success":"dps_warning","fail":"drunk_jail"},
+                                {"text":"😭 Смириться","p":1,"success":"drunk_jail","fail":"none"}]}
+
+    # 6. ОБЫЧНОЕ СОБЫТИЕ — гарантированный fallback (всегда что-то)
+    if age < 13:
+        pool = [e for e in CHILD_EVENTS if e["min_age"] <= age <= e["max_age"]]
+        return pick_rotating(l, pool, max_recent=3)
+    elif age < 18:
+        return pick_rotating(l, TEEN_EVENTS, max_recent=4)
+    else:
+        return pick_rotating(l, adult_events_for(l), max_recent=4)
+
+# ================= ХАРАКТЕРИСТИКИ =================
 def get_stats_line(l):
     return f"❤️ Здоровье: {l['health']}% | 😊 Счастье: {l['happiness']}% | 🧠 Знания: {l['knowledge']}% | 🤝 Отношения: {l['relationships']}%"
 
 def apply_focus(l, focus):
     if focus == "health":
-        l["health"] = min(100, l["health"] + random.randint(5, 10))
-        l["happiness"] = min(100, l["happiness"] + random.randint(0, 5))
-        l["knowledge"] = max(0, l["knowledge"] - random.randint(0, 3))
-        l["relationships"] = max(0, l["relationships"] - random.randint(0, 3))
+        l["health"] = min(100, l["health"] + random.randint(5,10)); l["happiness"] = min(100, l["happiness"] + random.randint(0,5))
+        l["knowledge"] = max(0, l["knowledge"] - random.randint(0,3)); l["relationships"] = max(0, l["relationships"] - random.randint(0,3))
         l["life_map"].append(f"{get_age_str(l['age'])}: Уделил время здоровью")
     elif focus == "knowledge":
-        l["knowledge"] = min(100, l["knowledge"] + random.randint(5, 10))
-        l["happiness"] = max(0, l["happiness"] - random.randint(0, 5))
-        l["health"] = max(0, l["health"] - random.randint(0, 3))
-        l["relationships"] = max(0, l["relationships"] - random.randint(0, 3))
+        l["knowledge"] = min(100, l["knowledge"] + random.randint(5,10)); l["happiness"] = max(0, l["happiness"] - random.randint(0,5))
+        l["health"] = max(0, l["health"] - random.randint(0,3)); l["relationships"] = max(0, l["relationships"] - random.randint(0,3))
         l["life_map"].append(f"{get_age_str(l['age'])}: Учился и развивался")
     elif focus == "relationships":
-        l["relationships"] = min(100, l["relationships"] + random.randint(5, 10))
-        l["happiness"] = min(100, l["happiness"] + random.randint(0, 5))
-        l["health"] = max(0, l["health"] - random.randint(0, 3))
-        l["knowledge"] = max(0, l["knowledge"] - random.randint(0, 3))
+        l["relationships"] = min(100, l["relationships"] + random.randint(5,10)); l["happiness"] = min(100, l["happiness"] + random.randint(0,5))
+        l["health"] = max(0, l["health"] - random.randint(0,3)); l["knowledge"] = max(0, l["knowledge"] - random.randint(0,3))
         l["life_map"].append(f"{get_age_str(l['age'])}: Уделил время семье и друзьям")
     elif focus == "happiness":
-        l["happiness"] = min(100, l["happiness"] + random.randint(10, 15))
-        l["health"] = max(0, l["health"] - random.randint(0, 5))
-        l["knowledge"] = max(0, l["knowledge"] - random.randint(0, 5))
-        l["relationships"] = max(0, l["relationships"] - random.randint(0, 5))
+        l["happiness"] = min(100, l["happiness"] + random.randint(10,15)); l["health"] = max(0, l["health"] - random.randint(0,5))
+        l["knowledge"] = max(0, l["knowledge"] - random.randint(0,5)); l["relationships"] = max(0, l["relationships"] - random.randint(0,5))
         l["life_map"].append(f"{get_age_str(l['age'])}: Наслаждался жизнью")
     elif focus == "work":
-        l["happiness"] = max(0, l["happiness"] - random.randint(2, 6))
-        l["health"] = max(0, l["health"] - random.randint(1, 4))
-        l["knowledge"] = min(100, l["knowledge"] + random.randint(0, 3))
-        l["relationships"] = max(0, l["relationships"] - random.randint(0, 4))
+        l["happiness"] = max(0, l["happiness"] - random.randint(2,6)); l["health"] = max(0, l["health"] - random.randint(1,4))
+        l["knowledge"] = min(100, l["knowledge"] + random.randint(0,3)); l["relationships"] = max(0, l["relationships"] - random.randint(0,4))
         l["life_map"].append(f"{get_age_str(l['age'])}: Работал не покладая рук")
 
 def next_year(user_id, chat_id):
@@ -561,40 +642,38 @@ def next_year(user_id, chat_id):
     if uid_str not in players_db: return bot.send_message(chat_id, "Начни заново: /start")
     l = players_db[uid_str]
     if not l["alive"]: return bot.send_message(chat_id, "Ты уже умер. Начни заново: /start")
-        
+
     if l["in_prison"] > 0:
         l["in_prison"] -= 1; l["age"] += 1; save_db(players_db)
-        if l["in_prison"] == 0: 
+        if l["in_prison"] == 0:
             l["job"] = "Безработный"; l["salary"] = 0; l["job_type"] = "none"
             return send_scene(chat_id, l, "⛓ <b>Ты вышел на свободу. Придется искать работу заново.</b>", kb_year(), "life")
         return send_scene(chat_id, l, f"⛓ <b>Тюрьма.</b> Осталось: {get_age_str(l['in_prison'])}.", kb_year(), "prison")
-    
+
     if l.get("focus"):
         l["last_focus"] = l["focus"]
         apply_focus(l, l["focus"])
         l["focus"] = None
     else:
         l["last_focus"] = None
-    
+
     l["age"] += 1
-    
+
     rent = sum(int(pr["value"] * 0.05) for pr in l["properties"])
     biz = sum(int(b["value"] * 0.15) for b in l["businesses"])
     l["clean_cash"] += rent + biz
-    
-    tax = int(l["salary"] * 0.2) if l["job_type"] in ["civilian", "police", "military"] else 0
+
+    tax = int(l["salary"] * 0.2) if l["job_type"] in ["civilian","police","military"] else 0
     med = sum(DISEASES[d]["cash"] for d in l["diseases"])
-    
     spend_mod = 1.0
     if l["prejudice"] and ("скупым" in l["prejudice"] or "предприимчивым" in l["prejudice"]): spend_mod = 0.7
     elif l["prejudice"] and ("беззаботным" in l["prejudice"] or "пьяницей" in l["prejudice"]): spend_mod = 1.3
-    
     living = int(l["country"][7] * 0.2 * spend_mod + (300 * l["children"]))
     l["clean_cash"] += (l["salary"] - tax - med - living)
-    if l["clean_cash"] < 0: 
+    if l["clean_cash"] < 0:
         l["debt"] += abs(l["clean_cash"]); l["clean_cash"] = 0
 
-    if l["job_type"] in ["civilian", "police", "military"]:
+    if l["job_type"] in ["civilian","police","military"]:
         l["job_years"] += 1
         if l["career_xp"] >= 100 and l["job_years"] >= 2:
             l["career_xp"] = 0; l["career_rank"] = min(5, l["career_rank"] + 1); l["salary"] = int(l["salary"] * 1.3); l["job_years"] = 0
@@ -616,7 +695,7 @@ def next_year(user_id, chat_id):
     elif l["age"] == 18: return start_exam(user_id, chat_id, 3, "университет")
 
     evt = get_event(l)
-    if evt: 
+    if evt:
         l["current_event"] = evt
         sc = "life"
         if "Овертайм" in evt["title"] or "Интриги" in evt["title"]: sc = "office_angry"
@@ -626,10 +705,10 @@ def next_year(user_id, chat_id):
         elif "Мошенники" in evt["title"]: sc = "money_lose"
         elif "Лотерея" in evt["title"]: sc = "money_win"
         elif "ДПС" in evt["title"] or "езда" in evt["title"]: sc = "police"
-        elif evt["title"].startswith(("🍼", "👣", "🧸 Любимая")): sc = "toddler"
+        elif evt["title"].startswith(("🍼","👣","🧸 Любимая")): sc = "toddler"
         send_scene(chat_id, l, format_event(l, evt) + echo_text, kb_event(evt["choices"]), sc)
-    else: 
-        send_scene(chat_id, l, format_year(l) + echo_text, kb_focus(), "life")
+    else:
+        send_scene(chat_id, l, format_year(l) + echo_text, kb_focus(l), "life")
     save_db(players_db)
 
 def send_death(user_id, chat_id):
@@ -650,7 +729,7 @@ def start_exam(user_id, chat_id, level, place):
     available = [t for t in TESTS[level] if t["q"] not in [a["q"] for a in l["asked_tests"][level]]]
     if not available: l["asked_tests"][level] = []; available = TESTS[level]
     test = random.choice(available); l["asked_tests"][level].append(test); l["test_data"] = test
-    school = random.choice(["Школа №1", "Гимназия", "Колледж", "Университет"])
+    school = random.choice(["Школа №1","Гимназия","Колледж","Университет"])
     kb = InlineKeyboardMarkup()
     for i, opt in enumerate(test["opts"]): kb.add(InlineKeyboardButton(opt, callback_data=f"ans_{i}"))
     bot.send_message(chat_id, f"📝 <b>Экзамен в {place}!</b>\n{school}\n\nВопрос: <b>{test['q']}</b>", reply_markup=kb, parse_mode="HTML")
@@ -674,71 +753,109 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
 
 def apply_outcome(l, outcome):
     vvp = l["country"][7]
-    BAD_TRAITS = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
-    is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS)
+    is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS_LOCAL)
 
-    # Малыш (1–5)
+    # Малыш
     if outcome == "toddler_mama": l["relationships"] += 5; return "Сказал «мама»."
     if outcome == "toddler_papa": l["relationships"] += 5; return "Сказал «папа»."
-    if outcome == "toddler_walk": l["health"] += 5; l["happiness"] += 10; return "Первый шаг! Ты счастлив."
+    if outcome == "toddler_walk": l["health"] += 5; l["happiness"] += 10; return "Первый шаг!"
     if outcome == "toddler_fall": l["health"] -= 2; return "Упал, но не сдался."
     if outcome == "toddler_crawl": l["happiness"] += 2; return "Ползаешь по полу."
     if outcome == "toddler_hug": l["happiness"] += 8; return "Мишка тебя успокоил."
     if outcome == "toddler_break": l["happiness"] -= 5; return "Сломал игрушку, плачешь."
 
+    # Предвзятость
     if outcome == "prej_fight_win": l["clean_cash"] += int(vvp*0.5); l["prejudice"] = None; l["happiness"] += 10; return "Ты сломал стереотип!"
     if outcome == "prej_fight_fail": l["clean_cash"] -= int(vvp*0.2); l["diseases"].append("ПТСР"); l["health"] -= 10; return "Ты потратил силы."
     if outcome == "prej_exploit":
-        if is_bad: l["dirty_cash"] += int(vvp*0.8); l["happiness"] -= 5; return "Ты использовал негативный стереотип для обогащения."
-        else: l["clean_cash"] += int(vvp*0.3); l["career_xp"] += 20; l["happiness"] += 5; return "Ты оседлал позитивный стереотип! Тебя повысили."
+        if is_bad: l["dirty_cash"] += int(vvp*0.8); l["happiness"] -= 5; return "Использовал негативный стереотип."
+        else: l["clean_cash"] += int(vvp*0.3); l["career_xp"] += 20; l["happiness"] += 5; return "Оседлал позитивный стереотип!"
     if outcome == "prej_exploit_fail":
-        if is_bad: l["in_prison"] = 3; l["happiness"] -= 20; return "Ты пытался провернуть махинацию и сел."
-        else: l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 10; return "Ты слишком старался соответствовать и выгорел."
-    if outcome == "prej_accept": l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 5; return "Ты смирился."
-    
-    if outcome == "marry": l["married"] = True; l["happiness"] += 20; l["relationships"] += 15; add_to_life_map(l, "Женился"); return "Вы поженились!"
-    if outcome == "divorce": 
+        if is_bad: l["in_prison"] = 3; l["happiness"] -= 20; return "Махинация — и сел."
+        else: l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 10; return "Выгорел."
+    if outcome == "prej_accept": l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 5; return "Смирился."
+
+    # Жизнь
+    if outcome == "marry": l["married"] = True; l["happiness"] += 20; l["relationships"] += 15; add_to_life_map(l, "Женился"); return "Поженились!"
+    if outcome == "divorce":
         l["married"] = False
         if l["clean_cash"] > 0: l["clean_cash"] = int(l["clean_cash"] / 2)
-        l["happiness"] -= 15; l["relationships"] -= 20
-        return "Развод."
+        l["happiness"] -= 15; l["relationships"] -= 20; return "Развод."
     if outcome == "job_civ": l["job_type"] = "civilian"; l["job"] = "Работник"; l["salary"] = int(vvp * 0.6); l["relationships"] += 5; add_to_life_map(l, "На работу"); return "Ты на гражданке."
     if outcome == "job_pol": l["job_type"] = "police"; l["faction"] = "Полиция"; l["job"] = "Полицейский"; l["salary"] = int(vvp * 0.5); l["relationships"] += 10; add_to_life_map(l, "В полиции"); return "Ты в полиции."
     if outcome == "job_mil": l["job_type"] = "military"; l["faction"] = "Армия"; l["job"] = "Военный"; l["salary"] = int(vvp * 0.4); l["relationships"] += 15; add_to_life_map(l, "В армии"); return "Ты в армии."
     if outcome == "job_crim": l["job_type"] = "criminal"; l["faction"] = "Уличная банда"; l["job"] = "Бандит"; l["dirty_cash"] += int(vvp*0.5); l["happiness"] -= 10; add_to_life_map(l, "Криминал"); return "Криминал."
+
+    # Карьера
     if outcome == "career_xp_up": l["career_xp"] += 30; l["happiness"] -= 5; return "Переработал. XP +30."
-    if outcome == "career_xp_down": l["career_xp"] -= 20; return "Ушел домой. XP -20."
+    if outcome == "career_xp_down": l["career_xp"] -= 20; return "Ушел. XP -20."
     if outcome == "career_fight_win": l["career_xp"] += 40; l["happiness"] -= 5; return "Отстоял место. XP +40."
-    if outcome == "career_grind": l["career_xp"] -= 10; return "Проглотил обиду. XP -10."
+    if outcome == "career_grind": l["career_xp"] -= 10; return "Проглотил. XP -10."
     if outcome == "work_extra": l["clean_cash"] += int(vvp*0.1); l["career_xp"] += 10; l["health"] -= 5; return "Вторая работа."
-    if outcome == "family_time": l["career_xp"] -= 10; l["happiness"] += 10; return "Время с семьей. XP -10."
+    if outcome == "family_time": l["career_xp"] -= 10; l["happiness"] += 10; return "Время с семьей."
     if outcome == "burnout": l["diseases"].append("Сердечная недостаточность"); l["health"] -= 20; return "Выгорание."
-    if outcome == "scammed": 
-        loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss
-        l["happiness"] -= 20
+
+    # Скамейка
+    if outcome == "scammed":
+        loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss; l["happiness"] -= 20
         return f"Украли {fmt_money(loss, l['country'])}."
+
+    # Детские
     if outcome == "child_fight": l["clean_cash"] += 100; l["happiness"] += 5; return "Дал сдачи."
     if outcome == "child_tell": return "Пожаловался."
-    if outcome == "child_smart": 
+    if outcome == "child_smart":
         l["books_read"] = l.get("books_read", 0) + 1
-        l["knowledge"] += 10; l["happiness"] += 5
-        return "Книга расширила кругозор. Знания +10."
-    if outcome == "child_walk": 
-        l["health"] += 5; l["happiness"] += 5
-        return "Хорошо погулял. Здоровье +5."
-    if outcome == "child_sport": l["health"] += 5; l["happiness"] += 8; l["relationships"] += 3; return "Отлично поиграл в футбол."
+        l["knowledge"] += 10; l["happiness"] += 5; return "Книга расширила кругозор."
+    if outcome == "child_walk": l["health"] += 5; l["happiness"] += 5; return "Хорошо погулял."
+    if outcome == "child_sport": l["health"] += 5; l["happiness"] += 8; l["relationships"] += 3; return "Отлично поиграл."
     if outcome == "child_injury": l["health"] -= 5; return "Травма на поле."
+    if outcome == "child_bday_big":
+        loss = 500; l["clean_cash"] -= loss; l["happiness"] += 15; l["relationships"] += 10; return "Отличный праздник!"
+    if outcome == "child_bday_bad": l["happiness"] -= 8; return "Друзья не пришли."
+    if outcome == "child_bday_small": l["happiness"] += 6; return "Тихо, но хорошо."
+    if outcome == "child_circus": l["happiness"] += 10; return "Цирк — это волшебство!"
+    if outcome == "child_swim_good": l["health"] += 4; l["happiness"] += 6; return "Научился плавать."
+    if outcome == "child_swim_fear": l["happiness"] -= 4; return "Испугался воды."
+    if outcome == "child_sick_treat": l["health"] += 6; return "Переболел."
+    if outcome == "child_sick_walk_ok": l["happiness"] += 3; return "Погулял."
+    if outcome == "child_sick_walk_bad": l["health"] -= 8; return "Болезнь усилилась."
+    if outcome == "child_draw_win": l["happiness"] += 10; l["knowledge"] += 3; return "Победил в конкурсе!"
+    if outcome == "child_draw_lose": l["happiness"] += 2; return "Поучаствовал."
+    if outcome == "child_bike_ok": l["health"] += 3; l["happiness"] += 8; return "Отлично покатался."
+    if outcome == "child_bike_fall": l["health"] -= 5; return "Упал с велосипеда."
+    if outcome == "child_bike_learn": l["health"] += 2; return "Освоил велосипед."
+    if outcome == "child_dog_ok": l["happiness"] += 6; return "Погладил собаку."
+    if outcome == "child_dog_bite": l["health"] -= 10; l["diseases"].append("Анемия"); return "Собака укусила."
+    if outcome == "child_dog_run": return "Убежал."
+    if outcome == "child_theater_good": l["happiness"] += 10; l["relationships"] += 5; return "Отличная роль!"
+    if outcome == "child_theater_shy": l["happiness"] -= 3; return "Постеснялся."
+    if outcome == "child_theater_tech": l["knowledge"] += 3; return "Помогал за кулисами."
+
+    # Подростковые
     if outcome == "teen_smoke": l["diseases"].append("Рак легких"); l["health"] -= 15; return "Курил."
     if outcome == "teen_healthy": l["clean_cash"] += 200; l["health"] += 5; return "Сэкономил."
     if outcome == "teen_love": l["happiness"] += 15; l["relationships"] += 10; return "Взаимная любовь."
     if outcome == "teen_heartbreak": l["diseases"].append("ПТСР"); l["happiness"] -= 15; l["relationships"] -= 10; return "Отказ."
+    if outcome == "teen_sport_good": l["health"] += 8; l["happiness"] += 5; return "Спорт-секция пошла на пользу."
+    if outcome == "teen_sport_hurt": l["health"] -= 6; return "Травма на тренировке."
+    if outcome == "teen_games_win": l["happiness"] += 8; l["relationships"] += 5; return "Победа на турнире!"
+    if outcome == "teen_games_lose": l["happiness"] += 3; return "Проиграл, но весело."
+    if outcome == "teen_study": l["knowledge"] += 6; return "Позанимался."
+    if outcome == "teen_fight_win": l["happiness"] += 8; l["relationships"] -= 3; return "Дал сдачи."
+    if outcome == "teen_fight_lose": l["health"] -= 8; return "Получил."
+    if outcome == "teen_tell_teacher": l["relationships"] += 3; return "Учитель вмешался."
+    if outcome == "teen_band": l["happiness"] += 10; l["relationships"] += 5; return "Игра в группе!"
+    if outcome == "teen_license_ok": l["has_license"] = True; l["happiness"] += 10; return "Получил права!"
+    if outcome == "teen_license_fail": l["happiness"] -= 3; return "Не сдал."
+
+    # Лотерея/ДПС
     if outcome == "lottery_win": l["clean_cash"] += int(vvp * 5); l["happiness"] += 30; return "ДЖЕКПОТ!"
     if outcome == "lottery_lose": l["clean_cash"] -= 100; l["happiness"] -= 5; return "Билет пустой."
-    if outcome == "bribe_dps": l["dirty_cash"] -= int(vvp*0.1); return "Взятка инспектору. Пронесло."
+    if outcome == "bribe_dps": l["dirty_cash"] -= int(vvp*0.1); return "Взятка. Пронесло."
     if outcome == "dps_jail": l["in_prison"] = 1; l["happiness"] -= 15; return "1 год тюрьмы за езду без прав."
-    if outcome == "dps_warning": return "Инспектор сделал предупреждение."
-    if outcome == "bribe_dps_big": l["dirty_cash"] -= int(vvp*0.3); return "Откупился от пьяной езды."
-    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; return "3 года тюрьмы + конфискация машины."
+    if outcome == "dps_warning": return "Инспектор предупредил."
+    if outcome == "bribe_dps_big": l["dirty_cash"] -= int(vvp*0.3); return "Откупился."
+    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; return "3 года тюрьмы + конфискация."
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
@@ -755,38 +872,48 @@ def resolve_choice(user_id, chat_id, i):
         text = apply_outcome(l, outcome) if outcome else "Год прошел."
 
     l["last_result"] = {"success": success, "text": text}
-    
+
     scene_map = {
-        "child_fight": "fight", "child_tell": "school", "child_smart": "school", "child_walk": "child",
-        "child_sport": "child", "child_injury": "hospital",
-        "toddler_mama": "toddler", "toddler_papa": "toddler", "toddler_walk": "toddler",
-        "toddler_fall": "toddler", "toddler_crawl": "toddler", "toddler_hug": "toddler",
-        "toddler_break": "sad",
-        "teen_love": "love", "teen_heartbreak": "sad", "teen_smoke": "sad",
-        "career_xp_up": "office", "career_fight_win": "office_angry", "career_grind": "office_angry",
-        "marry": "wedding", "divorce": "sad", "scammed": "money_lose", "lottery_win": "money_win", "lottery_lose": "sad",
-        "job_civ": "office", "job_pol": "police", "job_mil": "military", "job_crim": "criminal",
-        "prej_fight_win": "office", "prej_fight_fail": "sad", "prej_exploit": "money_win", "prej_exploit_fail": "prison", "prej_accept": "sad",
-        "bribe_dps": "police", "dps_jail": "prison", "dps_warning": "police", "bribe_dps_big": "police", "drunk_jail": "prison"
+        "child_fight":"fight","child_tell":"school","child_smart":"school","child_walk":"child",
+        "child_sport":"child","child_injury":"hospital",
+        "child_bday_big":"rich","child_bday_bad":"sad","child_bday_small":"child",
+        "child_circus":"child","child_swim_good":"child","child_swim_fear":"sad",
+        "child_sick_treat":"hospital","child_sick_walk_ok":"child","child_sick_walk_bad":"hospital",
+        "child_draw_win":"child","child_draw_lose":"child","child_bike_ok":"child",
+        "child_bike_fall":"hospital","child_bike_learn":"child","child_dog_ok":"child",
+        "child_dog_bite":"hospital","child_dog_run":"child","child_theater_good":"child",
+        "child_theater_shy":"sad","child_theater_tech":"school",
+        "toddler_mama":"toddler","toddler_papa":"toddler","toddler_walk":"toddler",
+        "toddler_fall":"toddler","toddler_crawl":"toddler","toddler_hug":"toddler","toddler_break":"sad",
+        "teen_love":"love","teen_heartbreak":"sad","teen_smoke":"sad","teen_sport_good":"child",
+        "teen_sport_hurt":"hospital","teen_games_win":"child","teen_games_lose":"child",
+        "teen_study":"school","teen_fight_win":"fight","teen_fight_lose":"hospital",
+        "teen_tell_teacher":"school","teen_band":"rich","teen_license_ok":"office","teen_license_fail":"sad",
+        "career_xp_up":"office","career_fight_win":"office_angry","career_grind":"office_angry",
+        "marry":"wedding","divorce":"sad","scammed":"money_lose","lottery_win":"money_win","lottery_lose":"sad",
+        "job_civ":"office","job_pol":"police","job_mil":"military","job_crim":"criminal",
+        "prej_fight_win":"office","prej_fight_fail":"sad","prej_exploit":"money_win",
+        "prej_exploit_fail":"prison","prej_accept":"sad",
+        "bribe_dps":"police","dps_jail":"prison","dps_warning":"police","bribe_dps_big":"police","drunk_jail":"prison",
     }
-    
-    if outcome == "direct": sc = "life"
-    elif outcome in ["prej_exploit", "prej_exploit_fail"]:
+
+    if outcome == "direct":
+        sc = "life"
+    elif outcome in ["prej_exploit","prej_exploit_fail"]:
         is_bad = l["prejudice"] and any(t in l["prejudice"] for t in BAD_TRAITS_LOCAL)
         if not is_bad: sc = "office" if outcome == "prej_exploit" else "sad"
         else: sc = "money_win" if outcome == "prej_exploit" else "prison"
-    else: sc = scene_map.get(outcome, "life")
-        
-    save_db(players_db)
-    
-    if outcome == "marry":
-        play_cutscene(chat_id, get_cutscene_frames("marry"), format_year(l), kb_focus())
-    elif outcome in ["dps_jail", "drunk_jail", "prej_exploit_fail"]:
-        play_cutscene(chat_id, get_cutscene_frames("prison"), format_year(l), kb_focus())
     else:
-        send_scene(chat_id, l, format_year(l), kb_focus(), sc)
+        sc = scene_map.get(outcome, "life")
 
-BAD_TRAITS_LOCAL = ["вором", "бандитом", "скупым", "террористом", "агрессивным", "бедным", "грязным", "дикарем", "пьяницей", "алкоголиком", "фанатиком", "угнетателем", "мафией", "сепаратистом", "предателем"]
+    save_db(players_db)
+
+    if outcome == "marry":
+        play_cutscene(chat_id, get_cutscene_frames("marry"), format_year(l), kb_focus(l))
+    elif outcome in ["dps_jail","drunk_jail","prej_exploit_fail"]:
+        play_cutscene(chat_id, get_cutscene_frames("prison"), format_year(l), kb_focus(l))
+    else:
+        send_scene(chat_id, l, format_year(l), kb_focus(l), sc)
 
 def format_year(l):
     c = l["country"]
@@ -801,7 +928,7 @@ def format_year(l):
     if l["debt"] > 0: parts.append(f"🏦 Долг: <b>{fmt_money(l['debt'], c)}</b>")
     parts.append(f"👑 Класс: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
     job = l["job"]
-    if l["job_type"] in ["civilian", "police", "military"]:
+    if l["job_type"] in ["civilian","police","military"]:
         job += f" ({CAREER_TITLES[l['job_type']].get(l['career_rank'], '')}, XP: {l['career_xp']}/100)"
     parts.append(f"💼 {job}")
     if l["properties"]: parts.append("🏠 " + ", ".join([p["type"] for p in l["properties"]]))
@@ -812,23 +939,28 @@ def format_year(l):
     parts.append(f"👨‍👩‍👧 Дети: {l['children']} | Брак: {'Да' if l['married'] else 'Нет'}")
     return "\n".join(parts)
 
-def format_event(l, evt): 
+def format_event(l, evt):
     visuals = get_scene_visuals("life", l["gender"])
     return f"<b>{get_age_str(l['age'])} · {evt['title']}</b>\n{visuals}\n\n{get_stats_line(l)}\n\n{evt['text']}"
 
 def send_scene(chat_id, l, text, kb, scene_type="life"):
-    if not text.startswith("<b>"): 
+    if not text.startswith("<b>"):
         visuals = get_scene_visuals(scene_type, l["gender"])
         text = f"{visuals}\n\n{text}"
     bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 
 def kb_intro(): return InlineKeyboardMarkup().add(InlineKeyboardButton("🎲 Родиться", callback_data="new"))
 def kb_year(): return InlineKeyboardMarkup().add(InlineKeyboardButton("▶️ Следующий год", callback_data="year")).add(InlineKeyboardButton("🛒 Магазин", callback_data="shop"))
-def kb_focus():
+
+def kb_focus(l=None):
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton("❤️ Здоровье", callback_data="focus_health"), InlineKeyboardButton("🧠 Знания", callback_data="focus_knowledge"))
-    kb.add(InlineKeyboardButton("🤝 Отношения", callback_data="focus_relationships"), InlineKeyboardButton("😊 Счастье", callback_data="focus_happiness"))
-    kb.add(InlineKeyboardButton("💼 Работа", callback_data="focus_work"))
+    kb.add(InlineKeyboardButton("❤️ Здоровье", callback_data="focus_health"),
+           InlineKeyboardButton("🧠 Знания", callback_data="focus_knowledge"))
+    kb.add(InlineKeyboardButton("🤝 Отношения", callback_data="focus_relationships"),
+           InlineKeyboardButton("😊 Счастье", callback_data="focus_happiness"))
+    # Кнопка «Работа» — только когда есть работа
+    if l and l.get("job_type") in ("civilian","police","military","criminal"):
+        kb.add(InlineKeyboardButton("💼 Работа", callback_data="focus_work"))
     kb.add(InlineKeyboardButton("▶️ Пропустить", callback_data="year"))
     kb.add(InlineKeyboardButton("🛒 Магазин", callback_data="shop"))
     return kb
@@ -838,6 +970,7 @@ def kb_event(choices):
     for i, c in enumerate(choices): kb.add(InlineKeyboardButton(c['text'], callback_data=f"choice_{i}"))
     return kb
 
+# ================= МАГАЗИН =================
 def open_shop(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup().add(InlineKeyboardButton("🏠 Недвижимость", callback_data="shop_prop")).add(InlineKeyboardButton("🚗 Авто", callback_data="shop_car")).add(InlineKeyboardButton("🏢 Бизнесы", callback_data="shop_biz")).add(InlineKeyboardButton("⬅️ Назад", callback_data="year"))
@@ -885,6 +1018,7 @@ def process_buy(user_id, chat_id, cat, name):
     save_db(players_db)
     bot.send_message(chat_id, f"🎉 Куплено: <b>{name}</b>!", reply_markup=kb_year(), parse_mode="HTML")
 
+# ================= ОБРАБОТЧИКИ =================
 @bot.message_handler(commands=["start"])
 def cmd_start(msg):
     text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду. Сможешь ли ты выжить и оставить след?"
@@ -901,15 +1035,15 @@ def handle(call):
             msg = f"👶 <b>Ты родился!</b>\n👤 {l['name']} ({l['country'][1]} {l['country'][0]})\n🧬 {l['ethnicity']}\n\n"
             if l["prejudice"]: msg += f"⚠️ <b>Внимание:</b> {l['prejudice']}\n\n"
             msg += f"{get_stats_line(l)}\n\n<i>Выбери свой первый фокус на год.</i>"
-            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus())
+            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
         elif d.startswith("focus_"):
             l = players_db[uid_str]; l["focus"] = d.replace("focus_", ""); save_db(players_db); next_year(uid, chat_id)
-        elif d == "year": 
+        elif d == "year":
             l = players_db[uid_str]; l["focus"] = None; save_db(players_db); next_year(uid, chat_id)
-        elif d.startswith("job_"): 
+        elif d.startswith("job_"):
             l = players_db[uid_str]; text = apply_outcome(l, d); save_db(players_db)
             sc = "office" if "civ" in d else "police" if "pol" in d else "military" if "mil" in d else "criminal"
-            send_scene(chat_id, l, text, kb_focus(), sc)
+            send_scene(chat_id, l, text, kb_focus(l), sc)
         elif d.startswith("choice_"): resolve_choice(uid, chat_id, int(d.split("_")[1]))
         elif d.startswith("ans_"): handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
         elif d == "shop": open_shop(uid, chat_id)
@@ -926,7 +1060,7 @@ def handle(call):
             l = create_life(force_country=n["country"]); l["name"] = n["name"]
             players_db[uid_str] = l; add_to_life_map(l, "Родился (смена судьбы)"); save_db(players_db)
             msg = f"🎭 <b>Новая судьба!</b>\nТы теперь {l['name']} ({l['country'][1]}).\n\n{get_stats_line(l)}"
-            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus())
+            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
     except Exception as e:
         bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
         print(f"Error: {e}")
