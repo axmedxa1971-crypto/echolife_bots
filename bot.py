@@ -16,9 +16,14 @@ def save_db(data):
     try:
         with open(DB_FILE, "w", encoding="utf-8") as f: json.dump(data, f, ensure_ascii=False)
     except: pass
+
 players_db = load_db()
 
-# ================= ГЛОБАЛЬНЫЙ РЕЙТИНГ =================
+# Чистим legacy-поле auto_mode у всех персонажей
+for _uid, _p in list(players_db.items()):
+    if isinstance(_p, dict) and "auto_mode" in _p:
+        _p.pop("auto_mode", None)
+
 if "_leaderboard" not in players_db:
     players_db["_leaderboard"] = []
     save_db(players_db)
@@ -222,7 +227,7 @@ FOCUS_EVENTS = {
     ],
 }
 
-# ================= ДЕТСКИЕ СОБЫТИЯ (1–12) =================
+# ================= ДЕТСКИЕ СОБЫТИЯ =================
 CHILD_EVENTS = [
     {"id":"c1","title":"🍼 Первое слово","text":"Ты пытаешься говорить.","min_age":1,"max_age":2,
      "choices":[{"text":"«Мама»","p":1,"success":"toddler_mama","fail":"none"},
@@ -268,7 +273,7 @@ CHILD_EVENTS = [
                 {"text":"За кулисами","p":1,"success":"child_theater_tech","fail":"none"}]},
 ]
 
-# ================= ПОДРОСТКОВЫЕ СОБЫТИЯ (13–17) =================
+# ================= ПОДРОСТКОВЫЕ СОБЫТИЯ =================
 TEEN_EVENTS = [
     {"id":"t1","title":"🚬 Сигарета","text":"Старшеклассники предлагают закурить.","min_age":13,"max_age":17,
      "choices":[{"text":"Попробовать","p":0.9,"success":"teen_smoke","fail":"none"},
@@ -540,7 +545,6 @@ def create_life(force_country=None):
         "seen_regular_events": [],
         "philosophy_answers": [],
         "wealth_history": [],
-        "auto_mode": False,
     }
 
 def add_to_life_map(l, text):
@@ -606,8 +610,9 @@ def calculate_life_score(l):
 
 def show_leaderboard(chat_id, highlight_user=None):
     lb = players_db.get("_leaderboard", [])
+    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("⬅️ Назад к жизни", callback_data="year"))
     if not lb:
-        return bot.send_message(chat_id, "🏆 Рейтинг пуст — ещё никто не прожил жизнь.", parse_mode="HTML")
+        return bot.send_message(chat_id, "🏆 Рейтинг пуст — ещё никто не прожил жизнь.", reply_markup=kb, parse_mode="HTML")
     text = "🏆 <b>Топ-10 прожитых жизней</b>\n\n"
     medals = ["🥇","🥈","🥉"]
     for i, e in enumerate(lb[:10]):
@@ -617,7 +622,7 @@ def show_leaderboard(chat_id, highlight_user=None):
                  f"    ⭐ {e['score']} очков · {get_age_str(e['age'])} · {e['wealth']}\n"
                  f"    🩺 {e['cause']}\n\n")
     text += f"\n<i>Всего жизней прожито: {len(lb)}</i>"
-    bot.send_message(chat_id, text, parse_mode="HTML")
+    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
 
 # ================= ГЛАВНОЕ: get_event =================
 def get_event(l):
@@ -797,6 +802,7 @@ def next_year(user_id, chat_id):
             "choices": [{"text": opt, "p": 1, "success_effect": {"happiness": 3, "text": f"Ты выбрал: {opt}. Год прошёл в размышлениях."}} for opt in q["opts"]],
             "is_philosophy": True,
             "age": l["age"],
+            "resolved": False,
         }
         save_db(players_db)
         return send_scene(chat_id, l, format_event(l, l["current_event"]), kb_event(l["current_event"]["choices"]), "life")
@@ -807,6 +813,7 @@ def next_year(user_id, chat_id):
 
     evt = get_event(l)
     if evt:
+        evt["resolved"] = False
         l["current_event"] = evt
         sc = "life"
         if "Овертайм" in evt["title"] or "Интриги" in evt["title"]: sc = "office_angry"
@@ -819,11 +826,13 @@ def next_year(user_id, chat_id):
         elif evt["title"].startswith(("🍼","👣","🧸 Любимая")): sc = "toddler"
         send_scene(chat_id, l, format_event(l, evt) + echo_text, kb_event(evt["choices"]), sc)
     else:
+        l["current_event"] = None
         send_scene(chat_id, l, format_year(l) + echo_text, kb_focus(l), "life")
     save_db(players_db)
 
 def send_death(user_id, chat_id):
     l = players_db[str(user_id)]; l["alive"] = False; c = l["country"]
+    l["current_event"] = None
 
     causes = []
     if l["age"] < 5: causes = ["Перинатальные причины", "Инфекции", "Несчастный случай"]
@@ -1014,11 +1023,11 @@ def apply_outcome(l, outcome):
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
-    l = players_db[str(user_id)]; evt = l.get("current_event")
+    l = players_db[str(user_id)]
+    evt = l.get("current_event")
     if not evt: return
-
-    if l.get("auto_mode") and not evt.get("is_philosophy"):
-        i = random.randint(0, len(evt["choices"])-1)
+    if evt.get("resolved"): return   # защита от повторного нажатия
+    if i < 0 or i >= len(evt["choices"]): return
 
     c = evt["choices"][i]; success = random.random() < c["p"]
 
@@ -1034,6 +1043,10 @@ def resolve_choice(user_id, chat_id, i):
 
     if evt.get("is_philosophy"):
         l.setdefault("philosophy_answers", []).append({"age": evt["age"], "choice": c["text"]})
+
+    # помечаем событие решённым и очищаем
+    evt["resolved"] = True
+    l["current_event"] = None
 
     scene_map = {
         "child_fight":"fight","child_tell":"school","child_smart":"school","child_walk":"child",
@@ -1074,10 +1087,6 @@ def resolve_choice(user_id, chat_id, i):
         play_cutscene(chat_id, get_cutscene_frames("prison"), format_year(l), kb_focus(l))
     else:
         send_scene(chat_id, l, format_year(l), kb_focus(l), sc)
-
-    if l.get("auto_mode") and not evt.get("is_philosophy"):
-        time.sleep(0.5)
-        next_year(user_id, chat_id)
 
 def format_year(l):
     c = l["country"]
@@ -1129,9 +1138,6 @@ def kb_focus(l=None):
         kb.add(InlineKeyboardButton("💼 Работа", callback_data="focus_work"))
     kb.add(InlineKeyboardButton("🏆 Топ жизней", callback_data="leaderboard"))
     kb.add(InlineKeyboardButton("▶️ Пропустить", callback_data="year"))
-    if l:
-        auto_status = "🤖 Авто: вкл" if l.get("auto_mode") else "🤖 Авто: выкл"
-        kb.add(InlineKeyboardButton(auto_status, callback_data="toggle_auto"))
     kb.add(InlineKeyboardButton("🛒 Магазин", callback_data="shop"))
     return kb
 
@@ -1200,7 +1206,20 @@ def cmd_top(msg):
 @bot.callback_query_handler(func=lambda c: True)
 def handle(call):
     uid = call.from_user.id; uid_str = str(uid); chat_id = call.message.chat.id
-    bot.answer_callback_query(call.id); d = call.data
+    d = call.data
+
+    # Один раз отвечаем на callback — снимаем спиннер у кнопки
+    try:
+        bot.answer_callback_query(call.id)
+    except:
+        pass
+
+    # Убираем клавиатуру с нажатого сообщения — защита от повторных кликов из истории
+    try:
+        bot.edit_message_reply_markup(chat_id, call.message.message_id, reply_markup=None)
+    except:
+        pass
+
     try:
         if d == "new":
             l = create_life(); players_db[uid_str] = l
@@ -1209,32 +1228,41 @@ def handle(call):
             if l["prejudice"]: msg += f"⚠️ <b>Внимание:</b> {l['prejudice']}\n\n"
             msg += f"{get_stats_line(l)}\n\n<i>Выбери свой первый фокус на год.</i>"
             play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
+
+        elif d == "toggle_auto":
+            # авторежим удалён — старая кнопка из истории просто игнорируется
+            return
+
         elif d.startswith("focus_"):
-            l = players_db[uid_str]
+            l = players_db.get(uid_str)
+            if not l: return
             focus = d.replace("focus_", "")
             if focus == "work" and l.get("job_type") not in ("civilian","police","military","criminal"):
-                bot.answer_callback_query(call.id, "У тебя нет работы — сначала найди её.", show_alert=True)
+                bot.send_message(chat_id, "❌ У тебя нет работы — сначала найди её.", reply_markup=kb_focus(l))
                 return
             l["focus"] = focus; save_db(players_db); next_year(uid, chat_id)
+
         elif d == "year":
-            l = players_db[uid_str]; l["focus"] = None; save_db(players_db); next_year(uid, chat_id)
-        elif d == "toggle_auto":
-            l = players_db[uid_str]
-            l["auto_mode"] = not l.get("auto_mode", False)
-            status = "включён" if l["auto_mode"] else "выключен"
-            bot.answer_callback_query(call.id, f"Авторежим {status}", show_alert=True)
-            save_db(players_db)
-            if l["auto_mode"]:
-                l["focus"] = random.choice(["health","knowledge","relationships","happiness"])
-                next_year(uid, chat_id)
+            l = players_db.get(uid_str)
+            if not l: return
+            l["focus"] = None; save_db(players_db); next_year(uid, chat_id)
+
         elif d == "leaderboard":
             show_leaderboard(chat_id, highlight_user=uid)
+
         elif d.startswith("job_"):
-            l = players_db[uid_str]; text = apply_outcome(l, d); save_db(players_db)
+            l = players_db.get(uid_str)
+            if not l: return
+            text = apply_outcome(l, d); save_db(players_db)
             sc = "office" if "civ" in d else "police" if "pol" in d else "military" if "mil" in d else "criminal"
             send_scene(chat_id, l, text, kb_focus(l), sc)
-        elif d.startswith("choice_"): resolve_choice(uid, chat_id, int(d.split("_")[1]))
-        elif d.startswith("ans_"): handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
+
+        elif d.startswith("choice_"):
+            resolve_choice(uid, chat_id, int(d.split("_")[1]))
+
+        elif d.startswith("ans_"):
+            handle_exam_answer(uid, chat_id, int(d.split("_")[1]))
+
         elif d == "shop": open_shop(uid, chat_id)
         elif d == "shop_prop": shop_prop_menu(uid, chat_id)
         elif d == "shop_car": shop_car_menu(uid, chat_id)
@@ -1243,20 +1271,31 @@ def handle(call):
         elif d.startswith("buy_prop_"): process_buy(uid, chat_id, "prop", d.replace("buy_prop_", ""))
         elif d.startswith("buy_car_"): process_buy(uid, chat_id, "car", d.replace("buy_car_", ""))
         elif d.startswith("buy_biz_"): process_buy(uid, chat_id, "biz", d.replace("buy_biz_", ""))
+
         elif d.startswith("play_peer_"):
             idx = int(d.split("_")[2])
-            p = players_db[uid_str]["peer_lives"][idx]
-            l = create_life(force_country=p["country"]); l["name"] = p["name"]
-            players_db[uid_str] = l; add_to_life_map(l, "Родился (судьба ровесника)"); save_db(players_db)
-            msg = f"🎭 <b>Судьба ровесника!</b>\nТы теперь {l['name']} ({l['country'][1]}).\n\n{get_stats_line(l)}"
-            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
+            l = players_db.get(uid_str)
+            if not l: return
+            peers = l.get("peer_lives", [])
+            if idx >= len(peers): return
+            p = peers[idx]
+            new_l = create_life(force_country=p["country"]); new_l["name"] = p["name"]
+            players_db[uid_str] = new_l; add_to_life_map(new_l, "Родился (судьба ровесника)"); save_db(players_db)
+            msg = f"🎭 <b>Судьба ровесника!</b>\nТы теперь {new_l['name']} ({new_l['country'][1]}).\n\n{get_stats_line(new_l)}"
+            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(new_l))
+
         elif d.startswith("play_"):
             idx = int(d.split("_")[1])
-            n = players_db[uid_str]["neighbors"][idx]
-            l = create_life(force_country=n["country"]); l["name"] = n["name"]
-            players_db[uid_str] = l; add_to_life_map(l, "Родился (смена судьбы)"); save_db(players_db)
-            msg = f"🎭 <b>Новая судьба!</b>\nТы теперь {l['name']} ({l['country'][1]}).\n\n{get_stats_line(l)}"
-            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
+            l = players_db.get(uid_str)
+            if not l: return
+            neighbors = l.get("neighbors", [])
+            if idx >= len(neighbors): return
+            n = neighbors[idx]
+            new_l = create_life(force_country=n["country"]); new_l["name"] = n["name"]
+            players_db[uid_str] = new_l; add_to_life_map(new_l, "Родился (смена судьбы)"); save_db(players_db)
+            msg = f"🎭 <b>Новая судьба!</b>\nТы теперь {new_l['name']} ({new_l['country'][1]}).\n\n{get_stats_line(new_l)}"
+            play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(new_l))
+
     except Exception as e:
         bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
         print(f"Error: {e}")
