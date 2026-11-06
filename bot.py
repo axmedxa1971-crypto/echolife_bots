@@ -198,7 +198,7 @@ FOCUS_EVENTS = {
          "choices":[{"text":"💵 Сходить","p":1,"success_effect":{"happiness":10,"cash":-300,"text":"Хороший фильм."}},
                     {"text":"🏠 Дома","p":1,"success_effect":{"happiness":3,"text":"Посмотрел кино дома."}}]},
         {"id":"p2","title":"🏖 Отпуск","text":"Пора отдохнуть.","min_age":5,
-         "choices":[{"text":"✈️ Поехать","p":0.8,"success_effect":{"happiness":20,"health":5,"cash":-5000,"text":"Отпуск удался!"},"fail_effect":{"happiness":-5,"cash":-5000,"text":"Отпуск испорчен."}},
+         "choices":[{"text":"✈️ Поехать","p":0.8,"success_effect":{"happiness":20,"health":5,"cash":-5000,"vacation":1,"text":"Отпуск удался!"},"fail_effect":{"happiness":-5,"cash":-5000,"text":"Отпуск испорчен."}},
                     {"text":"🛋 Остаться","p":1,"success_effect":{"text":"Остался дома."}}]},
         {"id":"p3","title":"🎨 Хобби","text":"Давно хотел заняться чем-то для души.","min_age":6,
          "choices":[{"text":"💵 Купить материалы","p":0.9,"success_effect":{"happiness":12,"knowledge":3,"cash":-500,"text":"Хобби радует."}},
@@ -389,6 +389,75 @@ WORLD_EVENTS = [
     {"id":"we4","title":"📈 Экономический бум","text":"Рынок растёт. Зарплаты повышают.","effect":{"cash":800,"happiness":10},"min_age":18},
 ]
 
+# ================= ЖИЗНЕННЫЕ ПОВОРОТЫ =================
+LIFE_TWISTS = [
+    {"id":"tw_inherit","title":"💰 Наследство",
+     "text":"Дальний родственник оставил тебе наследство.",
+     "min_age":18,"max_age":70,
+     "choices":[{"text":"Принять","p":1,
+                 "success_effect":{"cash":50000,"happiness":10,"text":"Ты получил наследство!"}}]},
+    {"id":"tw_meet","title":"🤝 Роковая встреча",
+     "text":"Ты случайно встретил влиятельного человека.",
+     "min_age":22,"max_age":60,
+     "choices":[{"text":"Впечатлить","p":0.5,
+                 "success_effect":{"career_xp":50,"relationships":10,"text":"Он предложил тебе помощь!"},
+                 "fail_effect":{"happiness":-3,"text":"Не впечатлил."}},
+                {"text":"Пройти мимо","p":1,"success_effect":{"text":"Прошёл мимо."}}]},
+    {"id":"tw_fire","title":"🔥 Пожар",
+     "text":"Твой дом загорелся!",
+     "min_age":5,"max_age":90,"requires_property":True,
+     "choices":[{"text":"Спасать имущество","p":0.5,
+                 "success_effect":{"cash":-5000,"health":-15,"text":"Спас часть вещей, но обгорел."},
+                 "fail_effect":{"cash":-30000,"health":-25,"text":"Всё сгорело, ты чудом выжил."}},
+                {"text":"Бежать","p":1,
+                 "success_effect":{"cash":-30000,"health":5,"text":"Дом сгорел, но ты цел."}}]},
+    {"id":"tw_plague","title":"🦠 Эпидемия",
+     "text":"В городе вспыхнула эпидемия.",
+     "min_age":0,"max_age":90,
+     "choices":[{"text":"Сидеть дома","p":0.9,
+                 "success_effect":{"health":-5,"happiness":-5,"text":"Пересидел дома."},
+                 "fail_effect":{"health":-30,"text":"Всё равно заразился."}},
+                {"text":"Жить как обычно","p":0.6,
+                 "success_effect":{"health":-15,"happiness":3,"text":"Повезло."},
+                 "fail_effect":{"health":-40,"diseases":["Ковид-19"],"text":"Тяжело заболел."}}]},
+    {"id":"tw_windfall","title":"🎰 Неожиданный выигрыш",
+     "text":"Ты выиграл в лотерею!",
+     "min_age":18,"max_age":80,
+     "choices":[{"text":"Забрать деньги","p":1,
+                 "success_effect":{"cash":20000,"happiness":20,"text":"Крупная сумма на счету!"}}]},
+]
+
+# ================= ДОСТИЖЕНИЯ =================
+ACHIEVEMENTS = {
+    "first_word":     {"name":"🍼 Первое слово",    "desc":"Сказать первое слово"},
+    "school":         {"name":"🎓 Первый звонок",   "desc":"Пойти в школу"},
+    "graduated":      {"name":"📜 Выпускник",       "desc":"Окончить школу"},
+    "university":     {"name":"🎓 Студент",         "desc":"Поступить в вуз"},
+    "married":        {"name":"💍 Вторая половинка","desc":"Вступить в брак"},
+    "parent":         {"name":"👨‍👩‍👧 Родитель",     "desc":"Завести ребёнка"},
+    "long_liver":     {"name":"🧓 Долгожитель",     "desc":"Прожить 90+ лет"},
+    "rich":           {"name":"💎 Богач",           "desc":"Накопить 100 000+"},
+    "elite":          {"name":"👑 Элита",           "desc":"Достичь статуса «Элита»"},
+    "rags_to_riches": {"name":"⬆️ Из грязи в князи", "desc":"Начать бедным и стать элитой"},
+    "criminal":       {"name":"🚔 Криминал",         "desc":"Выбрать криминальный путь"},
+    "prisoner":       {"name":"⛓ Узник",            "desc":"Побывать в тюрьме"},
+    "honest_worker":  {"name":"💼 Честный трудяга", "desc":"Достичь 4-го ранга карьеры"},
+    "survivor":       {"name":"💪 Титан духа",      "desc":"Пережить 3+ болезней"},
+    "polyglot":       {"name":"🌍 Полиглот",        "desc":"Достичь 90+ знаний"},
+    "social":         {"name":"🤝 Душа компании",   "desc":"Достичь 90+ отношений"},
+    "home_owner":     {"name":"🏠 Домовладелец",    "desc":"Купить недвижимость"},
+    "businessman":    {"name":"🏢 Бизнесмен",       "desc":"Открыть бизнес"},
+    "traveler":       {"name":"✈️ Путешественник",  "desc":"Побывать в отпуске 3 раза"},
+}
+
+# ================= РОЛИ КЛЮЧЕВЫХ NPC =================
+NPC_ROLES_DESC = {
+    "mother": "Мама",
+    "father": "Папа",
+    "friend": "Лучший друг",
+    "rival":  "Соперник",
+}
+
 # ================= УТИЛИТЫ =================
 def get_age_str(age):
     if age % 10 == 1 and age % 100 != 11: return f"{age} год"
@@ -526,6 +595,150 @@ def get_neighbor_final(n):
     elif n["trajectory"] == "unfortunate": return f"умер(ла) в бедности в {get_age_str(n['death_age'])}"
     else: return f"умер(ла) в {get_age_str(n['death_age'])}"
 
+# ================= КЛЮЧЕВЫЕ NPC =================
+def create_key_npcs(country, gender):
+    mother_name = random.choice(NAMES[country[2]]["f"])
+    father_name = random.choice(NAMES[country[2]]["m"])
+    friend_name = random.choice(NAMES[country[2]][gender])
+    rival_gender = "f" if gender == "m" else "m"
+    rival_name = random.choice(NAMES[country[2]][rival_gender])
+
+    return [
+        {"role":"mother","name":mother_name,"relation":70,"memories":[],
+         "dead":False,"death_age":random.randint(60, 90)},
+        {"role":"father","name":father_name,"relation":60,"memories":[],
+         "dead":False,"death_age":random.randint(55, 85)},
+        {"role":"friend","name":friend_name,"relation":50,"memories":[],
+         "dead":False,"death_age":random.randint(50, 90)},
+        {"role":"rival","name":rival_name,"relation":0,"memories":[],
+         "dead":False,"death_age":random.randint(40, 85)},
+    ]
+
+def get_npc_by_role(l, role):
+    for npc in l.get("key_npcs", []):
+        if npc["role"] == role:
+            return npc
+    return None
+
+def change_npc_relation(l, role, delta, memory_text=None):
+    npc = get_npc_by_role(l, role)
+    if not npc: return
+    npc["relation"] = max(-100, min(100, npc["relation"] + delta))
+    if memory_text:
+        npc["memories"].append({"age": l["age"], "text": memory_text})
+
+def check_npc_deaths(l):
+    for npc in l.get("key_npcs", []):
+        if not npc["dead"] and l["age"] >= npc.get("death_age", 999):
+            npc["dead"] = True
+            role_ru = NPC_ROLES_DESC.get(npc["role"], npc["role"])
+            add_to_life_map(l, f"Умер(ла) {role_ru} {npc['name']}")
+            if npc["role"] in ("mother", "father", "friend"):
+                l["happiness"] = max(0, l["happiness"] - 5)
+
+def get_npc_epilogue(npc):
+    role_ru = NPC_ROLES_DESC.get(npc["role"], npc["role"])
+    if npc["dead"]:
+        fate = f"умер(ла) в {get_age_str(npc['death_age'])}"
+    else:
+        fate = "жив(а)"
+    rel = npc["relation"]
+    if rel >= 60: mood = "был(а) рядом до конца"
+    elif rel >= 20: mood = "тёплые отношения"
+    elif rel >= -20: mood = "нейтрально"
+    else: mood = "испортились отношения"
+    return f"• {role_ru} {npc['name']}: {fate} — {mood}"
+
+# ================= ОТЛОЖЕННЫЕ ПОСЛЕДСТВИЯ =================
+def add_pending_consequence(l, years_ahead, event_data):
+    l.setdefault("pending_consequences", []).append({
+        "fire_age": l["age"] + years_ahead,
+        "event": event_data,
+    })
+
+def get_due_consequence(l):
+    due = [c for c in l.get("pending_consequences", []) if c["fire_age"] <= l["age"]]
+    if not due: return None
+    consequence = due[0]
+    l["pending_consequences"].remove(consequence)
+    event = dict(consequence["event"])
+    event["resolved"] = False
+    return event
+
+# ================= ДОСТИЖЕНИЯ =================
+def check_achievements(l):
+    if "achievements" not in l: l["achievements"] = []
+    if "ever_in_prison" not in l: l["ever_in_prison"] = False
+    new_ones = []
+
+    def has(aid): return aid in l["achievements"]
+    def unlock(aid):
+        if not has(aid):
+            l["achievements"].append(aid)
+            new_ones.append(ACHIEVEMENTS[aid])
+
+    if l["age"] >= 1: unlock("first_word")
+    if l["education"] in ["Начальное","Среднее","Высшее"]: unlock("school")
+    if l["education"] in ["Среднее","Высшее"]: unlock("graduated")
+    if l["education"] == "Высшее": unlock("university")
+    if l["married"]: unlock("married")
+    if l["children"] > 0: unlock("parent")
+    if l["age"] >= 90: unlock("long_liver")
+    if l["clean_cash"] >= 100000: unlock("rich")
+    if l["clean_cash"] >= 2000000: unlock("elite")
+    if l["job_type"] == "criminal": unlock("criminal")
+    if l["ever_in_prison"]: unlock("prisoner")
+    if l["career_rank"] >= 4: unlock("honest_worker")
+    if len(l["diseases"]) >= 3: unlock("survivor")
+    if l["knowledge"] >= 90: unlock("polyglot")
+    if l["relationships"] >= 90: unlock("social")
+    if l["properties"]: unlock("home_owner")
+    if l["businesses"]: unlock("businessman")
+    if l.get("vacation_count", 0) >= 3: unlock("traveler")
+
+    return new_ones
+
+def show_achievements(chat_id, l):
+    earned = l.get("achievements", [])
+    total = len(ACHIEVEMENTS)
+    text = f"🏆 <b>Коллекция судеб</b>\nОткрыто: {len(earned)}/{total}\n\n"
+    for aid, ach in ACHIEVEMENTS.items():
+        mark = "✅" if aid in earned else "⬜"
+        text += f"{mark} {ach['name']} — <i>{ach['desc']}</i>\n"
+    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("⬅️ Назад к жизни", callback_data="year"))
+    bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
+
+# ================= КИНЕМАТОГРАФИЧНЫЙ ИТОГ =================
+def get_life_balance(l):
+    happiness = l["happiness"]
+    meaning = 30 + 15 * len(l.get("philosophy_answers", []))
+    meaning = min(100, meaning + l["relationships"] // 5)
+    connections = l["relationships"]
+    if l["married"]: connections = min(100, connections + 10)
+    connections = min(100, connections + l["children"] * 5)
+    if l["clean_cash"] >= 2000000: wealth_score = 100
+    elif l["clean_cash"] >= 500000: wealth_score = 80
+    elif l["clean_cash"] >= 100000: wealth_score = 60
+    elif l["clean_cash"] >= 20000: wealth_score = 40
+    elif l["clean_cash"] >= 5000: wealth_score = 20
+    elif l["clean_cash"] >= 500: wealth_score = 10
+    else: wealth_score = 0
+    return {"happiness": happiness, "meaning": meaning,
+            "connections": connections, "wealth": wealth_score}
+
+def get_cinematic_headlines(l):
+    keywords = ["Родился","Пошел в школу","Окончил школу","Поступил в вуз",
+                "Женился","Развод","На работу","В полиции","В армии","Криминал",
+                "Повышение","Понижение","Купил","Открыл","Умер"]
+    highlights = []
+    for event in l["life_map"]:
+        for kw in keywords:
+            if kw in event:
+                highlights.append(event)
+                break
+    return highlights[-7:] if len(highlights) > 7 else highlights
+
+# ================= ЛИЧНОСТЬ =================
 def create_life(force_country=None):
     country = force_country if force_country else weighted_country()
     gender = "m" if random.random() < 0.51 else "f"
@@ -545,6 +758,12 @@ def create_life(force_country=None):
         "seen_regular_events": [],
         "philosophy_answers": [],
         "wealth_history": [],
+        "key_npcs": create_key_npcs(country, gender),
+        "pending_consequences": [],
+        "achievements": [],
+        "ever_in_prison": False,
+        "reputation": 0,
+        "vacation_count": 0,
     }
 
 def add_to_life_map(l, text):
@@ -577,6 +796,12 @@ def apply_direct_effect(l, effect):
             l[key] = max(0, min(100, l[key] + val))
         elif key == "career_xp":
             l["career_xp"] += val
+        elif key == "diseases":
+            for d in val:
+                if d not in l["diseases"]:
+                    l["diseases"].append(d)
+        elif key == "vacation":
+            l["vacation_count"] = l.get("vacation_count", 0) + val
     return effect.get("text", "Год прошел.")
 
 def show_peer_lives(l):
@@ -661,6 +886,61 @@ def get_event(l):
         if we.get("min_age",0) <= age:
             return {"id": we["id"], "title": we["title"], "text": we["text"],
                     "choices": [{"text": "Пережить", "p": 1, "success_effect": {**we["effect"], "text": we["text"]}}]}
+
+    # Жизненные повороты (1%)
+    if random.random() < 0.01:
+        twists = [t for t in LIFE_TWISTS
+                  if t.get("min_age",0) <= age <= t.get("max_age",999)
+                  and (not t.get("requires_property") or bool(l["properties"]))]
+        if twists:
+            twist = random.choice(twists)
+            return {"id": twist["id"], "title": twist["title"],
+                    "text": twist["text"], "choices": twist["choices"]}
+
+    # События с ключевыми NPC (12%)
+    if age >= 5 and random.random() < 0.12:
+        alive = [n for n in l.get("key_npcs", []) if not n.get("dead")]
+        if alive:
+            npc = random.choice(alive)
+            role = npc["role"]; nm = npc["name"]
+
+            if role == "mother" and age >= 14:
+                return {"id":"npc_mother","title":"📞 Звонок маме",
+                        "text":f"Мама {nm} звонит и хочет поговорить.",
+                        "choices":[
+                            {"text":"Поговорить","p":1,
+                             "success_effect":{"relationships":6,"happiness":5,"text":f"Тёплая беседа с мамой."}},
+                            {"text":"Бросить трубку","p":1,
+                             "success_effect":{"relationships":-8,"happiness":-3,"text":"Мама расстроилась."}}]}
+
+            if role == "friend" and age >= 10:
+                return {"id":"npc_friend","title":"🤝 Друг просит помощи",
+                        "text":f"Друг {nm} попал в беду. Он просит помочь.",
+                        "choices":[
+                            {"text":"Помочь","p":0.8,
+                             "success_effect":{"relationships":15,"happiness":5,"cash":-200,"text":f"Помог другу — теперь он твой должник."},
+                             "fail_effect":{"relationships":-5,"cash":-200,"text":"Помог, но не получилось."}},
+                            {"text":"Отказать","p":1,
+                             "success_effect":{"relationships":-15,"happiness":-5,"text":"Друг обиделся."}}]}
+
+            if role == "rival" and age >= 13:
+                return {"id":"npc_rival","title":"⚔️ Соперник",
+                        "text":f"Соперник {nm} бросает тебе вызов.",
+                        "choices":[
+                            {"text":"Принять вызов","p":0.5,
+                             "success_effect":{"happiness":10,"career_xp":15,"relationships":3,"text":"Ты победил!"},
+                             "fail_effect":{"happiness":-5,"health":-5,"text":"Проиграл."}},
+                            {"text":"Отказаться","p":1,
+                             "success_effect":{"relationships":-3,"text":"Соперник считает тебя трусом."}}]}
+
+            if role == "father" and age >= 20:
+                return {"id":"npc_father","title":"👴 Отец зовёт в гости",
+                        "text":f"Отец {nm} приглашает тебя на семейный ужин.",
+                        "choices":[
+                            {"text":"Пойти","p":1,
+                             "success_effect":{"relationships":8,"happiness":5,"text":"Отличный вечер с отцом."}},
+                            {"text":"Отказаться","p":1,
+                             "success_effect":{"relationships":-5,"text":"Отец обиделся."}}]}
 
     if age >= 18 and l["job_type"] in ["civilian","police","military"] and random.random() < 0.25:
         if random.random() < 0.5:
@@ -783,8 +1063,19 @@ def next_year(user_id, chat_id):
     if peer_text:
         echo_text += "\n\n" + peer_text
 
+    # NPC смерти
+    check_npc_deaths(l)
+
     if random.random() < mortality_rate(l):
         save_db(players_db); return send_death(user_id, chat_id)
+
+    # Отложенные последствия
+    consequence_evt = get_due_consequence(l)
+    if consequence_evt:
+        l["current_event"] = consequence_evt
+        save_db(players_db)
+        return send_scene(chat_id, l, format_event(l, consequence_evt),
+                          kb_event(consequence_evt["choices"]), "life")
 
     if l["age"] in (5, 15, 30, 50, 70) and l["age"] not in [a["age"] for a in l.get("philosophy_answers", [])]:
         questions = {
@@ -828,6 +1119,12 @@ def next_year(user_id, chat_id):
     else:
         l["current_event"] = None
         send_scene(chat_id, l, format_year(l) + echo_text, kb_focus(l), "life")
+
+    # Достижения (в конце)
+    new_ach = check_achievements(l)
+    for ach in new_ach:
+        bot.send_message(chat_id, f"🏆 <b>Новое достижение!</b>\n{ach['name']} — {ach['desc']}",
+                         parse_mode="HTML")
     save_db(players_db)
 
 def send_death(user_id, chat_id):
@@ -835,43 +1132,54 @@ def send_death(user_id, chat_id):
     l["current_event"] = None
 
     causes = []
-    if l["age"] < 5: causes = ["Перинатальные причины", "Инфекции", "Несчастный случай"]
-    elif l["age"] < 15: causes = ["Инфекции", "Несчастный случай", "Врождённые аномалии"]
-    elif l["age"] < 30: causes = ["Несчастный случай", "Насилие", "Болезни"]
-    elif l["age"] < 50: causes = ["Сердечно-сосудистые", "Онкология", "Несчастный случай"]
-    elif l["age"] < 70: causes = ["Онкология", "Сердечно-сосудистые", "Диабет"]
-    else: causes = ["Сердечно-сосудистые", "Онкология", "Старение"]
+    if l["age"] < 5: causes = ["Перинатальные причины","Инфекции","Несчастный случай"]
+    elif l["age"] < 15: causes = ["Инфекции","Несчастный случай","Врождённые аномалии"]
+    elif l["age"] < 30: causes = ["Несчастный случай","Насилие","Болезни"]
+    elif l["age"] < 50: causes = ["Сердечно-сосудистые","Онкология","Несчастный случай"]
+    elif l["age"] < 70: causes = ["Онкология","Сердечно-сосудистые","Диабет"]
+    else: causes = ["Сердечно-сосудистые","Онкология","Старение"]
 
     if l["diseases"]: cause = f"Осложнение: {l['diseases'][-1]}"
     else: cause = random.choice(causes)
 
+    final_ach = check_achievements(l)
+
     score = calculate_life_score(l)
-    entry = {
-        "name": l["name"],
-        "country": f"{c[1]} {c[0]}",
-        "score": score,
-        "age": l["age"],
-        "cause": cause,
-        "wealth": get_wealth_status(l["clean_cash"], l["dirty_cash"], l),
-        "user_id": str(user_id),
-    }
+    entry = {"name": l["name"], "country": f"{c[1]} {c[0]}", "score": score,
+             "age": l["age"], "cause": cause,
+             "wealth": get_wealth_status(l["clean_cash"], l["dirty_cash"], l),
+             "user_id": str(user_id)}
     lb = players_db.setdefault("_leaderboard", [])
     lb.append(entry)
     lb.sort(key=lambda x: x["score"], reverse=True)
     players_db["_leaderboard"] = lb[:50]
     save_db(players_db)
-
     place = next((i+1 for i, e in enumerate(lb) if e is entry), len(lb))
     total = len(lb)
 
-    map_text = "📜 <b>Карта жизни:</b>\n" + "\n".join([f"• {e}" for e in l["life_map"]]) if l["life_map"] else ""
+    balance = get_life_balance(l)
+    balance_text = (f"📊 <b>Баланс жизни:</b>\n"
+                    f"  😊 Счастье: {balance['happiness']}/100\n"
+                    f"  🎯 Смысл: {balance['meaning']}/100\n"
+                    f"  🤝 Связи: {balance['connections']}/100\n"
+                    f"  💰 Достаток: {balance['wealth']}/100\n")
+
+    headlines = get_cinematic_headlines(l)
+    headlines_text = "📜 <b>Летопись:</b>\n" + "\n".join([f"• {h}" for h in headlines]) if headlines else ""
+
+    npc_text = "💫 <b>Судьбы близких:</b>\n" + "\n".join([get_npc_epilogue(n) for n in l.get("key_npcs", [])])
+
+    earned = l.get("achievements", [])
+    ach_text = f"🏆 <b>Достижения:</b> {len(earned)}/{len(ACHIEVEMENTS)}"
+    if final_ach:
+        ach_text += "\n" + "\n".join([f"• {a['name']}" for a in final_ach])
 
     if l.get("wealth_history"):
         max_w = max(l["wealth_history"]) or 1
-        chart = "".join(["▁" if w < max_w*0.2 else "▃" if w < max_w*0.5 else "▅" if w < max_w*0.8 else "█" for w in l["wealth_history"]])
+        chart = "".join(["▁" if w < max_w*0.2 else "▃" if w < max_w*0.5
+                         else "▅" if w < max_w*0.8 else "█" for w in l["wealth_history"]])
         chart_text = f"\n📈 Кривая достатка: {chart}\n"
-    else:
-        chart_text = ""
+    else: chart_text = ""
 
     top_text = "\n🏆 <b>Топ-5 жизней:</b>\n"
     for i, e in enumerate(lb[:5]):
@@ -879,20 +1187,22 @@ def send_death(user_id, chat_id):
         top_text += f"{mark} {i+1}. <b>{e['name']}</b> ({e['country']}) — {e['score']} очков, {get_age_str(e['age'])}\n"
 
     msg = (f"💀 <b>Смерть в {get_age_str(l['age'])}.</b>\n"
-           f"🩺 Причина: {cause}\n"
-           f"{get_stats_line(l)}\n\n"
-           f"Итог: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}\n"
-           f"Деньги: {fmt_money(l['clean_cash'], c)}\n"
-           f"⭐ <b>Оценка жизни: {score} очков</b>\n"
-           f"🏅 Место в рейтинге: <b>#{place} из {total}</b>\n"
-           f"{chart_text}\n{map_text}\n\n"
-           f"{top_text}\n"
-           f"👥 <b>Ровесники:</b>\n")
+           f"🩺 Причина: {cause}\n\n"
+           f"{balance_text}\n"
+           f"⭐ Оценка жизни: <b>{score} очков</b> · место <b>#{place} из {total}</b>\n\n"
+           f"{headlines_text}\n\n"
+           f"{npc_text}\n\n"
+           f"{ach_text}\n"
+           f"{chart_text}")
+
     kb = InlineKeyboardMarkup()
     for i, p in enumerate(l.get("peer_lives", [])):
-        msg += f"• {p['name']} ({p['country'][1]}): {get_neighbor_final({'trajectory': p['trajectory'], 'death_age': p['death_age']})}\n"
+        fate = get_neighbor_final({"trajectory": p["trajectory"], "death_age": p["death_age"]})
+        msg += f"\n👥 Ровесник {p['name']} ({p['country'][1]}): {fate}"
         kb.add(InlineKeyboardButton(f"🎭 Прожить жизнь {p['name']}", callback_data=f"play_peer_{i}"))
+    msg += "\n\n" + top_text
     kb.add(InlineKeyboardButton("🏆 Топ жизней", callback_data="leaderboard"))
+    kb.add(InlineKeyboardButton("📖 Достижения", callback_data="achievements"))
     kb.add(InlineKeyboardButton("🎲 Начать заново", callback_data="new"))
 
     play_cutscene(chat_id, get_cutscene_frames("death"), msg, kb)
@@ -942,15 +1252,31 @@ def apply_outcome(l, outcome):
         if is_bad: l["dirty_cash"] += int(vvp*0.8); l["happiness"] -= 5; return "Использовал негативный стереотип."
         else: l["clean_cash"] += int(vvp*0.3); l["career_xp"] += 20; l["happiness"] += 5; return "Оседлал позитивный стереотип!"
     if outcome == "prej_exploit_fail":
-        if is_bad: l["in_prison"] = 3; l["happiness"] -= 20; return "Махинация — и сел."
+        if is_bad:
+            l["in_prison"] = 3; l["happiness"] -= 20; l["ever_in_prison"] = True
+            return "Махинация — и сел."
         else: l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 10; return "Выгорел."
     if outcome == "prej_accept": l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 5; return "Смирился."
 
-    if outcome == "marry": l["married"] = True; l["happiness"] += 20; l["relationships"] += 15; add_to_life_map(l, "Женился"); return "Поженились!"
+    if outcome == "marry":
+        l["married"] = True; l["happiness"] += 20; l["relationships"] += 15
+        add_to_life_map(l, "Женился")
+        if random.random() < 0.6:
+            l["children"] = l.get("children", 0) + 1
+            add_to_life_map(l, "Родился ребёнок")
+        return "Поженились!"
     if outcome == "divorce":
         l["married"] = False
         if l["clean_cash"] > 0: l["clean_cash"] = int(l["clean_cash"] / 2)
-        l["happiness"] -= 15; l["relationships"] -= 20; return "Развод."
+        l["happiness"] -= 15; l["relationships"] -= 20
+        add_pending_consequence(l, 5, {
+            "id":"conseq_ex","title":"💔 Встреча с бывшим",
+            "text":"Ты случайно встретил(а) бывшего супруга.",
+            "choices":[{"text":"Поговорить","p":0.5,
+                        "success_effect":{"happiness":5,"relationships":5,"text":"Мирно поболтали."},
+                        "fail_effect":{"happiness":-10,"text":"Поругались."}},
+                       {"text":"Пройти мимо","p":1,"success_effect":{"text":"Прошёл мимо."}}]})
+        return "Развод."
     if outcome == "job_civ": l["job_type"] = "civilian"; l["job"] = "Работник"; l["salary"] = int(vvp * 0.6); l["relationships"] += 5; add_to_life_map(l, "На работу"); return "Ты на гражданке."
     if outcome == "job_pol": l["job_type"] = "police"; l["faction"] = "Полиция"; l["job"] = "Полицейский"; l["salary"] = int(vvp * 0.5); l["relationships"] += 10; add_to_life_map(l, "В полиции"); return "Ты в полиции."
     if outcome == "job_mil": l["job_type"] = "military"; l["faction"] = "Армия"; l["job"] = "Военный"; l["salary"] = int(vvp * 0.4); l["relationships"] += 15; add_to_life_map(l, "В армии"); return "Ты в армии."
@@ -966,6 +1292,13 @@ def apply_outcome(l, outcome):
 
     if outcome == "scammed":
         loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss; l["happiness"] -= 20
+        add_pending_consequence(l, 3, {
+            "id":"conseq_scam","title":"🚨 Возмездие",
+            "text":"Мошенника поймали! Тебе предлагают вернуть деньги.",
+            "choices":[{"text":"Подать иск","p":0.7,
+                        "success_effect":{"cash":5000,"happiness":10,"text":"Деньги вернули!"},
+                        "fail_effect":{"cash":-1000,"text":"Судебные издержки."}},
+                       {"text":"Забыть","p":1,"success_effect":{"text":"Не стал связываться."}}]})
         return f"Украли {fmt_money(loss, l['country'])}."
 
     if outcome == "child_fight": l["happiness"] += 5; return "Дал сдачи."
@@ -997,7 +1330,15 @@ def apply_outcome(l, outcome):
     if outcome == "child_theater_shy": l["happiness"] -= 3; return "Постеснялся."
     if outcome == "child_theater_tech": l["knowledge"] += 3; return "Помогал за кулисами."
 
-    if outcome == "teen_smoke": l["diseases"].append("Рак легких"); l["health"] -= 15; return "Курил."
+    if outcome == "teen_smoke":
+        l["diseases"].append("Рак легких"); l["health"] -= 15
+        add_pending_consequence(l, 25, {
+            "id":"conseq_smoke","title":"🚬 Расплата",
+            "text":"Годы курения дали о себе знать.",
+            "choices":[{"text":"Лечиться","p":0.6,
+                        "success_effect":{"cash":-5000,"health":10,"text":"Обошлось."},
+                        "fail_effect":{"diseases":["Рак легких"],"health":-25,"text":"Диагноз — рак лёгких."}}]})
+        return "Курил."
     if outcome == "teen_healthy": l["clean_cash"] += 200; l["health"] += 5; return "Сэкономил."
     if outcome == "teen_love": l["happiness"] += 15; l["relationships"] += 10; return "Взаимная любовь."
     if outcome == "teen_heartbreak": l["diseases"].append("ПТСР"); l["happiness"] -= 15; l["relationships"] -= 10; return "Отказ."
@@ -1016,17 +1357,21 @@ def apply_outcome(l, outcome):
     if outcome == "lottery_win": l["clean_cash"] += int(vvp * 5); l["happiness"] += 30; return "ДЖЕКПОТ!"
     if outcome == "lottery_lose": l["clean_cash"] -= 100; l["happiness"] -= 5; return "Билет пустой."
     if outcome == "bribe_dps": l["dirty_cash"] -= int(vvp*0.1); return "Взятка. Пронесло."
-    if outcome == "dps_jail": l["in_prison"] = 1; l["happiness"] -= 15; return "1 год тюрьмы за езду без прав."
+    if outcome == "dps_jail":
+        l["in_prison"] = 1; l["happiness"] -= 15; l["ever_in_prison"] = True
+        return "1 год тюрьмы за езду без прав."
     if outcome == "dps_warning": return "Инспектор предупредил."
     if outcome == "bribe_dps_big": l["dirty_cash"] -= int(vvp*0.3); return "Откупился."
-    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; return "3 года тюрьмы + конфискация."
+    if outcome == "drunk_jail":
+        l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; l["ever_in_prison"] = True
+        return "3 года тюрьмы + конфискация."
     return "Год прошел."
 
 def resolve_choice(user_id, chat_id, i):
     l = players_db[str(user_id)]
     evt = l.get("current_event")
     if not evt: return
-    if evt.get("resolved"): return   # защита от повторного нажатия
+    if evt.get("resolved"): return
     if i < 0 or i >= len(evt["choices"]): return
 
     c = evt["choices"][i]; success = random.random() < c["p"]
@@ -1044,7 +1389,6 @@ def resolve_choice(user_id, chat_id, i):
     if evt.get("is_philosophy"):
         l.setdefault("philosophy_answers", []).append({"age": evt["age"], "choice": c["text"]})
 
-    # помечаем событие решённым и очищаем
     evt["resolved"] = True
     l["current_event"] = None
 
@@ -1137,6 +1481,7 @@ def kb_focus(l=None):
     if l and l.get("job_type") in ("civilian","police","military","criminal"):
         kb.add(InlineKeyboardButton("💼 Работа", callback_data="focus_work"))
     kb.add(InlineKeyboardButton("🏆 Топ жизней", callback_data="leaderboard"))
+    kb.add(InlineKeyboardButton("📖 Достижения", callback_data="achievements"))
     kb.add(InlineKeyboardButton("▶️ Пропустить", callback_data="year"))
     kb.add(InlineKeyboardButton("🛒 Магазин", callback_data="shop"))
     return kb
@@ -1203,18 +1548,22 @@ def cmd_start(msg):
 def cmd_top(msg):
     show_leaderboard(msg.chat.id)
 
+@bot.message_handler(commands=["achievements"])
+def cmd_achievements(msg):
+    l = players_db.get(str(msg.from_user.id))
+    if l: show_achievements(msg.chat.id, l)
+    else: bot.send_message(msg.chat.id, "Сначала начни жизнь: /start")
+
 @bot.callback_query_handler(func=lambda c: True)
 def handle(call):
     uid = call.from_user.id; uid_str = str(uid); chat_id = call.message.chat.id
     d = call.data
 
-    # Один раз отвечаем на callback — снимаем спиннер у кнопки
     try:
         bot.answer_callback_query(call.id)
     except:
         pass
 
-    # Убираем клавиатуру с нажатого сообщения — защита от повторных кликов из истории
     try:
         bot.edit_message_reply_markup(chat_id, call.message.message_id, reply_markup=None)
     except:
@@ -1230,7 +1579,6 @@ def handle(call):
             play_cutscene(chat_id, get_cutscene_frames("birth"), msg, kb_focus(l))
 
         elif d == "toggle_auto":
-            # авторежим удалён — старая кнопка из истории просто игнорируется
             return
 
         elif d.startswith("focus_"):
@@ -1249,6 +1597,10 @@ def handle(call):
 
         elif d == "leaderboard":
             show_leaderboard(chat_id, highlight_user=uid)
+
+        elif d == "achievements":
+            l = players_db.get(uid_str)
+            if l: show_achievements(chat_id, l)
 
         elif d.startswith("job_"):
             l = players_db.get(uid_str)
