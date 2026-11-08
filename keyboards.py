@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+_BASE_DIR = str(Path(__file__).resolve().parent)
+if _BASE_DIR not in sys.path:
+    sys.path.insert(0, _BASE_DIR)
+
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import bot, players_db
 from utils import fmt_money, track_message
@@ -41,10 +47,13 @@ def open_shop(user_id, chat_id):
         InlineKeyboardButton("🏢 Бизнесы", callback_data="shop_biz")
     ).add(
         InlineKeyboardButton("📈 Инвестиции", callback_data="shop_invest")
-    ).add(
+    )
+    if l.get("debt", 0) > 0:
+        kb.add(InlineKeyboardButton(f"💳 Погасить долг ({fmt_money(l['debt'], c)})", callback_data="shop_pay_debt"))
+    kb.add(
         InlineKeyboardButton("⬅️ Назад", callback_data="year")
     )
-    msg = bot.send_message(chat_id, f"🛒 <b>Магазин</b>\nБаланс: {fmt_money(l['clean_cash'], c)}", reply_markup=kb, parse_mode="HTML")
+    msg = bot.send_message(chat_id, f"🛒 <b>Магазин</b>\nБаланс: {fmt_money(l['clean_cash'], c)}\nДолг: {fmt_money(l.get('debt', 0), c)}", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 def shop_prop_menu(user_id, chat_id):
