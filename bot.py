@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
+_BASE_DIR = str(Path(__file__).resolve().parent)
+if _BASE_DIR not in sys.path:
+    sys.path.insert(0, _BASE_DIR)
+
 import time
+from telebot.types import BotCommand
 from config import bot, players_db, save_db
 from utils import get_stats_line, get_cutscene_frames, play_cutscene, clear_tracked_messages, fmt_money, track_message
 from keyboards import (
@@ -12,7 +19,13 @@ from mechanics import (
 
 @bot.message_handler(commands=["start"])
 def cmd_start(msg):
-    text = "🎲 <b>1 из 8: Эхо</b>\n\nТы — один из 5 детей, родившихся в эту секунду на планете. Сможешь ли ты выжить, построить карьеру и оставить след в истории?"
+    text = (
+        "🎲 <b>1 из 8: Эхо</b>\n\n"
+        "Ты — один из 5 детей, родившихся в эту секунду на планете. "
+        "Сможешь ли ты выжить, построить карьеру и оставить след в истории?\n\n"
+        "💡 <i>Подсказка: набери в строке ввода <b>/</b> (слэш) или нажми на синюю кнопку «Меню» слева внизу, "
+        "чтобы сразу увидеть все доступные команды игры!</i>"
+    )
     bot.send_message(msg.chat.id, text, reply_markup=kb_intro(), parse_mode="HTML")
 
 @bot.message_handler(commands=["top", "leaderboard"])
@@ -143,6 +156,9 @@ def handle(call):
         elif d == "shop_invest":
             shop_invest_menu(uid, chat_id)
 
+        elif d == "shop_pay_debt":
+            process_buy(uid, chat_id, "debt", "")
+
         elif d.startswith("buy_invest_"):
             process_buy(uid, chat_id, "invest", d.replace("buy_invest_", ""))
 
@@ -222,6 +238,21 @@ def handle(call):
         bot.send_message(chat_id, f"⚠️ Ошибка: {e}. Попробуйте нажать еще раз.")
         print(f"Error in handle: {e}")
 
+def register_bot_commands():
+    commands = [
+        BotCommand("start", "🎲 Начать новую жизнь"),
+        BotCommand("stats", "📊 Статус и характеристики персонажа"),
+        BotCommand("top", "🏆 Таблица лидеров и зал славы"),
+        BotCommand("achievements", "🎖 Твои достижения"),
+        BotCommand("help", "📖 Справка и правила игры"),
+    ]
+    try:
+        bot.set_my_commands(commands)
+        print("Команды Telegram бота успешно зарегистрированы.")
+    except Exception as e:
+        print(f"Ошибка регистрации команд бота: {e}")
+
 if __name__ == "__main__":
+    register_bot_commands()
     print("Бот успешно запущен (модульная архитектура)...")
     bot.infinity_polling()
