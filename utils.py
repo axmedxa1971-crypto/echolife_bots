@@ -1,7 +1,14 @@
+import sys
+from pathlib import Path
+_BASE_DIR = str(Path(__file__).resolve().parent)
+if _BASE_DIR not in sys.path:
+    sys.path.insert(0, _BASE_DIR)
+
 import time
 import random
 from config import bot
 from data.items import PROPERTIES, CARS, BUSINESSES
+from data.avatars import get_person_emoji
 
 def get_age_str(age):
     if age % 10 == 1 and age % 100 != 11: return f"{age} год"
@@ -42,10 +49,8 @@ def get_wealth_status(clean, dirty, l=None):
 def get_stats_line(l):
     return f"❤️ {l['health']}% | 😊 {l['happiness']}% | 🧠 {l['knowledge']}% | 🤝 {l['relationships']}%"
 
-def get_scene_visuals(scene_type, gender):
-    male = ["👦","🧑","👨","🧔","👨‍💼","👨‍💻","👨‍🎓"]
-    female = ["👧","👩","👩‍🦰","👩‍🦱","👩‍💼","👩‍💻","👩‍🎓"]
-    player = random.choice(male) if gender == "m" else random.choice(female)
+def get_scene_visuals(scene_type, gender, ethnicity=None, region=None, age=None):
+    player = get_person_emoji("player", gender=gender, ethnicity=ethnicity, region=region, age=age)
     scenes = {
         "military": f"🎖 🪖 {player} 🪖 🛡",
         "criminal": f"🕶 🔫 {player} 💰 💣",
