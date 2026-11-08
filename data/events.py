@@ -1,4 +1,4 @@
-# ================= ИГРОВЫЕ СОБЫТИЯ =================
+?# ================= ИГРОВЫЕ СОБЫТИЯ =================
 import random
 
 # ================= ФОКУС-СОБЫТИЯ =================
@@ -217,6 +217,32 @@ FOCUS_EVENTS = {
         {"id":"p17","title":"🍿 Кино с попкорном","text":"Идём в кино!","min_age":5,"max_age":11,
          "choices":[{"text":"На мультик","p":1,"success_effect":{"happiness":8,"cash":-200,"text":"Смешно!"}},
                     {"text":"На приключения","p":0.9,"success_effect":{"happiness":7,"text":"Захватывающе!"},"fail_effect":{"happiness":-2,"text":"Страшно."}}]},
+    ],
+    "work": [
+        {"id":"w1","title":"??  毠¥¤«®¦¥­¨¥","text":"렯ਤ㬠«¨, ª ª 㡪®ਢ젠 ¡®稥 ¯஦¥ᡫ ¢ ®⤥«¥.","min_age":18,
+         "choices":[{"text":"?? १¥­⮢ ⬠࣪®¢®¤ᢢ㢬"p":0.75,"success_effect":{"career_xp":35,"happiness":5,"text":"¥䠢 ¢®᢮ࣥ! XP +35."},"fail_effect":{"career_xp":-10,"happiness":-4,"text":"¤¥®竨 ­ ¨¢­®©. XP -10."}},
+                    {"text":"?? ஬®«砢좬"p":1.0,"success_effect":{"text":"¥訫¨ ­¥ ¢롮¢뢠⬡ﮢ}}]},
+        {"id":"w2","title":"?? ®௩¨© ¤¥¤« ©­","text":"஧­멠¯஥ª⠯®¤ 㣠®§®© ᠫ¢ . 㦥­ ¤®¡஢®«¥栭  ­®筣¬¥­㮢,"min_age":18,
+         "choices":[{"text":"? § 㤠࠭  ᥡ"p":0.85,"success_effect":{"career_xp":40,"health":-5,"text":"஥ª⠡¯ ᥭ! 㪮¢®¤ᢢ® ®業¨«® £¥ந§¬ (+40 XP)."},"fail_effect":{"career_xp":10,"health":-10,"happiness":-5,"text":"¤ «¨ ᠮ訡ª ¬¨, ­® ᢠ࠭¨ ¬¥⨫¨."}},
+                    {"text":"?? ©⨠¢®¢६"p":1.0,"success_effect":{"career_xp":-10,"happiness":3,"text":"®堠­¨«¨ ­¥ࢫ, ­® 襤 ­¥¤®¢®«¥­."}}]},
+        {"id":"w3","title":"?? ࣯­멠ª«¨¥­⢬"text":"⤥« ¯®«㧨« ª®­⠪⠡«®¦­®£®, ­® ®祭젡®£ ⮣® ª®­⠠£¥­⠮","min_age":20,
+         "choices":[{"text":"?? ஢¥ᢨ ¯¥ॣ®¢®ૠ«¨筮","p":0.65,"success_effect":{"career_xp":45,"cash":1500,"happiness":10,"text":"¤¥«ª  ¢¥ª  ¯®¤¯¨ᠭ ! ६¨ +45 XP."},"fail_effect":{"career_xp":-15,"happiness":-8,"text":"«¨¥­⠣襫 ª ª®­ª㠥­⠬."}},
+                    {"text":"?? ¥। ⬠ª®««¥£¥","p":1.0,"success_effect":{"relationships":5,"text":"®««¥£  ¡« £®¤ ७ §  ­ ¢®¤ª㮢}}]},
+        {"id":"w4","title":"?? 㠡 ¯®¢먥­¨¢ «¨䨪 樨","text":"।« £ ¯த¨«쭮¥ ®¡㧥­¨¥ §  ᧥⠪®¬¯ ­¨¨ ¢ ¢륮¤­륮","min_age":18,
+         "choices":[{"text":"?? ®©⨠㧨⬡"p":0.9,"success_effect":{"career_xp":30,"knowledge":8,"happiness":-3,"text":"¥ࢨ䨪 ⠯®«㧥­! XP +30."}},
+                    {"text":"?? ⤮季⬠¤®¬ ","p":1.0,"success_effect":{"happiness":5,"career_xp":-5,"text":"륮¤­률¯ந«¨ ᯮª®©­®."}}]},
+        {"id":"w5","title":"??? 㤨⠨ ¯஢¥ઠ","text":" ®⤥« ­ £௭㫠 ¢­¥§ ¯­ ¥¢¨§¨ 砫졢¢ .","min_age":18,
+         "choices":[{"text":"?? ¤¥ «쭮 ¯®¤£®⮢¨⬠®⧥⫢,"p":0.8,"success_effect":{"career_xp":30,"text":"஢¥ઠ ¯ன¤¥­  ¡¥§ ¥¤¨­®£® § ¬¥砭¨(+30 XP)"},"fail_effect":{"career_xp":-20,"text":" 諨 ¬¥«ª¨¥ ­¥ᮮ⢥⡢¢¨ﮢ}},
+                    {"text":"??  ¤¥ᯠ­   ¢®ᬢ,"p":0.5,"success_effect":{"career_xp":5,"text":"஭¥᫮."},"fail_effect":{"career_xp":-25,"happiness":-6,"text":"®«㧥­ ᢠ®£¨© ¢룮¢®஢}}]},
+        {"id":"w6","title":"?? ®­䫨ª⠢ ª®¬ ­¤¥","text":"¢  ª«¢률ᯥ樠«¨ᢠ ¢ 襣® ®⤥«  ࣣࠧ «¨ᬠ¢ ¯㥠¨ ¯ࠥ.","min_age":20,
+         "choices":[{"text":"?? 롢㯨⬠¬¥¤¨ ⮠®¬","p":0.7,"success_effect":{"career_xp":25,"relationships":12,"text":"¨ࠢ®ᡢ ­®¢«¥­, ¢ ᠣ¢ ¦ ¥⠢¥ᬠª®««¥ª⨢!"},"fail_effect":{"relationships":-8,"happiness":-5,"text":"¡  ¯®᧨⠫¨ ¢ ᠢ¨­®¢ ⫬."}},
+                    {"text":"?? ¥ ¢¬¥訢 ⬡"p":1.0,"success_effect":{"text":"㡢젠 §¡¨࠮⡯ ᠬ¨."}}]},
+        {"id":"w7","title":"?? ⠠᫥¢ ®­䥠¥­樯","text":"᢬ 蠭ᠯ®¥堢젡¯¨ª¥஬ ­  £« ¢­㮠¢롢 ¢ª㠣®¤ .","min_age":22,
+         "choices":[{"text":"?? 롢㯨⬠ᠤ®ª« ¤®¬","p":0.7,"success_effect":{"career_xp":40,"knowledge":10,"happiness":8,"text":"«¥᢯饥 ¢롢㯫¥­¨¥!  ¢ ᠧ £®¢®ਫ¨ ¢ ¨­¤㡢ਨ."},"fail_effect":{"career_xp":10,"happiness":-4,"text":"롢㯫¥­¨¥ ¯ந«® ᠥ¤­¥, ­® ®¯뢠¯®«¥§¥­."}},
+                    {"text":"?? ⪠§ ⬡"p":1.0,"success_effect":{"text":"ᢠ«¨ᬠ¢ ¯ਢ맭®© ࣢¨­¥."}}]},
+        {"id":"w8","title":"?? ®¤ᢠ¢  ª®­ª㠥­⮢","text":"®­ª㠨࣮頯 ®࣠­¨§ 樯 ¯뢠¥⡯ ¯¥६ ­¨⬠ª«¨¥­⡪㮠¡ §㠨«¨ 㡢ந⬠ᠡ®⠦.","min_age":20,
+         "choices":[{"text":"??  ⬠¦¥ᢪ¨© ®⯮ࢬ"p":0.75,"success_effect":{"career_xp":35,"relationships":5,"text":"⠪  ®⡨⠬ 襤 ¢믨ᠫ ¡« £®¤ ୮᢬!"},"fail_effect":{"career_xp":-15,"happiness":-5,"text":" ᢬ ¯®§¨権 ¯®⥠ﭠ."}},
+                    {"text":"?? ®¯뢠⬡®£®¢®ਢ졯","p":0.55,"success_effect":{"career_xp":20,"knowledge":5,"text":" ©¤¥­ ª®¬¯஬¨ᡮ"},"fail_effect":{"career_xp":-20,"text":" ᠯ¥॥¨⠨«¨."}}]},
     ],
 }
 
