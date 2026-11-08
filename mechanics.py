@@ -29,8 +29,8 @@ from keyboards import (
 
 def pick_rotating(l, pool, max_recent=6):
     if not pool:
-        return {"id":"fallback","title":"рџ“… РћР±С‹С‡РЅС‹Р№ РіРѕРґ","text":"РќРёС‡РµРіРѕ РѕСЃРѕР±РµРЅРЅРѕРіРѕ.",
-                "choices":[{"text":"РџСЂРѕРґРѕР»Р¶РёС‚СЊ","p":1,"success_effect":{"text":"РЎРїРѕРєРѕР№РЅС‹Р№ РіРѕРґ."}}]}
+        return {"id":"fallback","title":"ЁЯУЕ ╨Ю╨▒╤Л╤З╨╜╤Л╨╣ ╨│╨╛╨┤","text":"╨Э╨╕╤З╨╡╨│╨╛ ╨╛╤Б╨╛╨▒╨╡╨╜╨╜╨╛╨│╨╛.",
+                "choices":[{"text":"╨Я╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М","p":1,"success_effect":{"text":"╨б╨┐╨╛╨║╨╛╨╣╨╜╤Л╨╣ ╨│╨╛╨┤."}}]}
     seen = l.setdefault("seen_regular_events", [])
     recent = seen[-max_recent:] if len(seen) >= max_recent else seen
     available = [e for e in pool if e.get("id") not in recent]
@@ -54,16 +54,16 @@ def play_cutscene(chat_id, l, frames, final_text, kb=None):
     except: bot.send_message(chat_id, final_text, reply_markup=kb, parse_mode="HTML")
 
 def get_cutscene_frames(event_type):
-    if event_type == "birth": return ["рџЏҐ рџ‘ЁвЂЌвљ•пёЏ рџ¤°\n<i>Р’СЂР°С‡Рё РіРѕС‚РѕРІСЏС‚СЃСЏ...</i>","рџ‘¶ вњЁ рџ‘ЁвЂЌрџ‘©вЂЌрџ‘¦\n<i>Р Р°Р·РґР°РµС‚СЃСЏ РїРµСЂРІС‹Р№ РєСЂРёРє!</i>","рџЋ‰ рџЌј рџ§ё\n<i>РќРѕРІР°СЏ Р¶РёР·РЅСЊ РЅР°С‡Р°Р»Р°СЃСЊ!</i>"]
-    if event_type == "marry": return ["рџ’ђ рџЌ· рџ‘©вЂЌвќ¤пёЏвЂЌрџ‘Ё\n<i>Р РѕРјР°РЅС‚РёС‡РµСЃРєРёР№ СѓР¶РёРЅ...</i>","рџ¤µ рџ‘° рџ’Ќ\n<i>РџСЂРµРґР»РѕР¶РµРЅРёРµ СЂСѓРєРё Рё СЃРµСЂРґС†Р°!</i>","рџҐ‚ рџЋ‰ рџ’–\n<i>РЎРІР°РґСЊР±Р°!</i>"]
-    if event_type == "prison": return ["рџљ” рџљЁ рџЏѓвЂЌв™‚пёЏ\n<i>РџРѕРіРѕРЅСЏ...</i>","рџ‘®вЂЌв™‚пёЏ рџ”— рџ‘Ё\n<i>Р—Р°РґРµСЂР¶Р°РЅРёРµ...</i>","в›“ рџ§± рџљЄ\n<i>Р”РІРµСЂСЊ РєР°РјРµСЂС‹ Р·Р°С…Р»РѕРїРЅСѓР»Р°СЃСЊ.</i>"]
-    if event_type == "death": return ["рџЏҐ рџ›Њ рџ’”\n<i>Р—РґРѕСЂРѕРІСЊРµ РїРѕРґРІРѕРґРёС‚...</i>","рџ•ЇпёЏ вЃпёЏ\n<i>РџРѕСЃР»РµРґРЅРёР№ РІР·РґРѕС…...</i>","рџЄ¦ рџҐЂ рџ•ЉпёЏ\n<i>Р–РёР·РЅСЊ РѕРєРѕРЅС‡РµРЅР°.</i>"]
+    if event_type == "birth": return ["ЁЯПе ЁЯСитАНтЪХя╕П ЁЯд░\n<i>╨Т╤А╨░╤З╨╕ ╨│╨╛╤В╨╛╨▓╤П╤В╤Б╤П...</i>","ЁЯС╢ тЬи ЁЯСитАНЁЯСйтАНЁЯСж\n<i>╨а╨░╨╖╨┤╨░╨╡╤В╤Б╤П ╨┐╨╡╤А╨▓╤Л╨╣ ╨║╤А╨╕╨║!</i>","ЁЯОЙ ЁЯН╝ ЁЯз╕\n<i>╨Э╨╛╨▓╨░╤П ╨╢╨╕╨╖╨╜╤М ╨╜╨░╤З╨░╨╗╨░╤Б╤М!</i>"]
+    if event_type == "marry": return ["ЁЯТР ЁЯН╖ ЁЯСйтАНтЭдя╕ПтАНЁЯСи\n<i>╨а╨╛╨╝╨░╨╜╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ ╤Г╨╢╨╕╨╜...</i>","ЁЯд╡ ЁЯС░ ЁЯТН\n<i>╨Я╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╤А╤Г╨║╨╕ ╨╕ ╤Б╨╡╤А╨┤╤Ж╨░!</i>","ЁЯеВ ЁЯОЙ ЁЯТЦ\n<i>╨б╨▓╨░╨┤╤М╨▒╨░!</i>"]
+    if event_type == "prison": return ["ЁЯЪФ ЁЯЪи ЁЯПГтАНтЩВя╕П\n<i>╨Я╨╛╨│╨╛╨╜╤П...</i>","ЁЯСотАНтЩВя╕П ЁЯФЧ ЁЯСи\n<i>╨Ч╨░╨┤╨╡╤А╨╢╨░╨╜╨╕╨╡...</i>","тЫУ ЁЯз▒ ЁЯЪк\n<i>╨Ф╨▓╨╡╤А╤М ╨║╨░╨╝╨╡╤А╤Л ╨╖╨░╤Е╨╗╨╛╨┐╨╜╤Г╨╗╨░╤Б╤М.</i>"]
+    if event_type == "death": return ["ЁЯПе ЁЯЫМ ЁЯТФ\n<i>╨Ч╨┤╨╛╤А╨╛╨▓╤М╨╡ ╨┐╨╛╨┤╨▓╨╛╨┤╨╕╤В...</i>","ЁЯХпя╕П тШБя╕П\n<i>╨Я╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ ╨▓╨╖╨┤╨╛╤Е...</i>","ЁЯкж ЁЯеА ЁЯХКя╕П\n<i>╨Ц╨╕╨╖╨╜╤М ╨╛╨║╨╛╨╜╤З╨╡╨╜╨░.</i>"]
     return []
 
 def get_scene_visuals(scene_type, gender, ethnicity=None, region=None, age=None):
     player = get_person_emoji("player", gender=gender, ethnicity=ethnicity, region=region, age=age)
-    scenes = {"military":f"рџЋ– рџЄ– {player} рџЄ– рџ›Ў","criminal":f"рџ•¶ рџ”« {player} рџ’° рџ’Ј","child":f"рџЏ  рџЊі {player} рџ§ё вЂпёЏ","toddler":f"рџЌј рџ§ё {player} рџЋ€ рџЊџ","school":f"рџЏ« {player} рџ“љ рџЋ’ рџЌЋ","rich":f"рџЏ° рџљ— рџ’° {player} рџҐ‚ рџ›Ґ","office":f"рџЏў рџ§‘вЂЌрџ’» {player} рџ“Љ в•","office_angry":f"рџЏў рџЎ {player} рџ’ў рџ“‰","hospital":f"рџЏҐ рџ›Њ {player} рџ’‰ рџ©є","prison":f"в›“ рџ§± {player} рџљ” рџ•¶","fight":f"рџ‘Љ рџ’Ґ {player} рџҐЉ рџ¤•","love":f"вќ¤пёЏ {player} рџЊ№ рџ’‘ рџ’ђ","wedding":f"рџ’Ќ рџ¤µ рџ‘° {player} рџЋ‰","sad":f"рџЊ§ {player} в‚пёЏ рџ” рџ’§","police":f"рџљ” рџ’µ {player} рџљЁ рџ°","money_win":f"рџ’° рџ¤‘ {player} рџ’Ћ рџЋ°","money_lose":f"рџ’ё рџ­ {player} рџ•і рџ“‰"}
-    return scenes.get(scene_type, f"рџЊ† {player} рџЏ™ рџљ¶")
+    scenes = {"military":f"ЁЯОЦ ЁЯкЦ {player} ЁЯкЦ ЁЯЫб","criminal":f"ЁЯХ╢ ЁЯФл {player} ЁЯТ░ ЁЯТг","child":f"ЁЯПа ЁЯМ│ {player} ЁЯз╕ тШАя╕П","toddler":f"ЁЯН╝ ЁЯз╕ {player} ЁЯОИ ЁЯМЯ","school":f"ЁЯПл {player} ЁЯУЪ ЁЯОТ ЁЯНО","rich":f"ЁЯП░ ЁЯЪЧ ЁЯТ░ {player} ЁЯеВ ЁЯЫе","office":f"ЁЯПв ЁЯзСтАНЁЯТ╗ {player} ЁЯУК тШХ","office_angry":f"ЁЯПв ЁЯШб {player} ЁЯТв ЁЯУЙ","hospital":f"ЁЯПе ЁЯЫМ {player} ЁЯТЙ ЁЯй║","prison":f"тЫУ ЁЯз▒ {player} ЁЯЪФ ЁЯХ╢","fight":f"ЁЯСК ЁЯТе {player} ЁЯеК ЁЯдХ","love":f"тЭдя╕П {player} ЁЯМ╣ ЁЯТС ЁЯТР","wedding":f"ЁЯТН ЁЯд╡ ЁЯС░ {player} ЁЯОЙ","sad":f"ЁЯМз {player} тШВя╕П ЁЯШФ ЁЯТз","police":f"ЁЯЪФ ЁЯТ╡ {player} ЁЯЪи ЁЯШ░","money_win":f"ЁЯТ░ ЁЯдС {player} ЁЯТО ЁЯО░","money_lose":f"ЁЯТ╕ ЁЯШн {player} ЁЯХ│ ЁЯУЙ"}
+    return scenes.get(scene_type, f"ЁЯМЖ {player} ЁЯПЩ ЁЯЪ╢")
 
 def fmt_money(amount_usd, country):
     return f"{int(amount_usd * country[8]):,} {country[9]}".replace(",", " ")
@@ -72,14 +72,14 @@ def get_wealth_status(clean, dirty, l=None):
     total = clean + dirty
     if l and l.get("properties"): total += sum(p["value"] for p in l["properties"])
     if l and l.get("cars"): total += sum(c["value"] for c in l["cars"])
-    if total < 0: return "рџ’ё Р’ РґРѕР»РіР°С…"
-    if total < 500: return "рџҐЂ РќРёС‰РёР№"
-    if total < 5000: return "рџ‘• Р‘РµРґРЅС‹Р№"
-    if total < 20000: return "рџ”§ Р Р°Р±РѕС‡РёР№ РєР»Р°СЃСЃ"
-    if total < 100000: return "рџЏ  РЎСЂРµРґРЅРёР№ РєР»Р°СЃСЃ"
-    if total < 500000: return "рџ’ј Р—Р°Р¶РёС‚РѕС‡РЅС‹Р№"
-    if total < 2000000: return "рџ’Ћ Р‘РѕРіР°С‡"
-    return "рџ‘‘ Р­Р»РёС‚Р°"
+    if total < 0: return "ЁЯТ╕ ╨Т ╨┤╨╛╨╗╨│╨░╤Е"
+    if total < 500: return "ЁЯеА ╨Э╨╕╤Й╨╕╨╣"
+    if total < 5000: return "ЁЯСХ ╨С╨╡╨┤╨╜╤Л╨╣"
+    if total < 20000: return "ЁЯФз ╨а╨░╨▒╨╛╤З╨╕╨╣ ╨║╨╗╨░╤Б╤Б"
+    if total < 100000: return "ЁЯПа ╨б╤А╨╡╨┤╨╜╨╕╨╣ ╨║╨╗╨░╤Б╤Б"
+    if total < 500000: return "ЁЯТ╝ ╨Ч╨░╨╢╨╕╤В╨╛╤З╨╜╤Л╨╣"
+    if total < 2000000: return "ЁЯТО ╨С╨╛╨│╨░╤З"
+    return "ЁЯСС ╨н╨╗╨╕╤В╨░"
 
 def weighted_country():
     r = random.random() * TOTAL_WEIGHT
@@ -90,10 +90,10 @@ def weighted_country():
 
 def get_ethnicity(region):
     r = random.random() * 100; cum = 0
-    for name, chance, prejudice in ETHNICITIES.get(region, [("РњРµСЃС‚РЅС‹Р№",100,None)]):
+    for name, chance, prejudice in ETHNICITIES.get(region, [("╨Ь╨╡╤Б╤В╨╜╤Л╨╣",100,None)]):
         cum += chance
         if r <= cum: return name, prejudice
-    return "РњРµСЃС‚РЅС‹Р№", None
+    return "╨Ь╨╡╤Б╤В╨╜╤Л╨╣", None
 
 def generate_neighbors(count=3):
     neighbors = []
@@ -120,32 +120,32 @@ def generate_peer_lives(count=4):
 def get_neighbor_echo(n, age):
     g_m = n["gender"] == "m"
     if age >= n["death_age"]:
-        if n["death_age"] < 3: return "СѓРјРµСЂ(Р»Р°) РІ РјР»Р°РґРµРЅС‡РµСЃС‚РІРµ"
-        elif n["death_age"] < 18: return f"СѓРјРµСЂ(Р»Р°) РѕС‚ Р±РѕР»РµР·РЅРё РІ {get_age_str(n['death_age'])}"
-        elif n["trajectory"] == "criminal": return f"РїРѕРіРёР±(Р»Р°) РІ СЂР°Р·Р±РѕСЂРєРµ РІ {get_age_str(n['death_age'])}"
-        else: return f"СѓРјРµСЂ(Р»Р°) РІ {get_age_str(n['death_age'])}"
+        if n["death_age"] < 3: return "╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ ╨╝╨╗╨░╨┤╨╡╨╜╤З╨╡╤Б╤В╨▓╨╡"
+        elif n["death_age"] < 18: return f"╤Г╨╝╨╡╤А(╨╗╨░) ╨╛╤В ╨▒╨╛╨╗╨╡╨╖╨╜╨╕ ╨▓ {get_age_str(n['death_age'])}"
+        elif n["trajectory"] == "criminal": return f"╨┐╨╛╨│╨╕╨▒(╨╗╨░) ╨▓ ╤А╨░╨╖╨▒╨╛╤А╨║╨╡ ╨▓ {get_age_str(n['death_age'])}"
+        else: return f"╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ {get_age_str(n['death_age'])}"
     if age < 13:
-        if n["trajectory"] == "unfortunate": return "Р¶РёРІРµС‚ РІ Р±РµРґРЅРѕСЃС‚Рё"
-        elif n["trajectory"] == "prosperous": return "С…РѕРґРёС‚ РІ СЌР»РёС‚РЅСѓСЋ С€РєРѕР»Сѓ"
-        else: return "С…РѕРґРёС‚ РІ С€РєРѕР»Сѓ"
+        if n["trajectory"] == "unfortunate": return "╨╢╨╕╨▓╨╡╤В ╨▓ ╨▒╨╡╨┤╨╜╨╛╤Б╤В╨╕"
+        elif n["trajectory"] == "prosperous": return "╤Е╨╛╨┤╨╕╤В ╨▓ ╤Н╨╗╨╕╤В╨╜╤Г╤О ╤И╨║╨╛╨╗╤Г"
+        else: return "╤Е╨╛╨┤╨╕╤В ╨▓ ╤И╨║╨╛╨╗╤Г"
     elif age < 25:
-        if n["trajectory"] == "criminal": return "СЃРІСЏР·Р°Р»СЃСЏ СЃ Р±Р°РЅРґРѕР№" if g_m else "СЃРІСЏР·Р°Р»Р°СЃСЊ СЃ Р±Р°РЅРґРѕР№"
-        elif n["trajectory"] == "prosperous": return "РїРѕСЃС‚СѓРїРёР» РІ РІСѓР·" if g_m else "РїРѕСЃС‚СѓРїРёР»Р° РІ РІСѓР·"
-        else: return "СЂР°Р±РѕС‚Р°РµС‚"
+        if n["trajectory"] == "criminal": return "╤Б╨▓╤П╨╖╨░╨╗╤Б╤П ╤Б ╨▒╨░╨╜╨┤╨╛╨╣" if g_m else "╤Б╨▓╤П╨╖╨░╨╗╨░╤Б╤М ╤Б ╨▒╨░╨╜╨┤╨╛╨╣"
+        elif n["trajectory"] == "prosperous": return "╨┐╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ ╨▓╤Г╨╖" if g_m else "╨┐╨╛╤Б╤В╤Г╨┐╨╕╨╗╨░ ╨▓ ╨▓╤Г╨╖"
+        else: return "╤А╨░╨▒╨╛╤В╨░╨╡╤В"
     elif age < 55:
-        if n["trajectory"] == "criminal": return "СЃРёРґРёС‚ РІ С‚СЋСЂСЊРјРµ"
-        elif n["trajectory"] == "prosperous": return "СЃС‚Р°Р» Р±РѕРіР°С‚С‹Рј" if g_m else "СЃС‚Р°Р»Р° Р±РѕРіР°С‚РѕР№"
-        else: return "СЂР°Р±РѕС‚Р°РµС‚ РЅР° Р·Р°РІРѕРґРµ"
-    return "РЅР° РїРµРЅСЃРёРё"
+        if n["trajectory"] == "criminal": return "╤Б╨╕╨┤╨╕╤В ╨▓ ╤В╤О╤А╤М╨╝╨╡"
+        elif n["trajectory"] == "prosperous": return "╤Б╤В╨░╨╗ ╨▒╨╛╨│╨░╤В╤Л╨╝" if g_m else "╤Б╤В╨░╨╗╨░ ╨▒╨╛╨│╨░╤В╨╛╨╣"
+        else: return "╤А╨░╨▒╨╛╤В╨░╨╡╤В ╨╜╨░ ╨╖╨░╨▓╨╛╨┤╨╡"
+    return "╨╜╨░ ╨┐╨╡╨╜╤Б╨╕╨╕"
 
 def get_neighbor_final(n):
-    if n["death_age"] < 3: return "СѓРјРµСЂ(Р»Р°) РІ РјР»Р°РґРµРЅС‡РµСЃС‚РІРµ"
-    elif n["trajectory"] == "criminal": return f"РїРѕРіРёР±(Р»Р°) РІ СЂР°Р·Р±РѕСЂРєРµ РІ {get_age_str(n['death_age'])}"
-    elif n["trajectory"] == "prosperous": return f"СѓРјРµСЂ(Р»Р°) Р±РѕРіР°С‚С‹Рј(РѕР№) РІ {get_age_str(n['death_age'])}"
-    elif n["trajectory"] == "unfortunate": return f"СѓРјРµСЂ(Р»Р°) РІ Р±РµРґРЅРѕСЃС‚Рё РІ {get_age_str(n['death_age'])}"
-    else: return f"СѓРјРµСЂ(Р»Р°) РІ {get_age_str(n['death_age'])}"
+    if n["death_age"] < 3: return "╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ ╨╝╨╗╨░╨┤╨╡╨╜╤З╨╡╤Б╤В╨▓╨╡"
+    elif n["trajectory"] == "criminal": return f"╨┐╨╛╨│╨╕╨▒(╨╗╨░) ╨▓ ╤А╨░╨╖╨▒╨╛╤А╨║╨╡ ╨▓ {get_age_str(n['death_age'])}"
+    elif n["trajectory"] == "prosperous": return f"╤Г╨╝╨╡╤А(╨╗╨░) ╨▒╨╛╨│╨░╤В╤Л╨╝(╨╛╨╣) ╨▓ {get_age_str(n['death_age'])}"
+    elif n["trajectory"] == "unfortunate": return f"╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ ╨▒╨╡╨┤╨╜╨╛╤Б╤В╨╕ ╨▓ {get_age_str(n['death_age'])}"
+    else: return f"╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ {get_age_str(n['death_age'])}"
 
-# ================= NPC Р РџР Р•Р”Р«РЎРўРћР РРЇ =================
+# ================= NPC ╨Ш ╨Я╨а╨Х╨Ф╨л╨б╨в╨Ю╨а╨Ш╨п =================
 def create_key_npcs(country, gender, family=None):
     if family:
         mother_name = family["mother_name"]; father_name = family["father_name"]
@@ -171,46 +171,46 @@ def check_npc_deaths(l):
         if not npc["dead"] and l["age"] >= npc.get("death_age", 999):
             npc["dead"] = True
             role_ru = NPC_ROLES_DESC.get(npc["role"], npc["role"])
-            add_to_life_map(l, f"РЈРјРµСЂ(Р»Р°) {role_ru} {npc['name']}")
+            add_to_life_map(l, f"╨г╨╝╨╡╤А(╨╗╨░) {role_ru} {npc['name']}")
             if npc["role"] in ("mother","father","friend"):
                 l["happiness"] = max(0, l["happiness"] - 5)
 
 def get_npc_epilogue(npc):
     role_ru = NPC_ROLES_DESC.get(npc["role"], npc["role"])
-    fate = f"СѓРјРµСЂ(Р»Р°) РІ {get_age_str(npc['death_age'])}" if npc["dead"] else "Р¶РёРІ(Р°)"
+    fate = f"╤Г╨╝╨╡╤А(╨╗╨░) ╨▓ {get_age_str(npc['death_age'])}" if npc["dead"] else "╨╢╨╕╨▓(╨░)"
     rel = npc["relation"]
-    if rel >= 60: mood = "Р±С‹Р»(Р°) СЂСЏРґРѕРј"
-    elif rel >= 20: mood = "С‚С‘РїР»С‹Рµ РѕС‚РЅРѕС€РµРЅРёСЏ"
-    elif rel >= -20: mood = "РЅРµР№С‚СЂР°Р»СЊРЅРѕ"
-    else: mood = "РёСЃРїРѕСЂС‚РёР»РёСЃСЊ"
-    return f"вЂў {role_ru} {npc['name']}: {fate} вЂ” {mood}"
+    if rel >= 60: mood = "╨▒╤Л╨╗(╨░) ╤А╤П╨┤╨╛╨╝"
+    elif rel >= 20: mood = "╤В╤С╨┐╨╗╤Л╨╡ ╨╛╤В╨╜╨╛╤И╨╡╨╜╨╕╤П"
+    elif rel >= -20: mood = "╨╜╨╡╨╣╤В╤А╨░╨╗╤М╨╜╨╛"
+    else: mood = "╨╕╤Б╨┐╨╛╤А╤В╨╕╨╗╨╕╤Б╤М"
+    return f"тАв {role_ru} {npc['name']}: {fate} тАФ {mood}"
 
 def generate_world_context(country):
     year = 2025 + random.randint(-5, 5)
     global_states = [
-        {"icon":"рџЊЌ","title":"РћС‚РЅРѕСЃРёС‚РµР»СЊРЅР°СЏ СЃС‚Р°Р±РёР»СЊРЅРѕСЃС‚СЊ","desc":"РќРµС‚ РєСЂСѓРїРЅС‹С… РІРѕР№РЅ. Р­РєРѕРЅРѕРјРёРєР° СЂР°СЃС‚С‘С‚."},
-        {"icon":"вљ пёЏ","title":"Р“Р»РѕР±Р°Р»СЊРЅР°СЏ РЅР°РїСЂСЏР¶С‘РЅРЅРѕСЃС‚СЊ","desc":"РЎР°РЅРєС†РёРё, РєРѕРЅС„Р»РёРєС‚С‹, РіРѕРЅРєР° РІРѕРѕСЂСѓР¶РµРЅРёР№."},
-        {"icon":"рџ“€","title":"Р­РєРѕРЅРѕРјРёС‡РµСЃРєРёР№ РїРѕРґСЉС‘Рј","desc":"Р С‹РЅРєРё СЂР°СЃС‚СѓС‚, РЅРѕРІС‹Рµ С‚РµС…РЅРѕР»РѕРіРёРё."},
-        {"icon":"рџ“‰","title":"РњРёСЂРѕРІРѕР№ РєСЂРёР·РёСЃ","desc":"РРЅС„Р»СЏС†РёСЏ, Р±РµР·СЂР°Р±РѕС‚РёС†Р°."},
-        {"icon":"рџ¦ ","title":"РџРѕСЃР»Рµ РїР°РЅРґРµРјРёРё","desc":"РњРёСЂ РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ."},
+        {"icon":"ЁЯМН","title":"╨Ю╤В╨╜╨╛╤Б╨╕╤В╨╡╨╗╤М╨╜╨░╤П ╤Б╤В╨░╨▒╨╕╨╗╤М╨╜╨╛╤Б╤В╤М","desc":"╨Э╨╡╤В ╨║╤А╤Г╨┐╨╜╤Л╤Е ╨▓╨╛╨╣╨╜. ╨н╨║╨╛╨╜╨╛╨╝╨╕╨║╨░ ╤А╨░╤Б╤В╤С╤В."},
+        {"icon":"тЪая╕П","title":"╨У╨╗╨╛╨▒╨░╨╗╤М╨╜╨░╤П ╨╜╨░╨┐╤А╤П╨╢╤С╨╜╨╜╨╛╤Б╤В╤М","desc":"╨б╨░╨╜╨║╤Ж╨╕╨╕, ╨║╨╛╨╜╤Д╨╗╨╕╨║╤В╤Л, ╨│╨╛╨╜╨║╨░ ╨▓╨╛╨╛╤А╤Г╨╢╨╡╨╜╨╕╨╣."},
+        {"icon":"ЁЯУИ","title":"╨н╨║╨╛╨╜╨╛╨╝╨╕╤З╨╡╤Б╨║╨╕╨╣ ╨┐╨╛╨┤╤К╤С╨╝","desc":"╨а╤Л╨╜╨║╨╕ ╤А╨░╤Б╤В╤Г╤В, ╨╜╨╛╨▓╤Л╨╡ ╤В╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╨╕."},
+        {"icon":"ЁЯУЙ","title":"╨Ь╨╕╤А╨╛╨▓╨╛╨╣ ╨║╤А╨╕╨╖╨╕╤Б","desc":"╨Ш╨╜╤Д╨╗╤П╤Ж╨╕╤П, ╨▒╨╡╨╖╤А╨░╨▒╨╛╤В╨╕╤Ж╨░."},
+        {"icon":"ЁЯжа","title":"╨Я╨╛╤Б╨╗╨╡ ╨┐╨░╨╜╨┤╨╡╨╝╨╕╨╕","desc":"╨Ь╨╕╤А ╨▓╨╛╤Б╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В╤Б╤П."},
     ]
     global_state = random.choice(global_states)
     region_news = {
-        "south_asia":["рџЊѕ РђРіСЂР°СЂРЅС‹Р№ СЃРµРєС‚РѕСЂ РјРѕРґРµСЂРЅРёР·РёСЂСѓРµС‚СЃСЏ.","рџЏ™ Р“РѕСЂРѕРґР° СЂР°СЃС‚СѓС‚ СЃС‚СЂРµРјРёС‚РµР»СЊРЅРѕ.","вљ–пёЏ Р‘РѕСЂСЊР±Р° СЃ Р±РµРґРЅРѕСЃС‚СЊСЋ.","рџљ‚ РќРѕРІС‹Рµ Р¶РµР»РµР·РЅС‹Рµ РґРѕСЂРѕРіРё."],
-        "east_asia":["рџЏ­ РђРІС‚РѕРјР°С‚РёР·Р°С†РёСЏ СЃРѕРєСЂР°С‰Р°РµС‚ СЂР°Р±РѕС‡РёРµ РјРµСЃС‚Р°.","рџљЂ РўРµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёР№ Р±СѓРј.","рџ‘ґ РЎС‚Р°СЂРµРЅРёРµ РЅР°СЃРµР»РµРЅРёСЏ.","рџ“± РњРѕР±РёР»СЊРЅС‹Рµ РїР»Р°С‚РµР¶Рё."],
-        "southeast_asia":["рџЏ– РўСѓСЂРёР·Рј РїСЂРёРЅРѕСЃРёС‚ РґРµРЅСЊРіРё.","рџЏ— РЎС‚СЂРѕРёС‚РµР»СЊСЃС‚РІРѕ РёРЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂС‹.","рџ’ј РњРЅРѕРіРёРµ СѓРµР·Р¶Р°СЋС‚ Р·Р° РіСЂР°РЅРёС†Сѓ.","рџЊЉ РќР°РІРѕРґРЅРµРЅРёСЏ."],
-        "africa":["рџЊЌ РњРѕР»РѕРґРѕРµ РЅР°СЃРµР»РµРЅРёРµ.","рџ’Ћ Р‘РѕРіР°С‚С‹Рµ СЂРµСЃСѓСЂСЃС‹.","вљ”пёЏ Р’ РЅРµРєРѕС‚РѕСЂС‹С… СЂРµРіРёРѕРЅР°С… РЅРµСЃРїРѕРєРѕР№РЅРѕ.","рџ“љ Р Р°СЃС‚С‘С‚ РґРѕСЃС‚СѓРї Рє РѕР±СЂР°Р·РѕРІР°РЅРёСЋ."],
-        "arab":["рџ›ў РќРµС„С‚СЊ вЂ” РіР»Р°РІРЅС‹Р№ СЂРµСЃСѓСЂСЃ.","рџЏ™ Р”СѓР±Р°Р№ вЂ” СЃРёРјРІРѕР» Р±РѕРіР°С‚СЃС‚РІР°.","вљ–пёЏ РњРµРЅСЏСЋС‰РёРµСЃСЏ С‚СЂР°РґРёС†РёРё.","рџЊћ РЎРѕР»РЅРµС‡РЅР°СЏ СЌРЅРµСЂРіРµС‚РёРєР°."],
-        "latam":["рџ’ѓ Р–РёРІР°СЏ РєСѓР»СЊС‚СѓСЂР°.","вљ пёЏ РџСЂРµСЃС‚СѓРїРЅРѕСЃС‚СЊ РІ РіРѕСЂРѕРґР°С….","рџЊі Р’С‹СЂСѓР±РєР° Р»РµСЃРѕРІ.","рџЋ­ Р¤РµСЃС‚РёРІР°Р»Рё."],
-        "europe":["рџ‡Єрџ‡є Р•РґРёРЅСЃС‚РІРѕ Рё СЃС‚Р°Р±РёР»СЊРЅРѕСЃС‚СЊ.","в™»пёЏ Р—РµР»С‘РЅР°СЏ СЌРЅРµСЂРіРµС‚РёРєР°.","рџ‘ґ РЎС‚Р°СЂРµРЅРёРµ Рё РјРёРіСЂР°С†РёСЏ.","рџљ„ РЎРєРѕСЂРѕСЃС‚РЅС‹Рµ РїРѕРµР·РґР°."],
-        "post_soviet":["рџЏљ РќР°СЃР»РµРґРёРµ РЎРЎРЎР .","рџ’ј РњРѕР»РѕРґС‘Р¶СЊ РёС‰РµС‚ СЂР°Р±РѕС‚Сѓ.","рџ“є Р’Р»РёСЏРЅРёРµ РіРѕСЃСѓРґР°СЂСЃС‚РІР°.","рџ›Ј РЎС‚СЂРѕРёС‚РµР»СЊСЃС‚РІРѕ РґРѕСЂРѕРі."],
-        "developed":["рџ’» РўРµС…РЅРѕР»РѕРіРёРё РјРµРЅСЏСЋС‚ Р¶РёР·РЅСЊ.","рџЏҐ Р”РѕСЃС‚СѓРїРЅР°СЏ РјРµРґРёС†РёРЅР°.","рџЋ“ Р’С‹СЃРѕРєРёР№ СѓСЂРѕРІРµРЅСЊ РѕР±СЂР°Р·РѕРІР°РЅРёСЏ.","рџљ— Р­Р»РµРєС‚СЂРѕРјРѕР±РёР»Рё."],
+        "south_asia":["ЁЯМ╛ ╨Р╨│╤А╨░╤А╨╜╤Л╨╣ ╤Б╨╡╨║╤В╨╛╤А ╨╝╨╛╨┤╨╡╤А╨╜╨╕╨╖╨╕╤А╤Г╨╡╤В╤Б╤П.","ЁЯПЩ ╨У╨╛╤А╨╛╨┤╨░ ╤А╨░╤Б╤В╤Г╤В ╤Б╤В╤А╨╡╨╝╨╕╤В╨╡╨╗╤М╨╜╨╛.","тЪЦя╕П ╨С╨╛╤А╤М╨▒╨░ ╤Б ╨▒╨╡╨┤╨╜╨╛╤Б╤В╤М╤О.","ЁЯЪВ ╨Э╨╛╨▓╤Л╨╡ ╨╢╨╡╨╗╨╡╨╖╨╜╤Л╨╡ ╨┤╨╛╤А╨╛╨│╨╕."],
+        "east_asia":["ЁЯПн ╨Р╨▓╤В╨╛╨╝╨░╤В╨╕╨╖╨░╤Ж╨╕╤П ╤Б╨╛╨║╤А╨░╤Й╨░╨╡╤В ╤А╨░╨▒╨╛╤З╨╕╨╡ ╨╝╨╡╤Б╤В╨░.","ЁЯЪА ╨в╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╤З╨╡╤Б╨║╨╕╨╣ ╨▒╤Г╨╝.","ЁЯС┤ ╨б╤В╨░╤А╨╡╨╜╨╕╨╡ ╨╜╨░╤Б╨╡╨╗╨╡╨╜╨╕╤П.","ЁЯУ▒ ╨Ь╨╛╨▒╨╕╨╗╤М╨╜╤Л╨╡ ╨┐╨╗╨░╤В╨╡╨╢╨╕."],
+        "southeast_asia":["ЁЯПЦ ╨в╤Г╤А╨╕╨╖╨╝ ╨┐╤А╨╕╨╜╨╛╤Б╨╕╤В ╨┤╨╡╨╜╤М╨│╨╕.","ЁЯПЧ ╨б╤В╤А╨╛╨╕╤В╨╡╨╗╤М╤Б╤В╨▓╨╛ ╨╕╨╜╤Д╤А╨░╤Б╤В╤А╤Г╨║╤В╤Г╤А╤Л.","ЁЯТ╝ ╨Ь╨╜╨╛╨│╨╕╨╡ ╤Г╨╡╨╖╨╢╨░╤О╤В ╨╖╨░ ╨│╤А╨░╨╜╨╕╤Ж╤Г.","ЁЯМК ╨Э╨░╨▓╨╛╨┤╨╜╨╡╨╜╨╕╤П."],
+        "africa":["ЁЯМН ╨Ь╨╛╨╗╨╛╨┤╨╛╨╡ ╨╜╨░╤Б╨╡╨╗╨╡╨╜╨╕╨╡.","ЁЯТО ╨С╨╛╨│╨░╤В╤Л╨╡ ╤А╨╡╤Б╤Г╤А╤Б╤Л.","тЪФя╕П ╨Т ╨╜╨╡╨║╨╛╤В╨╛╤А╤Л╤Е ╤А╨╡╨│╨╕╨╛╨╜╨░╤Е ╨╜╨╡╤Б╨┐╨╛╨║╨╛╨╣╨╜╨╛.","ЁЯУЪ ╨а╨░╤Б╤В╤С╤В ╨┤╨╛╤Б╤В╤Г╨┐ ╨║ ╨╛╨▒╤А╨░╨╖╨╛╨▓╨░╨╜╨╕╤О."],
+        "arab":["ЁЯЫв ╨Э╨╡╤Д╤В╤М тАФ ╨│╨╗╨░╨▓╨╜╤Л╨╣ ╤А╨╡╤Б╤Г╤А╤Б.","ЁЯПЩ ╨Ф╤Г╨▒╨░╨╣ тАФ ╤Б╨╕╨╝╨▓╨╛╨╗ ╨▒╨╛╨│╨░╤В╤Б╤В╨▓╨░.","тЪЦя╕П ╨Ь╨╡╨╜╤П╤О╤Й╨╕╨╡╤Б╤П ╤В╤А╨░╨┤╨╕╤Ж╨╕╨╕.","ЁЯМЮ ╨б╨╛╨╗╨╜╨╡╤З╨╜╨░╤П ╤Н╨╜╨╡╤А╨│╨╡╤В╨╕╨║╨░."],
+        "latam":["ЁЯТГ ╨Ц╨╕╨▓╨░╤П ╨║╤Г╨╗╤М╤В╤Г╤А╨░.","тЪая╕П ╨Я╤А╨╡╤Б╤В╤Г╨┐╨╜╨╛╤Б╤В╤М ╨▓ ╨│╨╛╤А╨╛╨┤╨░╤Е.","ЁЯМ│ ╨Т╤Л╤А╤Г╨▒╨║╨░ ╨╗╨╡╤Б╨╛╨▓.","ЁЯОн ╨д╨╡╤Б╤В╨╕╨▓╨░╨╗╨╕."],
+        "europe":["ЁЯЗкЁЯЗ║ ╨Х╨┤╨╕╨╜╤Б╤В╨▓╨╛ ╨╕ ╤Б╤В╨░╨▒╨╕╨╗╤М╨╜╨╛╤Б╤В╤М.","тЩ╗я╕П ╨Ч╨╡╨╗╤С╨╜╨░╤П ╤Н╨╜╨╡╤А╨│╨╡╤В╨╕╨║╨░.","ЁЯС┤ ╨б╤В╨░╤А╨╡╨╜╨╕╨╡ ╨╕ ╨╝╨╕╨│╤А╨░╤Ж╨╕╤П.","ЁЯЪД ╨б╨║╨╛╤А╨╛╤Б╤В╨╜╤Л╨╡ ╨┐╨╛╨╡╨╖╨┤╨░."],
+        "post_soviet":["ЁЯПЪ ╨Э╨░╤Б╨╗╨╡╨┤╨╕╨╡ ╨б╨б╨б╨а.","ЁЯТ╝ ╨Ь╨╛╨╗╨╛╨┤╤С╨╢╤М ╨╕╤Й╨╡╤В ╤А╨░╨▒╨╛╤В╤Г.","ЁЯУ║ ╨Т╨╗╨╕╤П╨╜╨╕╨╡ ╨│╨╛╤Б╤Г╨┤╨░╤А╤Б╤В╨▓╨░.","ЁЯЫг ╨б╤В╤А╨╛╨╕╤В╨╡╨╗╤М╤Б╤В╨▓╨╛ ╨┤╨╛╤А╨╛╨│."],
+        "developed":["ЁЯТ╗ ╨в╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╨╕ ╨╝╨╡╨╜╤П╤О╤В ╨╢╨╕╨╖╨╜╤М.","ЁЯПе ╨Ф╨╛╤Б╤В╤Г╨┐╨╜╨░╤П ╨╝╨╡╨┤╨╕╤Ж╨╕╨╜╨░.","ЁЯОУ ╨Т╤Л╤Б╨╛╨║╨╕╨╣ ╤Г╤А╨╛╨▓╨╡╨╜╤М ╨╛╨▒╤А╨░╨╖╨╛╨▓╨░╨╜╨╕╤П.","ЁЯЪЧ ╨н╨╗╨╡╨║╤В╤А╨╛╨╝╨╛╨▒╨╕╨╗╨╕."],
     }
-    positive_news = ["рџЋ‰ РЎРїРѕСЂС‚РёРІРЅС‹Рµ РёРіСЂС‹.","рџЏ† Р’Р°Р¶РЅРѕРµ РѕС‚РєСЂС‹С‚РёРµ.","рџЊѕ РҐРѕСЂРѕС€РёР№ СѓСЂРѕР¶Р°Р№.","рџ›Ј РќРѕРІР°СЏ РјР°РіРёСЃС‚СЂР°Р»СЊ.","рџ“± РўРµС…РЅРѕР»РѕРіРёС‡РµСЃРєРёР№ СЃС‚Р°СЂС‚Р°Рї.","рџЋ¬ РќР°С†РёРѕРЅР°Р»СЊРЅС‹Р№ С„РёР»СЊРј РїРѕР»СѓС‡РёР» РЅР°РіСЂР°РґСѓ."]
-    negative_news = ["вљ пёЏ РЎРєР°РЅРґР°Р» РІ РїСЂР°РІРёС‚РµР»СЊСЃС‚РІРµ.","рџЊЉ РќР°РІРѕРґРЅРµРЅРёРµ.","рџ“‰ Р РѕСЃС‚ С†РµРЅ.","рџљ” РћРіСЂР°Р±Р»РµРЅРёСЏ.","рџЏ­ Р—Р°Р±Р°СЃС‚РѕРІРєР°.","рџ”Ґ Р›РµСЃРЅС‹Рµ РїРѕР¶Р°СЂС‹."]
+    positive_news = ["ЁЯОЙ ╨б╨┐╨╛╤А╤В╨╕╨▓╨╜╤Л╨╡ ╨╕╨│╤А╤Л.","ЁЯПЖ ╨Т╨░╨╢╨╜╨╛╨╡ ╨╛╤В╨║╤А╤Л╤В╨╕╨╡.","ЁЯМ╛ ╨е╨╛╤А╨╛╤И╨╕╨╣ ╤Г╤А╨╛╨╢╨░╨╣.","ЁЯЫг ╨Э╨╛╨▓╨░╤П ╨╝╨░╨│╨╕╤Б╤В╤А╨░╨╗╤М.","ЁЯУ▒ ╨в╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╤З╨╡╤Б╨║╨╕╨╣ ╤Б╤В╨░╤А╤В╨░╨┐.","ЁЯОм ╨Э╨░╤Ж╨╕╨╛╨╜╨░╨╗╤М╨╜╤Л╨╣ ╤Д╨╕╨╗╤М╨╝ ╨┐╨╛╨╗╤Г╤З╨╕╨╗ ╨╜╨░╨│╤А╨░╨┤╤Г."]
+    negative_news = ["тЪая╕П ╨б╨║╨░╨╜╨┤╨░╨╗ ╨▓ ╨┐╤А╨░╨▓╨╕╤В╨╡╨╗╤М╤Б╤В╨▓╨╡.","ЁЯМК ╨Э╨░╨▓╨╛╨┤╨╜╨╡╨╜╨╕╨╡.","ЁЯУЙ ╨а╨╛╤Б╤В ╤Ж╨╡╨╜.","ЁЯЪФ ╨Ю╨│╤А╨░╨▒╨╗╨╡╨╜╨╕╤П.","ЁЯПн ╨Ч╨░╨▒╨░╤Б╤В╨╛╨▓╨║╨░.","ЁЯФе ╨Ы╨╡╤Б╨╜╤Л╨╡ ╨┐╨╛╨╢╨░╤А╤Л."]
     return {
         "year": year, "global_icon": global_state["icon"], "global_title": global_state["title"], "global_desc": global_state["desc"],
-        "region_news": random.choice(region_news.get(country[2], ["РњРёСЂ РјРµРЅСЏРµС‚СЃСЏ."])),
+        "region_news": random.choice(region_news.get(country[2], ["╨Ь╨╕╤А ╨╝╨╡╨╜╤П╨╡╤В╤Б╤П."])),
         "extra_news": random.choice(positive_news + negative_news),
     }
 
@@ -221,23 +221,23 @@ def generate_family_background(country, gender, start_cash):
     else: wealth_class = "rich"
 
     if wealth_class == "poor":
-        father_occ = random.choice(["СЂР°Р±РѕС‚Р°РµС‚ РЅР° С„Р°Р±СЂРёРєРµ","РіСЂСѓР·С‡РёРє РІ РїРѕСЂС‚Сѓ","РјРµР»РєРёР№ С„РµСЂРјРµСЂ","РєСѓСЂСЊРµСЂ","СЃС‚РѕСЂРѕР¶ РЅР° СЃРєР»Р°РґРµ","СЂР°Р·РЅРѕСЂР°Р±РѕС‡РёР№","С‡РёСЃС‚РёР»СЊС‰РёРє РѕР±СѓРІРё","РїСЂРѕРґР°РІРµС† РЅР° СЂС‹РЅРєРµ"])
-        mother_occ = random.choice(["СЂР°Р±РѕС‚Р°РµС‚ СѓР±РѕСЂС‰РёС†РµР№","С€РІРµСЏ РЅР° РґРѕРјСѓ","С‚РѕСЂРіСѓРµС‚ РЅР° СЂС‹РЅРєРµ","РїРѕСЃСѓРґРѕРјРѕР№РєР° РІ РєР°С„Рµ","РґРѕРјРѕС…РѕР·СЏР№РєР°","СЃРѕР±РёСЂР°РµС‚ РїР»Р°СЃС‚РёРє","РїСЂРёСЃР»СѓРіР° РІ Р±РѕРіР°С‚РѕРј РґРѕРјРµ"])
-        housing = random.choice(["РєСЂРѕС€РµС‡РЅР°СЏ С…РёР¶РёРЅР°","РєРѕРјРЅР°С‚Р° РІ С‚СЂСѓС‰РѕР±Р°С…","РґРѕРјРёРє РІ РґРµСЂРµРІРЅРµ","РїРѕРґРІР°Р»","РѕР±С‰РµР¶РёС‚РёРµ РґР»СЏ СЂР°Р±РѕС‡РёС…","РєРІР°СЂС‚РёСЂР°-СЃС‚СѓРґРёСЏ"])
-        living = "РўРµСЃРЅРѕРµ Р¶РёР»РёС‰Рµ, РІРѕРґР° РёР· РєРѕР»РѕРЅРєРё."
-        location = random.choice(["РіР»СѓС…Р°СЏ РґРµСЂРµРІРЅСЏ","С‚СЂСѓС‰РѕР±С‹ Р±РѕР»СЊС€РѕРіРѕ РіРѕСЂРѕРґР°","РѕРєСЂР°РёРЅР° РјРµРіР°РїРѕР»РёСЃР°","СЂР°Р±РѕС‡РёР№ РєРІР°СЂС‚Р°Р»","РїРѕСЃС‘Р»РѕРє Сѓ С„Р°Р±СЂРёРєРё"])
+        father_occ = random.choice(["╤А╨░╨▒╨╛╤В╨░╨╡╤В ╨╜╨░ ╤Д╨░╨▒╤А╨╕╨║╨╡","╨│╤А╤Г╨╖╤З╨╕╨║ ╨▓ ╨┐╨╛╤А╤В╤Г","╨╝╨╡╨╗╨║╨╕╨╣ ╤Д╨╡╤А╨╝╨╡╤А","╨║╤Г╤А╤М╨╡╤А","╤Б╤В╨╛╤А╨╛╨╢ ╨╜╨░ ╤Б╨║╨╗╨░╨┤╨╡","╤А╨░╨╖╨╜╨╛╤А╨░╨▒╨╛╤З╨╕╨╣","╤З╨╕╤Б╤В╨╕╨╗╤М╤Й╨╕╨║ ╨╛╨▒╤Г╨▓╨╕","╨┐╤А╨╛╨┤╨░╨▓╨╡╤Ж ╨╜╨░ ╤А╤Л╨╜╨║╨╡"])
+        mother_occ = random.choice(["╤А╨░╨▒╨╛╤В╨░╨╡╤В ╤Г╨▒╨╛╤А╤Й╨╕╤Ж╨╡╨╣","╤И╨▓╨╡╤П ╨╜╨░ ╨┤╨╛╨╝╤Г","╤В╨╛╤А╨│╤Г╨╡╤В ╨╜╨░ ╤А╤Л╨╜╨║╨╡","╨┐╨╛╤Б╤Г╨┤╨╛╨╝╨╛╨╣╨║╨░ ╨▓ ╨║╨░╤Д╨╡","╨┤╨╛╨╝╨╛╤Е╨╛╨╖╤П╨╣╨║╨░","╤Б╨╛╨▒╨╕╤А╨░╨╡╤В ╨┐╨╗╨░╤Б╤В╨╕╨║","╨┐╤А╨╕╤Б╨╗╤Г╨│╨░ ╨▓ ╨▒╨╛╨│╨░╤В╨╛╨╝ ╨┤╨╛╨╝╨╡"])
+        housing = random.choice(["╨║╤А╨╛╤И╨╡╤З╨╜╨░╤П ╤Е╨╕╨╢╨╕╨╜╨░","╨║╨╛╨╝╨╜╨░╤В╨░ ╨▓ ╤В╤А╤Г╤Й╨╛╨▒╨░╤Е","╨┤╨╛╨╝╨╕╨║ ╨▓ ╨┤╨╡╤А╨╡╨▓╨╜╨╡","╨┐╨╛╨┤╨▓╨░╨╗","╨╛╨▒╤Й╨╡╨╢╨╕╤В╨╕╨╡ ╨┤╨╗╤П ╤А╨░╨▒╨╛╤З╨╕╤Е","╨║╨▓╨░╤А╤В╨╕╤А╨░-╤Б╤В╤Г╨┤╨╕╤П"])
+        living = "╨в╨╡╤Б╨╜╨╛╨╡ ╨╢╨╕╨╗╨╕╤Й╨╡, ╨▓╨╛╨┤╨░ ╨╕╨╖ ╨║╨╛╨╗╨╛╨╜╨║╨╕."
+        location = random.choice(["╨│╨╗╤Г╤Е╨░╤П ╨┤╨╡╤А╨╡╨▓╨╜╤П","╤В╤А╤Г╤Й╨╛╨▒╤Л ╨▒╨╛╨╗╤М╤И╨╛╨│╨╛ ╨│╨╛╤А╨╛╨┤╨░","╨╛╨║╤А╨░╨╕╨╜╨░ ╨╝╨╡╨│╨░╨┐╨╛╨╗╨╕╤Б╨░","╤А╨░╨▒╨╛╤З╨╕╨╣ ╨║╨▓╨░╤А╤В╨░╨╗","╨┐╨╛╤Б╤С╨╗╨╛╨║ ╤Г ╤Д╨░╨▒╤А╨╕╨║╨╕"])
     elif wealth_class == "middle":
-        father_occ = random.choice(["РёРЅР¶РµРЅРµСЂ","СѓС‡РёС‚РµР»СЊ","Р±СѓС…РіР°Р»С‚РµСЂ","РІСЂР°С‡ РІ РїРѕР»РёРєР»РёРЅРёРєРµ","РјРµС…Р°РЅРёРє","РјРµРЅРµРґР¶РµСЂ РІ РѕС„РёСЃРµ","С‚РѕСЂРіРѕРІС‹Р№ РїСЂРµРґСЃС‚Р°РІРёС‚РµР»СЊ","РІРѕРґРёС‚РµР»СЊ Р°РІС‚РѕР±СѓСЃР°"])
-        mother_occ = random.choice(["СѓС‡РёС‚РµР»СЊРЅРёС†Р°","РјРµРґСЃРµСЃС‚СЂР°","РїСЂРѕРґР°РІРµС† РІ РјР°РіР°Р·РёРЅРµ","РїР°СЂРёРєРјР°С…РµСЂ","РїРѕРІР°СЂ","СЃРµРєСЂРµС‚Р°СЂСЊ","Р±РёР±Р»РёРѕС‚РµРєР°СЂСЊ"])
-        housing = random.choice(["РєРІР°СЂС‚РёСЂР° РІ РїР°РЅРµР»СЊРЅРѕРј РґРѕРјРµ","РЅРµР±РѕР»СЊС€РѕР№ РґРѕРј РЅР° РѕРєСЂР°РёРЅРµ","Р¶РёР»СЊС‘ СЃ РёРїРѕС‚РµРєРѕР№","РґРІСѓС…РєРѕРјРЅР°С‚РЅР°СЏ РєРІР°СЂС‚РёСЂР°"])
-        living = "РЎРєСЂРѕРјРЅР°СЏ, РЅРѕ РѕРїСЂСЏС‚РЅР°СЏ РєРІР°СЂС‚РёСЂР°."
-        location = random.choice(["СЃРїР°Р»СЊРЅС‹Р№ СЂР°Р№РѕРЅ","РїСЂРёРіРѕСЂРѕРґ","СЂР°Р±РѕС‡РёР№ РїСЂРёРіРѕСЂРѕРґ","РЅРµР±РѕР»СЊС€РѕР№ РіРѕСЂРѕРґ"])
+        father_occ = random.choice(["╨╕╨╜╨╢╨╡╨╜╨╡╤А","╤Г╤З╨╕╤В╨╡╨╗╤М","╨▒╤Г╤Е╨│╨░╨╗╤В╨╡╤А","╨▓╤А╨░╤З ╨▓ ╨┐╨╛╨╗╨╕╨║╨╗╨╕╨╜╨╕╨║╨╡","╨╝╨╡╤Е╨░╨╜╨╕╨║","╨╝╨╡╨╜╨╡╨┤╨╢╨╡╤А ╨▓ ╨╛╤Д╨╕╤Б╨╡","╤В╨╛╤А╨│╨╛╨▓╤Л╨╣ ╨┐╤А╨╡╨┤╤Б╤В╨░╨▓╨╕╤В╨╡╨╗╤М","╨▓╨╛╨┤╨╕╤В╨╡╨╗╤М ╨░╨▓╤В╨╛╨▒╤Г╤Б╨░"])
+        mother_occ = random.choice(["╤Г╤З╨╕╤В╨╡╨╗╤М╨╜╨╕╤Ж╨░","╨╝╨╡╨┤╤Б╨╡╤Б╤В╤А╨░","╨┐╤А╨╛╨┤╨░╨▓╨╡╤Ж ╨▓ ╨╝╨░╨│╨░╨╖╨╕╨╜╨╡","╨┐╨░╤А╨╕╨║╨╝╨░╤Е╨╡╤А","╨┐╨╛╨▓╨░╤А","╤Б╨╡╨║╤А╨╡╤В╨░╤А╤М","╨▒╨╕╨▒╨╗╨╕╨╛╤В╨╡╨║╨░╤А╤М"])
+        housing = random.choice(["╨║╨▓╨░╤А╤В╨╕╤А╨░ ╨▓ ╨┐╨░╨╜╨╡╨╗╤М╨╜╨╛╨╝ ╨┤╨╛╨╝╨╡","╨╜╨╡╨▒╨╛╨╗╤М╤И╨╛╨╣ ╨┤╨╛╨╝ ╨╜╨░ ╨╛╨║╤А╨░╨╕╨╜╨╡","╨╢╨╕╨╗╤М╤С ╤Б ╨╕╨┐╨╛╤В╨╡╨║╨╛╨╣","╨┤╨▓╤Г╤Е╨║╨╛╨╝╨╜╨░╤В╨╜╨░╤П ╨║╨▓╨░╤А╤В╨╕╤А╨░"])
+        living = "╨б╨║╤А╨╛╨╝╨╜╨░╤П, ╨╜╨╛ ╨╛╨┐╤А╤П╤В╨╜╨░╤П ╨║╨▓╨░╤А╤В╨╕╤А╨░."
+        location = random.choice(["╤Б╨┐╨░╨╗╤М╨╜╤Л╨╣ ╤А╨░╨╣╨╛╨╜","╨┐╤А╨╕╨│╨╛╤А╨╛╨┤","╤А╨░╨▒╨╛╤З╨╕╨╣ ╨┐╤А╨╕╨│╨╛╤А╨╛╨┤","╨╜╨╡╨▒╨╛╨╗╤М╤И╨╛╨╣ ╨│╨╛╤А╨╛╨┤"])
     else:
-        father_occ = random.choice(["РІР»Р°РґРµР»РµС† С„РёСЂРјС‹","Р°РґРІРѕРєР°С‚","РєСЂСѓРїРЅС‹Р№ Р±РёР·РЅРµСЃРјРµРЅ","РґРµРїСѓС‚Р°С‚ РїР°СЂР»Р°РјРµРЅС‚Р°","С‚РѕРї-РјРµРЅРµРґР¶РµСЂ РєРѕСЂРїРѕСЂР°С†РёРё","РІСЂР°С‡-С…РёСЂСѓСЂРі РІ С‡Р°СЃС‚РЅРѕР№ РєР»РёРЅРёРєРµ"])
-        mother_occ = random.choice(["СѓРїСЂР°РІР»СЏРµС‚ СЃРµРјРµР№РЅС‹Рј Р±РёР·РЅРµСЃРѕРј","РґРёР·Р°Р№РЅРµСЂ РёРЅС‚РµСЂСЊРµСЂРѕРІ","РёР·РІРµСЃС‚РЅС‹Р№ РІСЂР°С‡","РїСЂРѕС„РµСЃСЃРѕСЂ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р°","СЃРІРµС‚СЃРєР°СЏ Р»СЊРІРёС†Р°","Р°РґРІРѕРєР°С‚ РїРѕ Р±РёР·РЅРµСЃСѓ"])
-        housing = random.choice(["СЂРѕСЃРєРѕС€РЅС‹Р№ РѕСЃРѕР±РЅСЏРє","РїРµРЅС‚С…Р°СѓСЃ РІ С†РµРЅС‚СЂРµ","РїРѕРјРµСЃС‚СЊРµ Р·Р° РіРѕСЂРѕРґРѕРј","РґРѕРј СЃ Р±Р°СЃСЃРµР№РЅРѕРј Рё СЃР°РґРѕРј"])
-        living = "РџСЂРѕСЃС‚РѕСЂРЅС‹Р№ РґРѕРј СЃ РїСЂРёСЃР»СѓРіРѕР№."
-        location = random.choice(["РїСЂРµСЃС‚РёР¶РЅС‹Р№ СЂР°Р№РѕРЅ СЃС‚РѕР»РёС†С‹","Р·Р°РєСЂС‹С‚С‹Р№ РєРѕС‚С‚РµРґР¶РЅС‹Р№ РїРѕСЃС‘Р»РѕРє","С†РµРЅС‚СЂ РіРѕСЂРѕРґР°"])
+        father_occ = random.choice(["╨▓╨╗╨░╨┤╨╡╨╗╨╡╤Ж ╤Д╨╕╤А╨╝╤Л","╨░╨┤╨▓╨╛╨║╨░╤В","╨║╤А╤Г╨┐╨╜╤Л╨╣ ╨▒╨╕╨╖╨╜╨╡╤Б╨╝╨╡╨╜","╨┤╨╡╨┐╤Г╤В╨░╤В ╨┐╨░╤А╨╗╨░╨╝╨╡╨╜╤В╨░","╤В╨╛╨┐-╨╝╨╡╨╜╨╡╨┤╨╢╨╡╤А ╨║╨╛╤А╨┐╨╛╤А╨░╤Ж╨╕╨╕","╨▓╤А╨░╤З-╤Е╨╕╤А╤Г╤А╨│ ╨▓ ╤З╨░╤Б╤В╨╜╨╛╨╣ ╨║╨╗╨╕╨╜╨╕╨║╨╡"])
+        mother_occ = random.choice(["╤Г╨┐╤А╨░╨▓╨╗╤П╨╡╤В ╤Б╨╡╨╝╨╡╨╣╨╜╤Л╨╝ ╨▒╨╕╨╖╨╜╨╡╤Б╨╛╨╝","╨┤╨╕╨╖╨░╨╣╨╜╨╡╤А ╨╕╨╜╤В╨╡╤А╤М╨╡╤А╨╛╨▓","╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╣ ╨▓╤А╨░╤З","╨┐╤А╨╛╤Д╨╡╤Б╤Б╨╛╤А ╤Г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В╨░","╤Б╨▓╨╡╤В╤Б╨║╨░╤П ╨╗╤М╨▓╨╕╤Ж╨░","╨░╨┤╨▓╨╛╨║╨░╤В ╨┐╨╛ ╨▒╨╕╨╖╨╜╨╡╤Б╤Г"])
+        housing = random.choice(["╤А╨╛╤Б╨║╨╛╤И╨╜╤Л╨╣ ╨╛╤Б╨╛╨▒╨╜╤П╨║","╨┐╨╡╨╜╤В╤Е╨░╤Г╤Б ╨▓ ╤Ж╨╡╨╜╤В╤А╨╡","╨┐╨╛╨╝╨╡╤Б╤В╤М╨╡ ╨╖╨░ ╨│╨╛╤А╨╛╨┤╨╛╨╝","╨┤╨╛╨╝ ╤Б ╨▒╨░╤Б╤Б╨╡╨╣╨╜╨╛╨╝ ╨╕ ╤Б╨░╨┤╨╛╨╝"])
+        living = "╨Я╤А╨╛╤Б╤В╨╛╤А╨╜╤Л╨╣ ╨┤╨╛╨╝ ╤Б ╨┐╤А╨╕╤Б╨╗╤Г╨│╨╛╨╣."
+        location = random.choice(["╨┐╤А╨╡╤Б╤В╨╕╨╢╨╜╤Л╨╣ ╤А╨░╨╣╨╛╨╜ ╤Б╤В╨╛╨╗╨╕╤Ж╤Л","╨╖╨░╨║╤А╤Л╤В╤Л╨╣ ╨║╨╛╤В╤В╨╡╨┤╨╢╨╜╤Л╨╣ ╨┐╨╛╤Б╤С╨╗╨╛╨║","╤Ж╨╡╨╜╤В╤А ╨│╨╛╤А╨╛╨┤╨░"])
 
     father_name = random.choice(NAMES[country[2]]["m"])
     mother_name = random.choice(NAMES[country[2]]["f"])
@@ -245,61 +245,61 @@ def generate_family_background(country, gender, start_cash):
     siblings = []
     for _ in range(sib_count):
         sg = random.choice(["m","f"]); sn = random.choice(NAMES[country[2]][sg])
-        if wealth_class == "poor": st = random.choice(["С…РѕРґРёС‚ РІ С€РєРѕР»Сѓ, РїРѕРјРѕРіР°РµС‚ СЂРѕРґРёС‚РµР»СЏРј","СЂР°Р±РѕС‚Р°РµС‚ СЃ 10 Р»РµС‚","РїСЂРёСЃРјР°С‚СЂРёРІР°РµС‚ Р·Р° РјР»Р°РґС€РёРјРё"])
-        elif wealth_class == "middle": st = random.choice(["СѓС‡РёС‚СЃСЏ РІ С€РєРѕР»Рµ","С…РѕРґРёС‚ РІ РјСѓР·С‹РєР°Р»СЊРЅСѓСЋ С€РєРѕР»Сѓ","Р·Р°РЅРёРјР°РµС‚СЃСЏ СЃРїРѕСЂС‚РѕРј"])
-        else: st = random.choice(["С…РѕРґРёС‚ РІ С‡Р°СЃС‚РЅСѓСЋ С€РєРѕР»Сѓ","Р·Р°РЅРёРјР°РµС‚СЃСЏ СЃ СЂРµРїРµС‚РёС‚РѕСЂР°РјРё","СѓС‡РёС‚СЃСЏ Р·Р° РіСЂР°РЅРёС†РµР№"])
+        if wealth_class == "poor": st = random.choice(["╤Е╨╛╨┤╨╕╤В ╨▓ ╤И╨║╨╛╨╗╤Г, ╨┐╨╛╨╝╨╛╨│╨░╨╡╤В ╤А╨╛╨┤╨╕╤В╨╡╨╗╤П╨╝","╤А╨░╨▒╨╛╤В╨░╨╡╤В ╤Б 10 ╨╗╨╡╤В","╨┐╤А╨╕╤Б╨╝╨░╤В╤А╨╕╨▓╨░╨╡╤В ╨╖╨░ ╨╝╨╗╨░╨┤╤И╨╕╨╝╨╕"])
+        elif wealth_class == "middle": st = random.choice(["╤Г╤З╨╕╤В╤Б╤П ╨▓ ╤И╨║╨╛╨╗╨╡","╤Е╨╛╨┤╨╕╤В ╨▓ ╨╝╤Г╨╖╤Л╨║╨░╨╗╤М╨╜╤Г╤О ╤И╨║╨╛╨╗╤Г","╨╖╨░╨╜╨╕╨╝╨░╨╡╤В╤Б╤П ╤Б╨┐╨╛╤А╤В╨╛╨╝"])
+        else: st = random.choice(["╤Е╨╛╨┤╨╕╤В ╨▓ ╤З╨░╤Б╤В╨╜╤Г╤О ╤И╨║╨╛╨╗╤Г","╨╖╨░╨╜╨╕╨╝╨░╨╡╤В╤Б╤П ╤Б ╤А╨╡╨┐╨╡╤В╨╕╤В╨╛╤А╨░╨╝╨╕","╤Г╤З╨╕╤В╤Б╤П ╨╖╨░ ╨│╤А╨░╨╜╨╕╤Ж╨╡╨╣"])
         siblings.append({"name":sn,"gender":sg,"status":st,"age_diff":random.randint(-4,6)})
     grandparents = []
-    for side in ["РјР°РјС‹","РїР°РїС‹"]:
-        for role in ["РґРµРґСѓС€РєР°","Р±Р°Р±СѓС€РєР°"]:
-            grandparents.append({"role":f"{role} РїРѕ Р»РёРЅРёРё {side}","alive":random.random()<0.55})
+    for side in ["╨╝╨░╨╝╤Л","╨┐╨░╨┐╤Л"]:
+        for role in ["╨┤╨╡╨┤╤Г╤И╨║╨░","╨▒╨░╨▒╤Г╤И╨║╨░"]:
+            grandparents.append({"role":f"{role} ╨┐╨╛ ╨╗╨╕╨╜╨╕╨╕ {side}","alive":random.random()<0.55})
     return {"wealth_class":wealth_class,"father_name":father_name,"father_occupation":father_occ,"mother_name":mother_name,"mother_occupation":mother_occ,"housing":housing,"living_conditions":living,"siblings":siblings,"siblings_count":sib_count,"grandparents":grandparents,"location":location}
 
 def format_backstory(l):
     family = l.get("family",{}); world = l.get("world_context",{}); c = l["country"]
     eth = l.get("ethnicity"); reg = c[2]
-    world_text = (f"рџЊЌ <b>Р“РѕРґ {world['year']}. РњРёСЂ, РІ РєРѕС‚РѕСЂС‹Р№ С‚С‹ РїСЂРёС…РѕРґРёС€СЊ</b>\n\n"
+    world_text = (f"ЁЯМН <b>╨У╨╛╨┤ {world['year']}. ╨Ь╨╕╤А, ╨▓ ╨║╨╛╤В╨╛╤А╤Л╨╣ ╤В╤Л ╨┐╤А╨╕╤Е╨╛╨┤╨╕╤И╤М</b>\n\n"
                   f"{world['global_icon']} <b>{world['global_title']}</b>\n<i>{world['global_desc']}</i>\n\n"
-                  f"<b>Р’ {c[1]} {c[0]}:</b>\n{world['region_news']}\n{world['extra_news']}\n\n"
-                  f"<i>Р­С‚Рѕ РјРёСЂ, РІ РєРѕС‚РѕСЂРѕРј С‚РµР±Рµ РїСЂРµРґСЃС‚РѕРёС‚ Р¶РёС‚СЊ.</i>")
-    wealth_emoji = {"poor":"рџҐЂ","middle":"рџЏ ","rich":"рџ‘‘"}
-    wealth_ru = {"poor":"Р±РµРґРЅРѕР№","middle":"СЃСЂРµРґРЅРµР№","rich":"Р±РѕРіР°С‚РѕР№"}
+                  f"<b>╨Т {c[1]} {c[0]}:</b>\n{world['region_news']}\n{world['extra_news']}\n\n"
+                  f"<i>╨н╤В╨╛ ╨╝╨╕╤А, ╨▓ ╨║╨╛╤В╨╛╤А╨╛╨╝ ╤В╨╡╨▒╨╡ ╨┐╤А╨╡╨┤╤Б╤В╨╛╨╕╤В ╨╢╨╕╤В╤М.</i>")
+    wealth_emoji = {"poor":"ЁЯеА","middle":"ЁЯПа","rich":"ЁЯСС"}
+    wealth_ru = {"poor":"╨▒╨╡╨┤╨╜╨╛╨╣","middle":"╤Б╤А╨╡╨┤╨╜╨╡╨╣","rich":"╨▒╨╛╨│╨░╤В╨╛╨╣"}
 
     ic_father = get_person_emoji("father", "m", eth, reg)
     ic_mother = get_person_emoji("mother", "f", eth, reg)
     ic_me = get_person_emoji("player", l["gender"], eth, reg, age=0)
 
-    family_text = (f"{wealth_emoji[family['wealth_class']]} <b>РўС‹ СЂРѕРґРёР»СЃСЏ РІ {wealth_ru[family['wealth_class']]} СЃРµРјСЊРµ</b>\n\n"
-                   f"{ic_father} <b>РћС‚РµС†:</b> {family['father_name']} вЂ” {family['father_occupation']}\n"
-                   f"{ic_mother} <b>РњР°С‚СЊ:</b> {family['mother_name']} вЂ” {family['mother_occupation']}\n\n"
-                   f"рџЏЎ <b>Р–РёР»РёС‰Рµ:</b> {family['housing']}\n{family['living_conditions']}\n"
-                   f"рџ“Ќ <b>РњРµСЃС‚Рѕ:</b> {family['location']}\n\n"
-                   f"{ic_me} <b>РўС‹:</b> {l['name']}, {l['ethnicity'].lower()}")
+    family_text = (f"{wealth_emoji[family['wealth_class']]} <b>╨в╤Л ╤А╨╛╨┤╨╕╨╗╤Б╤П ╨▓ {wealth_ru[family['wealth_class']]} ╤Б╨╡╨╝╤М╨╡</b>\n\n"
+                   f"{ic_father} <b>╨Ю╤В╨╡╤Ж:</b> {family['father_name']} тАФ {family['father_occupation']}\n"
+                   f"{ic_mother} <b>╨Ь╨░╤В╤М:</b> {family['mother_name']} тАФ {family['mother_occupation']}\n\n"
+                   f"ЁЯПб <b>╨Ц╨╕╨╗╨╕╤Й╨╡:</b> {family['housing']}\n{family['living_conditions']}\n"
+                   f"ЁЯУН <b>╨Ь╨╡╤Б╤В╨╛:</b> {family['location']}\n\n"
+                   f"{ic_me} <b>╨в╤Л:</b> {l['name']}, {l['ethnicity'].lower()}")
     sibs = family.get("siblings",[])
     if sibs:
-        sib_text = "рџ‘ЁвЂЌрџ‘©вЂЌрџ‘§вЂЌрџ‘¦ <b>Р‘СЂР°С‚СЊСЏ Рё СЃС‘СЃС‚СЂС‹:</b>\n"
+        sib_text = "ЁЯСитАНЁЯСйтАНЁЯСзтАНЁЯСж <b>╨С╤А╨░╤В╤М╤П ╨╕ ╤Б╤С╤Б╤В╤А╤Л:</b>\n"
         for s in sibs:
             ic = get_person_emoji("sibling", s["gender"], eth, reg)
             ad = s.get("age_diff",0)
-            rel = f"СЃС‚Р°СЂС€Рµ РЅР° {ad} Рі." if ad > 0 else f"РјР»Р°РґС€Рµ РЅР° {abs(ad)} Рі." if ad < 0 else "СЂРѕРІРµСЃРЅРёРє"
-            sib_text += f"  {ic} <b>{s['name']}</b> ({rel}) вЂ” {s['status']}\n"
-    else: sib_text = "рџ‘¶ <b>Р‘СЂР°С‚СЊРµРІ Рё СЃРµСЃС‚С‘СЂ РЅРµС‚</b> вЂ” С‚С‹ РµРґРёРЅСЃС‚РІРµРЅРЅС‹Р№ СЂРµР±С‘РЅРѕРє.\n"
+            rel = f"╤Б╤В╨░╤А╤И╨╡ ╨╜╨░ {ad} ╨│." if ad > 0 else f"╨╝╨╗╨░╨┤╤И╨╡ ╨╜╨░ {abs(ad)} ╨│." if ad < 0 else "╤А╨╛╨▓╨╡╤Б╨╜╨╕╨║"
+            sib_text += f"  {ic} <b>{s['name']}</b> ({rel}) тАФ {s['status']}\n"
+    else: sib_text = "ЁЯС╢ <b>╨С╤А╨░╤В╤М╨╡╨▓ ╨╕ ╤Б╨╡╤Б╤В╤С╤А ╨╜╨╡╤В</b> тАФ ╤В╤Л ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╤А╨╡╨▒╤С╨╜╨╛╨║.\n"
     gp_alive = [g for g in family.get("grandparents",[]) if g["alive"]]
     gp_dead = [g for g in family.get("grandparents",[]) if not g["alive"]]
     gp_text = ""
     if gp_alive:
-        gp_text += "\nрџ‘µ <b>Р–РёРІС‹:</b>\n"
+        gp_text += "\nЁЯС╡ <b>╨Ц╨╕╨▓╤Л:</b>\n"
         for g in gp_alive:
-            g_role = "grandpa" if "РґРµРґСѓС€РєР°" in g["role"] else "grandma"
+            g_role = "grandpa" if "╨┤╨╡╨┤╤Г╤И╨║╨░" in g["role"] else "grandma"
             ic_gp = get_person_emoji(g_role, "m" if g_role == "grandpa" else "f", eth, reg)
             gp_text += f"  {ic_gp} {g['role']}\n"
     if gp_dead:
-        gp_text += "\nрџЄ¦ <b>РЈС€Р»Рё РёР· Р¶РёР·РЅРё:</b>\n"
-        for g in gp_dead: gp_text += f"  вќЊ {g['role']}\n"
-    relatives_text = sib_text + gp_text + "\n<i>РўРІРѕСЏ СЃРµРјСЊСЏ вЂ” С‡Р°СЃС‚СЊ С‚РІРѕРµР№ РёСЃС‚РѕСЂРёРё.</i>"
+        gp_text += "\nЁЯкж <b>╨г╤И╨╗╨╕ ╨╕╨╖ ╨╢╨╕╨╖╨╜╨╕:</b>\n"
+        for g in gp_dead: gp_text += f"  тЭМ {g['role']}\n"
+    relatives_text = sib_text + gp_text + "\n<i>╨в╨▓╨╛╤П ╤Б╨╡╨╝╤М╤П тАФ ╤З╨░╤Б╤В╤М ╤В╨▓╨╛╨╡╨╣ ╨╕╤Б╤В╨╛╤А╨╕╨╕.</i>"
     return [world_text, family_text, relatives_text]
 
-# ================= РћРўР›РћР–Р•РќРќР«Р• РџРћРЎР›Р•Р”РЎРўР’РРЇ =================
+# ================= ╨Ю╨в╨Ы╨Ю╨Ц╨Х╨Э╨Э╨л╨Х ╨Я╨Ю╨б╨Ы╨Х╨Ф╨б╨в╨Т╨Ш╨п =================
 def add_pending_consequence(l, years_ahead, event_data):
     l.setdefault("pending_consequences",[]).append({"fire_age":l["age"] + years_ahead,"event":event_data})
 
@@ -310,7 +310,7 @@ def get_due_consequence(l):
     event = dict(consequence["event"]); event["resolved"] = False
     return event
 
-# ================= Р”РћРЎРўРР–Р•РќРРЇ Р РРўРћР“ =================
+# ================= ╨Ф╨Ю╨б╨в╨Ш╨Ц╨Х╨Э╨Ш╨п ╨Ш ╨Ш╨в╨Ю╨У =================
 def check_achievements(l):
     if "achievements" not in l: l["achievements"] = []
     if "ever_in_prison" not in l: l["ever_in_prison"] = False
@@ -319,9 +319,9 @@ def check_achievements(l):
     def unlock(aid):
         if not has(aid): l["achievements"].append(aid); new_ones.append(ACHIEVEMENTS[aid])
     if l["age"] >= 1: unlock("first_word")
-    if any(l["education"].startswith(ed) for ed in ["РќР°С‡Р°Р»СЊРЅРѕРµ","РЎСЂРµРґРЅРµРµ","Р’С‹СЃС€РµРµ"]): unlock("school")
-    if any(l["education"].startswith(ed) for ed in ["РЎСЂРµРґРЅРµРµ","Р’С‹СЃС€РµРµ"]): unlock("graduated")
-    if l["education"].startswith("Р’С‹СЃС€РµРµ"): unlock("university")
+    if any(l["education"].startswith(ed) for ed in ["╨Э╨░╤З╨░╨╗╤М╨╜╨╛╨╡","╨б╤А╨╡╨┤╨╜╨╡╨╡","╨Т╤Л╤Б╤И╨╡╨╡"]): unlock("school")
+    if any(l["education"].startswith(ed) for ed in ["╨б╤А╨╡╨┤╨╜╨╡╨╡","╨Т╤Л╤Б╤И╨╡╨╡"]): unlock("graduated")
+    if l["education"].startswith("╨Т╤Л╤Б╤И╨╡╨╡"): unlock("university")
     if l["married"]: unlock("married")
     if l["children"] > 0: unlock("parent")
     if l["age"] >= 90: unlock("long_liver")
@@ -341,11 +341,11 @@ def check_achievements(l):
 def show_achievements(chat_id, l):
     earned = l.get("achievements",[])
     total = len(ACHIEVEMENTS)
-    text = f"рџЏ† <b>РљРѕР»Р»РµРєС†РёСЏ СЃСѓРґРµР±</b>\nРћС‚РєСЂС‹С‚Рѕ: {len(earned)}/{total}\n\n"
+    text = f"ЁЯПЖ <b>╨Ъ╨╛╨╗╨╗╨╡╨║╤Ж╨╕╤П ╤Б╤Г╨┤╨╡╨▒</b>\n╨Ю╤В╨║╤А╤Л╤В╨╛: {len(earned)}/{total}\n\n"
     for aid, ach in ACHIEVEMENTS.items():
-        mark = "вњ…" if aid in earned else "в¬њ"
-        text += f"{mark} {ach['name']} вЂ” <i>{ach['desc']}</i>\n"
-    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ Рє Р¶РёР·РЅРё", callback_data="refresh"))
+        mark = "тЬЕ" if aid in earned else "тмЬ"
+        text += f"{mark} {ach['name']} тАФ <i>{ach['desc']}</i>\n"
+    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤ ╨║ ╨╢╨╕╨╖╨╜╨╕", callback_data="refresh"))
     msg = bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
@@ -366,7 +366,7 @@ def get_life_balance(l):
     return {"happiness":happiness,"meaning":meaning,"connections":connections,"wealth":wealth_score}
 
 def get_cinematic_headlines(l):
-    kws = ["Р РѕРґРёР»СЃСЏ","РџРѕС€РµР» РІ С€РєРѕР»Сѓ","РћРєРѕРЅС‡РёР» С€РєРѕР»Сѓ","РџРѕСЃС‚СѓРїРёР» РІ РІСѓР·","Р–РµРЅРёР»СЃСЏ","Р Р°Р·РІРѕРґ","РќР° СЂР°Р±РѕС‚Сѓ","Р’ РїРѕР»РёС†РёРё","Р’ Р°СЂРјРёРё","РљСЂРёРјРёРЅР°Р»","РџРѕРІС‹С€РµРЅРёРµ","РџРѕРЅРёР¶РµРЅРёРµ","РљСѓРїРёР»","РћС‚РєСЂС‹Р»","РЈРјРµСЂ"]
+    kws = ["╨а╨╛╨┤╨╕╨╗╤Б╤П","╨Я╨╛╤И╨╡╨╗ ╨▓ ╤И╨║╨╛╨╗╤Г","╨Ю╨║╨╛╨╜╤З╨╕╨╗ ╤И╨║╨╛╨╗╤Г","╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ ╨▓╤Г╨╖","╨Ц╨╡╨╜╨╕╨╗╤Б╤П","╨а╨░╨╖╨▓╨╛╨┤","╨Э╨░ ╤А╨░╨▒╨╛╤В╤Г","╨Т ╨┐╨╛╨╗╨╕╤Ж╨╕╨╕","╨Т ╨░╤А╨╝╨╕╨╕","╨Ъ╤А╨╕╨╝╨╕╨╜╨░╨╗","╨Я╨╛╨▓╤Л╤И╨╡╨╜╨╕╨╡","╨Я╨╛╨╜╨╕╨╢╨╡╨╜╨╕╨╡","╨Ъ╤Г╨┐╨╕╨╗","╨Ю╤В╨║╤А╤Л╨╗","╨г╨╝╨╡╤А"]
     highlights = []
     for event in l["life_map"]:
         for kw in kws:
@@ -384,9 +384,9 @@ def create_life(force_country=None):
     world = generate_world_context(country)
     return {
         "country":country,"gender":gender,"name":name,"ethnicity":ethnicity,"prejudice":prejudice,
-        "clean_cash":start_cash,"dirty_cash":0,"in_prison":0,"age":0,"alive":True,"faction":"РќРµС‚",
+        "clean_cash":start_cash,"dirty_cash":0,"in_prison":0,"age":0,"alive":True,"faction":"╨Э╨╡╤В",
         "health":100,"happiness":50,"knowledge":50,"relationships":50,
-        "education":"РќРµС‚","job":"Р‘РµР·СЂР°Р±РѕС‚РЅС‹Р№","salary":0,"job_type":"none","career_xp":0,"career_rank":1,
+        "education":"╨Э╨╡╤В","job":"╨С╨╡╨╖╤А╨░╨▒╨╛╤В╨╜╤Л╨╣","salary":0,"job_type":"none","career_xp":0,"career_rank":1,
         "married":False,"children":0,"diseases":[],"properties":[],"cars":[],"businesses":[],"investments":[],"political_reputation":50,"debt":0,
         "life_map":[],"neighbors":generate_neighbors(),"peer_lives":generate_peer_lives(),
         "test_data":None,"asked_tests":{1:[],2:[],3:[]},"current_event":None,"has_license":False,"job_years":0,"books_read":0,
@@ -399,16 +399,16 @@ def create_life(force_country=None):
 
 def create_dynasty_heir(parent_life):
     heir = create_life(force_country=parent_life["country"])
-    heir["name"] = f"{parent_life['name']} II (РќР°СЃР»РµРґРЅРёРє)"
+    heir["name"] = f"{parent_life['name']} II (╨Э╨░╤Б╨╗╨╡╨┤╨╜╨╕╨║)"
     heir["age"] = 18
     heir["clean_cash"] = int(parent_life["clean_cash"] * 0.5)
     heir["properties"] = [dict(p) for p in parent_life.get("properties", [])]
     heir["businesses"] = [dict(b) for b in parent_life.get("businesses", [])]
     heir["investments"] = [dict(i) for i in parent_life.get("investments", [])]
     heir["political_reputation"] = parent_life.get("political_reputation", 50)
-    heir["education"] = "РЎСЂРµРґРЅРµРµ (Р»РёС†РµР№/РєРѕР»Р»РµРґР¶)"
+    heir["education"] = "╨б╤А╨╡╨┤╨╜╨╡╨╡ (╨╗╨╕╤Ж╨╡╨╣/╨║╨╛╨╗╨╗╨╡╨┤╨╢)"
     heir["mode"] = "dynasty"
-    heir["life_map"] = ["18 Р»РµС‚: Р’СЃС‚СѓРїРёР» РІ РїСЂР°РІР° РЅР°СЃР»РµРґСЃС‚РІР° РІРµР»РёРєРѕР№ РґРёРЅР°СЃС‚РёРё."]
+    heir["life_map"] = ["18 ╨╗╨╡╤В: ╨Т╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ ╨┐╤А╨░╨▓╨░ ╨╜╨░╤Б╨╗╨╡╨┤╤Б╤В╨▓╨░ ╨▓╨╡╨╗╨╕╨║╨╛╨╣ ╨┤╨╕╨╜╨░╤Б╤В╨╕╨╕."]
     return heir
 
 def add_to_life_map(l, text):
@@ -450,13 +450,13 @@ def apply_direct_effect(l, effect):
         elif key == "in_prison": l["in_prison"] = val; l["ever_in_prison"] = True
         elif key == "job": l["job"] = val
         elif key == "education": l["education"] = val
-    return effect.get("text", "Р“РѕРґ РїСЂРѕС€РµР».")
+    return effect.get("text", "╨У╨╛╨┤ ╨┐╤А╨╛╤И╨╡╨╗.")
 
 def show_peer_lives(l):
     if l["age"] % 5 != 0: return None
-    text = "рџ‘Ґ <b>Р РѕРІРµСЃРЅРёРєРё (СЂРѕРґРёР»РёСЃСЊ СЃ С‚РѕР±РѕР№ РІ РѕРґРЅСѓ СЃРµРєСѓРЅРґСѓ):</b>\n\n"
+    text = "ЁЯСе <b>╨а╨╛╨▓╨╡╤Б╨╜╨╕╨║╨╕ (╤А╨╛╨┤╨╕╨╗╨╕╤Б╤М ╤Б ╤В╨╛╨▒╨╛╨╣ ╨▓ ╨╛╨┤╨╜╤Г ╤Б╨╡╨║╤Г╨╜╨┤╤Г):</b>\n\n"
     for i, p in enumerate(l.get("peer_lives",[])):
-        if l["age"] >= p["death_age"]: status = "рџ’Ђ СѓРјРµСЂ(Р»Р°)"
+        if l["age"] >= p["death_age"]: status = "ЁЯТА ╤Г╨╝╨╡╤А(╨╗╨░)"
         else: status = get_neighbor_echo({"trajectory":p["trajectory"],"gender":p["gender"],"death_age":p["death_age"]}, l["age"])
         text += f"{i+1}. <b>{p['name']}</b> ({p['country'][1]}): {status}\n"
     return text
@@ -475,42 +475,42 @@ def calculate_life_score(l):
 
 def show_leaderboard(chat_id, highlight_user=None):
     lb = players_db.get("_leaderboard", [])
-    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ Рє Р¶РёР·РЅРё", callback_data="refresh"))
+    kb = InlineKeyboardMarkup().add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤ ╨║ ╨╢╨╕╨╖╨╜╨╕", callback_data="refresh"))
     if not lb:
-        msg = bot.send_message(chat_id, "рџЏ† Р РµР№С‚РёРЅРі РїСѓСЃС‚.", reply_markup=kb, parse_mode="HTML")
+        msg = bot.send_message(chat_id, "ЁЯПЖ ╨а╨╡╨╣╤В╨╕╨╜╨│ ╨┐╤Г╤Б╤В.", reply_markup=kb, parse_mode="HTML")
         if highlight_user:
             l_ref = players_db.get(str(highlight_user))
             if l_ref: track_message(l_ref, chat_id, msg.message_id)
         return
-    text = "рџЏ† <b>РўРѕРї-10 РїСЂРѕР¶РёС‚С‹С… Р¶РёР·РЅРµР№</b>\n\n"
-    medals = ["рџҐ‡","рџҐ€","рџҐ‰"]
+    text = "ЁЯПЖ <b>╨в╨╛╨┐-10 ╨┐╤А╨╛╨╢╨╕╤В╤Л╤Е ╨╢╨╕╨╖╨╜╨╡╨╣</b>\n\n"
+    medals = ["ЁЯеЗ","ЁЯеИ","ЁЯеЙ"]
     for i, e in enumerate(lb[:10]):
         prefix = medals[i] if i < 3 else f"{i+1}."
-        mark = " рџ‘€" if highlight_user and e["user_id"] == str(highlight_user) else ""
+        mark = " ЁЯСИ" if highlight_user and e["user_id"] == str(highlight_user) else ""
         text += (f"{prefix} <b>{e['name']}</b> ({e['country']}){mark}\n"
-                 f"    в­ђ {e['score']} РѕС‡РєРѕРІ В· {get_age_str(e['age'])} В· {e['wealth']}\n"
-                 f"    рџ©є {e['cause']}\n\n")
-    text += f"\n<i>Р’СЃРµРіРѕ Р¶РёР·РЅРµР№ РїСЂРѕР¶РёС‚Рѕ: {len(lb)}</i>"
+                 f"    тнР {e['score']} ╨╛╤З╨║╨╛╨▓ ┬╖ {get_age_str(e['age'])} ┬╖ {e['wealth']}\n"
+                 f"    ЁЯй║ {e['cause']}\n\n")
+    text += f"\n<i>╨Т╤Б╨╡╨│╨╛ ╨╢╨╕╨╖╨╜╨╡╨╣ ╨┐╤А╨╛╨╢╨╕╤В╨╛: {len(lb)}</i>"
     msg = bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
     if highlight_user:
         l_ref = players_db.get(str(highlight_user))
         if l_ref: track_message(l_ref, chat_id, msg.message_id)
 
-# ================= РџРћР›РРўРРљРђ, Р‘РР—РќР•РЎ-РљР РР—РРЎР« Р РРќР’Р•РЎРўРР¦РР =================
+# ================= ╨Я╨Ю╨Ы╨Ш╨в╨Ш╨Ъ╨Р, ╨С╨Ш╨Ч╨Э╨Х╨б-╨Ъ╨а╨Ш╨Ч╨Ш╨б╨л ╨Ш ╨Ш╨Э╨Т╨Х╨б╨в╨Ш╨ж╨Ш╨Ш =================
 def trigger_politics_event(l):
     if l["age"] >= 30 and l.get("job_type") != "politics" and random.random() < 0.25:
         seen = l.setdefault("seen_regular_events", [])
         if "politics_election" in seen[-5:]:
             return None
         seen.append("politics_election")
-        curr_job = l.get("job", "Р‘РµР·СЂР°Р±РѕС‚РЅС‹Р№")
+        curr_job = l.get("job", "╨С╨╡╨╖╤А╨░╨▒╨╛╤В╨╜╤Л╨╣")
         return {
             "id": "politics_election",
-            "title": "рџ—і Р’С‹Р±РѕСЂС‹ РІ РјСѓРЅРёС†РёРїР°Р»СЊРЅС‹Р№ СЃРѕРІРµС‚",
-            "text": f"РЈ РІР°СЃ РїРѕСЏРІРёР»Р°СЃСЊ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІС‹РґРІРёРЅСѓС‚СЊ СЃРІРѕСЋ РєР°РЅРґРёРґР°С‚СѓСЂСѓ РЅР° РІС‹Р±РѕСЂР°С…. РџРµСЂРµС…РѕРґ РІ РїРѕР»РёС‚РёРєСѓ РїРѕС‚СЂРµР±СѓРµС‚ РѕСЃС‚Р°РІРёС‚СЊ С‚РµРєСѓС‰СѓСЋ РґРµСЏС‚РµР»СЊРЅРѕСЃС‚СЊ ({curr_job})!",
+            "title": "ЁЯЧ│ ╨Т╤Л╨▒╨╛╤А╤Л ╨▓ ╨╝╤Г╨╜╨╕╤Ж╨╕╨┐╨░╨╗╤М╨╜╤Л╨╣ ╤Б╨╛╨▓╨╡╤В",
+            "text": f"╨г ╨▓╨░╤Б ╨┐╨╛╤П╨▓╨╕╨╗╨░╤Б╤М ╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛╤Б╤В╤М ╨▓╤Л╨┤╨▓╨╕╨╜╤Г╤В╤М ╤Б╨▓╨╛╤О ╨║╨░╨╜╨┤╨╕╨┤╨░╤В╤Г╤А╤Г ╨╜╨░ ╨▓╤Л╨▒╨╛╤А╨░╤Е. ╨Я╨╡╤А╨╡╤Е╨╛╨┤ ╨▓ ╨┐╨╛╨╗╨╕╤В╨╕╨║╤Г ╨┐╨╛╤В╤А╨╡╨▒╤Г╨╡╤В ╨╛╤Б╤В╨░╨▓╨╕╤В╤М ╤В╨╡╨║╤Г╤Й╤Г╤О ╨┤╨╡╤П╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М ({curr_job})!",
             "choices": [
-                {"text": "рџ—і Р‘Р°Р»Р»РѕС‚РёСЂРѕРІР°С‚СЊСЃСЏ", "p": 0.45, "success": "politics_win", "fail": "politics_fail"},
-                {"text": "рџљ¶ РћС‚РєР°Р·Р°С‚СЊСЃСЏ", "p": 1.0, "success_effect": {"text": "Р’С‹ СЂРµС€РёР»Рё РЅРµ РјРµРЅСЏС‚СЊ РїСЂРѕС„РµСЃСЃРёСЋ Рё РЅРµ Р»РµР·С‚СЊ РІ РїРѕР»РёС‚РёРєСѓ."}}
+                {"text": "ЁЯЧ│ ╨С╨░╨╗╨╗╨╛╤В╨╕╤А╨╛╨▓╨░╤В╤М╤Б╤П", "p": 0.45, "success": "politics_win", "fail": "politics_fail"},
+                {"text": "ЁЯЪ╢ ╨Ю╤В╨║╨░╨╖╨░╤В╤М╤Б╤П", "p": 1.0, "success_effect": {"text": "╨Т╤Л ╤А╨╡╤И╨╕╨╗╨╕ ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М ╨┐╤А╨╛╤Д╨╡╤Б╤Б╨╕╤О ╨╕ ╨╜╨╡ ╨╗╨╡╨╖╤В╤М ╨▓ ╨┐╨╛╨╗╨╕╤В╨╕╨║╤Г."}}
             ]
         }
     return None
@@ -526,7 +526,7 @@ def trigger_business_crisis(l):
     if random.random() < 0.09:
         biz = random.choice(bizs)
         crisis_pool = ["tax_audit", "supply_chain", "strike"]
-        if is_poor_country or l.get("faction") == "РЈР»РёС‡РЅР°СЏ Р±Р°РЅРґР°":
+        if is_poor_country or l.get("faction") == "╨г╨╗╨╕╤З╨╜╨░╤П ╨▒╨░╨╜╨┤╨░":
             crisis_pool.append("racket")
         else:
             crisis_pool.append("market_drop")
@@ -536,42 +536,42 @@ def trigger_business_crisis(l):
         if crisis_type == "tax_audit":
             fine = max(300, int(biz["value"] * random.uniform(0.04, 0.08)))
             l["clean_cash"] -= fine
-            return f"рџљЁ <b>РќР°Р»РѕРіРѕРІР°СЏ РёРЅСЃРїРµРєС†РёСЏ</b> РїСЂРѕРІРµР»Р° Р°СѓРґРёС‚ Р±РёР·РЅРµСЃР° В«{biz['type']}В». Р’С‹РїРёСЃР°РЅ С€С‚СЂР°С„ Рё РґРѕРЅР°С‡РёСЃР»РµРЅРёСЏ: {fmt_money(fine, l['country'])}."
+            return f"ЁЯЪи <b>╨Э╨░╨╗╨╛╨│╨╛╨▓╨░╤П ╨╕╨╜╤Б╨┐╨╡╨║╤Ж╨╕╤П</b> ╨┐╤А╨╛╨▓╨╡╨╗╨░ ╨░╤Г╨┤╨╕╤В ╨▒╨╕╨╖╨╜╨╡╤Б╨░ ┬л{biz['type']}┬╗. ╨Т╤Л╨┐╨╕╤Б╨░╨╜ ╤И╤В╤А╨░╤Д ╨╕ ╨┤╨╛╨╜╨░╤З╨╕╤Б╨╗╨╡╨╜╨╕╤П: {fmt_money(fine, l['country'])}."
         elif crisis_type == "strike":
             loss = max(200, int(biz["value"] * random.uniform(0.03, 0.06)))
             l["clean_cash"] -= loss
-            return f"рџ›  <b>Р—Р°Р±Р°СЃС‚РѕРІРєР° РїРµСЂСЃРѕРЅР°Р»Р°</b> РЅР° В«{biz['type']}В» РїР°СЂР°Р»РёР·РѕРІР°Р»Р° СЂР°Р±РѕС‚Сѓ РЅР° РЅРµРґРµР»СЋ. РЈР±С‹С‚РѕРє: {fmt_money(loss, l['country'])}."
+            return f"ЁЯЫа <b>╨Ч╨░╨▒╨░╤Б╤В╨╛╨▓╨║╨░ ╨┐╨╡╤А╤Б╨╛╨╜╨░╨╗╨░</b> ╨╜╨░ ┬л{biz['type']}┬╗ ╨┐╨░╤А╨░╨╗╨╕╨╖╨╛╨▓╨░╨╗╨░ ╤А╨░╨▒╨╛╤В╤Г ╨╜╨░ ╨╜╨╡╨┤╨╡╨╗╤О. ╨г╨▒╤Л╤В╨╛╨║: {fmt_money(loss, l['country'])}."
         elif crisis_type == "racket":
             extortion = max(500, int(biz["value"] * 0.07))
             l["clean_cash"] -= extortion
             l["happiness"] = max(0, l["happiness"] - 5)
-            return f"рџ•¶ <b>РњРµСЃС‚РЅС‹Рµ РєСЂРёРјРёРЅР°Р»СЊРЅС‹Рµ СЃС‚СЂСѓРєС‚СѓСЂС‹</b> РѕР±Р»РѕР¶РёР»Рё В«{biz['type']}В» РґР°РЅСЊСЋ. РџРѕС‚РµСЂРё: {fmt_money(extortion, l['country'])}."
+            return f"ЁЯХ╢ <b>╨Ь╨╡╤Б╤В╨╜╤Л╨╡ ╨║╤А╨╕╨╝╨╕╨╜╨░╨╗╤М╨╜╤Л╨╡ ╤Б╤В╤А╤Г╨║╤В╤Г╤А╤Л</b> ╨╛╨▒╨╗╨╛╨╢╨╕╨╗╨╕ ┬л{biz['type']}┬╗ ╨┤╨░╨╜╤М╤О. ╨Я╨╛╤В╨╡╤А╨╕: {fmt_money(extortion, l['country'])}."
         elif crisis_type == "market_drop":
             biz["value"] = max(500, int(biz["value"] * 0.88))
-            return f"рџ“‰ <b>РџР°РґРµРЅРёРµ СЂС‹РЅРѕС‡РЅРѕРіРѕ СЃРїСЂРѕСЃР°:</b> РєР°РїРёС‚Р°Р»РёР·Р°С†РёСЏ РїСЂРµРґРїСЂРёСЏС‚РёСЏ В«{biz['type']}В» СЃРЅРёР·РёР»Р°СЃСЊ РЅР° 12%."
+            return f"ЁЯУЙ <b>╨Я╨░╨┤╨╡╨╜╨╕╨╡ ╤А╤Л╨╜╨╛╤З╨╜╨╛╨│╨╛ ╤Б╨┐╤А╨╛╤Б╨░:</b> ╨║╨░╨┐╨╕╤В╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П ╨┐╤А╨╡╨┤╨┐╤А╨╕╤П╤В╨╕╤П ┬л{biz['type']}┬╗ ╤Б╨╜╨╕╨╖╨╕╨╗╨░╤Б╤М ╨╜╨░ 12%."
         elif crisis_type == "supply_chain":
             delay_loss = max(250, int(biz["value"] * 0.04))
             l["clean_cash"] -= delay_loss
-            return f"рџ“¦ <b>РЎР±РѕР№ РІ Р»РѕРіРёСЃС‚РёС‡РµСЃРєРѕР№ С†РµРїРѕС‡РєРµ</b> СЃС‹СЂСЊСЏ РґР»СЏ В«{biz['type']}В». РќРµСѓСЃС‚РѕР№РєР° РєР»РёРµРЅС‚Р°Рј: {fmt_money(delay_loss, l['country'])}."
+            return f"ЁЯУж <b>╨б╨▒╨╛╨╣ ╨▓ ╨╗╨╛╨│╨╕╤Б╤В╨╕╤З╨╡╤Б╨║╨╛╨╣ ╤Ж╨╡╨┐╨╛╤З╨║╨╡</b> ╤Б╤Л╤А╤М╤П ╨┤╨╗╤П ┬л{biz['type']}┬╗. ╨Э╨╡╤Г╤Б╤В╨╛╨╣╨║╨░ ╨║╨╗╨╕╨╡╨╜╤В╨░╨╝: {fmt_money(delay_loss, l['country'])}."
     return None
 
 def process_investments(l):
     if not l.get("investments"):
         return ""
-    report = "\n\nрџ“€ <b>РћС‚С‡РµС‚ РїРѕ РёРЅРІРµСЃС‚РёС†РёСЏРј:</b>\n"
+    report = "\n\nЁЯУИ <b>╨Ю╤В╤З╨╡╤В ╨┐╨╛ ╨╕╨╜╨▓╨╡╤Б╤В╨╕╤Ж╨╕╤П╨╝:</b>\n"
     for inv in list(l["investments"]):
         asset_name = inv["type"]
         amount = inv["amount"]
         props = INVESTMENT_ASSETS.get(asset_name, {"risk": 0.2, "min_return": 0.9, "max_return": 1.2})
         if random.random() < props["risk"] and random.random() < 0.5:
             multiplier = random.uniform(props["min_return"] * 0.5, 0.9)
-            status = "рџ“‰ РїСЂРѕСЃРµР»Рё"
+            status = "ЁЯУЙ ╨┐╤А╨╛╤Б╨╡╨╗╨╕"
         else:
             multiplier = random.uniform(props["min_return"], props["max_return"])
-            status = "рџ“€ РІС‹СЂРѕСЃР»Рё"
+            status = "ЁЯУИ ╨▓╤Л╤А╨╛╤Б╨╗╨╕"
         new_amt = max(0, int(amount * multiplier))
         inv["amount"] = new_amt
-        report += f"вЂў {asset_name}: {status} (Р±Р°Р»Р°РЅСЃ: {fmt_money(new_amt, l['country'])})\n"
+        report += f"тАв {asset_name}: {status} (╨▒╨░╨╗╨░╨╜╤Б: {fmt_money(new_amt, l['country'])})\n"
     return report
 
 # ================= get_event =================
@@ -582,12 +582,12 @@ def get_event(l):
     if pol_evt:
         return pol_evt
 
-    if age >= 18 and l["job_type"] == "none" and l["faction"] == "РќРµС‚" and l["in_prison"] == 0:
-        return {"id":"path","title":"вљЎ Р’С‹Р±РѕСЂ РїСѓС‚Рё","text":"РџРѕСЂР° РѕРїСЂРµРґРµР»СЏС‚СЊСЃСЏ.",
-                "choices":[{"text":"рџ’ј Р“СЂР°Р¶РґР°РЅРєР°","p":1,"success":"job_civ","fail":"none"},
-                           {"text":"рџ‘® РџРѕР»РёС†РёСЏ","p":1 if l["education"].startswith("Р’С‹СЃС€РµРµ") else 0,"success":"job_pol","fail":"none"},
-                           {"text":"рџЋ– РђСЂРјРёСЏ","p":1 if any(l["education"].startswith(ed) for ed in ["РЎСЂРµРґРЅРµРµ","Р’С‹СЃС€РµРµ"]) else 0,"success":"job_mil","fail":"none"},
-                           {"text":"рџ’Љ РљСЂРёРјРёРЅР°Р»","p":1,"success":"job_crim","fail":"none"}]}
+    if age >= 18 and l["job_type"] == "none" and l["faction"] == "╨Э╨╡╤В" and l["in_prison"] == 0:
+        return {"id":"path","title":"тЪб ╨Т╤Л╨▒╨╛╤А ╨┐╤Г╤В╨╕","text":"╨Я╨╛╤А╨░ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╤П╤В╤М╤Б╤П.",
+                "choices":[{"text":"ЁЯТ╝ ╨У╤А╨░╨╢╨┤╨░╨╜╨║╨░","p":1,"success":"job_civ","fail":"none"},
+                           {"text":"ЁЯСо ╨Я╨╛╨╗╨╕╤Ж╨╕╤П","p":1 if l["education"].startswith("╨Т╤Л╤Б╤И╨╡╨╡") else 0,"success":"job_pol","fail":"none"},
+                           {"text":"ЁЯОЦ ╨Р╤А╨╝╨╕╤П","p":1 if any(l["education"].startswith(ed) for ed in ["╨б╤А╨╡╨┤╨╜╨╡╨╡","╨Т╤Л╤Б╤И╨╡╨╡"]) else 0,"success":"job_mil","fail":"none"},
+                           {"text":"ЁЯТК ╨Ъ╤А╨╕╨╝╨╕╨╜╨░╨╗","p":1,"success":"job_crim","fail":"none"}]}
 
     lf = l.get("last_focus")
     if lf and lf in FOCUS_EVENTS and random.random() < 0.40:
@@ -605,16 +605,16 @@ def get_event(l):
             return evt
 
     if l["prejudice"] and 16 < age < 60 and random.random() < 0.15:
-        return {"id":"prej","title":"РЎС‚РѕР»РєРЅРѕРІРµРЅРёРµ СЃ РїСЂРµРґРІР·СЏС‚РѕСЃС‚СЊСЋ","text":f"{l['prejudice']}",
-                "choices":[{"text":"вњЉ Р”РѕРєР°Р·Р°С‚СЊ","p":0.4,"success":"prej_fight_win","fail":"prej_fight_fail"},
-                           {"text":"рџ¦Љ РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ","p":0.7,"success":"prej_exploit","fail":"prej_exploit_fail"},
-                           {"text":"рџ” РЎРјРёСЂРёС‚СЊСЃСЏ","p":1,"success":"prej_accept","fail":"none"}]}
+        return {"id":"prej","title":"╨б╤В╨╛╨╗╨║╨╜╨╛╨▓╨╡╨╜╨╕╨╡ ╤Б ╨┐╤А╨╡╨┤╨▓╨╖╤П╤В╨╛╤Б╤В╤М╤О","text":f"{l['prejudice']}",
+                "choices":[{"text":"тЬК ╨Ф╨╛╨║╨░╨╖╨░╤В╤М","p":0.4,"success":"prej_fight_win","fail":"prej_fight_fail"},
+                           {"text":"ЁЯжК ╨Ш╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╤М","p":0.7,"success":"prej_exploit","fail":"prej_exploit_fail"},
+                           {"text":"ЁЯШФ ╨б╨╝╨╕╤А╨╕╤В╤М╤Б╤П","p":1,"success":"prej_accept","fail":"none"}]}
 
     if age >= 15 and random.random() < 0.05:
         we = random.choice(WORLD_EVENTS)
         if we.get("min_age",0) <= age:
             return {"id":we["id"],"title":we["title"],"text":we["text"],
-                    "choices":[{"text":"РџРµСЂРµР¶РёС‚СЊ","p":1,"success_effect":{**we["effect"],"text":we["text"]}}]}
+                    "choices":[{"text":"╨Я╨╡╤А╨╡╨╢╨╕╤В╤М","p":1,"success_effect":{**we["effect"],"text":we["text"]}}]}
 
     if random.random() < 0.01:
         twists = [t for t in LIFE_TWISTS if t.get("min_age",0) <= age <= t.get("max_age",999) and (not t.get("requires_property") or bool(l["properties"]))]
@@ -627,49 +627,49 @@ def get_event(l):
         if alive:
             npc = random.choice(alive); role = npc["role"]; nm = npc["name"]
             if role == "mother" and age >= 14:
-                return {"id":"npc_mother","title":"рџ“ћ Р—РІРѕРЅРѕРє РјР°РјРµ","text":f"РњР°РјР° {nm} Р·РІРѕРЅРёС‚.",
-                        "choices":[{"text":"РџРѕРіРѕРІРѕСЂРёС‚СЊ","p":1,"success_effect":{"relationships":6,"happiness":5,"text":"РўС‘РїР»Р°СЏ Р±РµСЃРµРґР°."}},
-                                   {"text":"Р‘СЂРѕСЃРёС‚СЊ","p":1,"success_effect":{"relationships":-8,"happiness":-3,"text":"РњР°РјР° СЂР°СЃСЃС‚СЂРѕРёР»Р°СЃСЊ."}}]}
+                return {"id":"npc_mother","title":"ЁЯУЮ ╨Ч╨▓╨╛╨╜╨╛╨║ ╨╝╨░╨╝╨╡","text":f"╨Ь╨░╨╝╨░ {nm} ╨╖╨▓╨╛╨╜╨╕╤В.",
+                        "choices":[{"text":"╨Я╨╛╨│╨╛╨▓╨╛╤А╨╕╤В╤М","p":1,"success_effect":{"relationships":6,"happiness":5,"text":"╨в╤С╨┐╨╗╨░╤П ╨▒╨╡╤Б╨╡╨┤╨░."}},
+                                   {"text":"╨С╤А╨╛╤Б╨╕╤В╤М","p":1,"success_effect":{"relationships":-8,"happiness":-3,"text":"╨Ь╨░╨╝╨░ ╤А╨░╤Б╤Б╤В╤А╨╛╨╕╨╗╨░╤Б╤М."}}]}
             if role == "friend" and age >= 10:
-                return {"id":"npc_friend","title":"рџ¤ќ Р”СЂСѓРі РїСЂРѕСЃРёС‚ РїРѕРјРѕС‰Рё","text":f"Р”СЂСѓРі {nm} РІ Р±РµРґРµ.",
-                        "choices":[{"text":"РџРѕРјРѕС‡СЊ","p":0.8,"success_effect":{"relationships":15,"happiness":5,"cash":-200,"text":"РћРЅ С‚РІРѕР№ РґРѕР»Р¶РЅРёРє."},"fail_effect":{"relationships":-5,"cash":-200,"text":"РќРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ."}},
-                                   {"text":"РћС‚РєР°Р·Р°С‚СЊ","p":1,"success_effect":{"relationships":-15,"happiness":-5,"text":"РћР±РёРґРµР»СЃСЏ."}}]}
+                return {"id":"npc_friend","title":"ЁЯдЭ ╨Ф╤А╤Г╨│ ╨┐╤А╨╛╤Б╨╕╤В ╨┐╨╛╨╝╨╛╤Й╨╕","text":f"╨Ф╤А╤Г╨│ {nm} ╨▓ ╨▒╨╡╨┤╨╡.",
+                        "choices":[{"text":"╨Я╨╛╨╝╨╛╤З╤М","p":0.8,"success_effect":{"relationships":15,"happiness":5,"cash":-200,"text":"╨Ю╨╜ ╤В╨▓╨╛╨╣ ╨┤╨╛╨╗╨╢╨╜╨╕╨║."},"fail_effect":{"relationships":-5,"cash":-200,"text":"╨Э╨╡ ╨┐╨╛╨╗╤Г╤З╨╕╨╗╨╛╤Б╤М."}},
+                                   {"text":"╨Ю╤В╨║╨░╨╖╨░╤В╤М","p":1,"success_effect":{"relationships":-15,"happiness":-5,"text":"╨Ю╨▒╨╕╨┤╨╡╨╗╤Б╤П."}}]}
             if role == "rival" and age >= 13:
-                return {"id":"npc_rival","title":"вљ”пёЏ РЎРѕРїРµСЂРЅРёРє","text":f"РЎРѕРїРµСЂРЅРёРє {nm} Р±СЂРѕСЃР°РµС‚ РІС‹Р·РѕРІ.",
-                        "choices":[{"text":"РџСЂРёРЅСЏС‚СЊ","p":0.5,"success_effect":{"happiness":10,"career_xp":15,"relationships":3,"text":"РџРѕР±РµРґРёР»!"},"fail_effect":{"happiness":-5,"health":-5,"text":"РџСЂРѕРёРіСЂР°Р»."}},
-                                   {"text":"РћС‚РєР°Р·Р°С‚СЊСЃСЏ","p":1,"success_effect":{"relationships":-3,"text":"РўСЂСѓСЃ."}}]}
+                return {"id":"npc_rival","title":"тЪФя╕П ╨б╨╛╨┐╨╡╤А╨╜╨╕╨║","text":f"╨б╨╛╨┐╨╡╤А╨╜╨╕╨║ {nm} ╨▒╤А╨╛╤Б╨░╨╡╤В ╨▓╤Л╨╖╨╛╨▓.",
+                        "choices":[{"text":"╨Я╤А╨╕╨╜╤П╤В╤М","p":0.5,"success_effect":{"happiness":10,"career_xp":15,"relationships":3,"text":"╨Я╨╛╨▒╨╡╨┤╨╕╨╗!"},"fail_effect":{"happiness":-5,"health":-5,"text":"╨Я╤А╨╛╨╕╨│╤А╨░╨╗."}},
+                                   {"text":"╨Ю╤В╨║╨░╨╖╨░╤В╤М╤Б╤П","p":1,"success_effect":{"relationships":-3,"text":"╨в╤А╤Г╤Б."}}]}
             if role == "father" and age >= 20:
-                return {"id":"npc_father","title":"рџ‘ґ РћС‚РµС† Р·РѕРІС‘С‚","text":f"РћС‚РµС† {nm} РЅР° СѓР¶РёРЅ.",
-                        "choices":[{"text":"РџРѕР№С‚Рё","p":1,"success_effect":{"relationships":8,"happiness":5,"text":"РћС‚Р»РёС‡РЅС‹Р№ РІРµС‡РµСЂ."}},
-                                   {"text":"РћС‚РєР°Р·Р°С‚СЊСЃСЏ","p":1,"success_effect":{"relationships":-5,"text":"РћР±РёРґРµР»СЃСЏ."}}]}
+                return {"id":"npc_father","title":"ЁЯС┤ ╨Ю╤В╨╡╤Ж ╨╖╨╛╨▓╤С╤В","text":f"╨Ю╤В╨╡╤Ж {nm} ╨╜╨░ ╤Г╨╢╨╕╨╜.",
+                        "choices":[{"text":"╨Я╨╛╨╣╤В╨╕","p":1,"success_effect":{"relationships":8,"happiness":5,"text":"╨Ю╤В╨╗╨╕╤З╨╜╤Л╨╣ ╨▓╨╡╤З╨╡╤А."}},
+                                   {"text":"╨Ю╤В╨║╨░╨╖╨░╤В╤М╤Б╤П","p":1,"success_effect":{"relationships":-5,"text":"╨Ю╨▒╨╕╨┤╨╡╨╗╤Б╤П."}}]}
 
     if age >= 18 and l["job_type"] in ["civilian","police","military","criminal","politics"] and random.random() < 0.30:
         work_pool = [
-            {"id":"work_ot","title":"?? ЋўҐав ©¬","text":"ѓ®апйЁ© Їа®ҐЄв ваҐЎгҐв бўҐаега®з­®© а Ў®вл ­  ўбо ­®зм.",
-             "choices":[{"text":"‘®Ј« бЁвмбп","p":0.75,"success_effect":{"career_xp":35,"happiness":-4,"health":-3,"text":"Џа®ҐЄв § ўҐаиҐ­ ў®ўаҐ¬п! XP +35."},"fail_effect":{"career_xp":10,"happiness":-8,"health":-5,"text":"“бв «®бвм бЄ § « бм, ­® а Ў®вг б¤ «Ё."}},
-                        {"text":"“©вЁ ¤®¬®©","p":1.0,"success_effect":{"career_xp":-10,"happiness":5,"text":"‚лЎа « ®в¤ле. Ґд ­Ґ¤®ў®«Ґ­."}}]},
-            {"id":"work_int","title":"?? ЋдЁб­лҐ бЇ«Ґв­Ё","text":"Љ®««ҐЈЁ а бЇгбЄ ов б«геЁ §  ў иҐ© бЇЁ­®© ЇҐаҐ¤ Ї®ўлиҐ­ЁҐ¬.",
-             "choices":[{"text":"ђ §®Ўа вмбп Їап¬®","p":0.6,"success_effect":{"career_xp":30,"relationships":5,"text":"Џ®бв ўЁ« Ё­ваЁЈ ­®ў ­  ¬Ґбв®! “ў ¦Ґ­ЁҐ ў Є®««ҐЄвЁўҐ."},"fail_effect":{"career_xp":-15,"happiness":-5,"text":"‘Є ­¤ « ¤®иҐ« ¤® ­ з «мбвў . XP -15."}},
-                        {"text":"€Ј­®аЁа®ў вм","p":1.0,"success_effect":{"happiness":2,"text":"ЌҐ ®Ўа вЁ« ў­Ё¬ ­Ёп Ё бд®ЄгбЁа®ў «бп ­  § ¤ з е."}}]},
-            {"id":"work_bonus","title":"?? ЏаҐ¬Ё «м­л© д®­¤","text":"ђгЄ®ў®¤бвў® а бЇаҐ¤Ґ«пҐв Ј®¤®ўлҐ Ў®­гбл «гзиЁ¬ б®ваг¤­ЁЄ ¬.",
-             "choices":[{"text":"Џ®ваҐЎ®ў вм ЇаҐ¬Ёо","p":0.7,"success_effect":{"cash":int(l['country'][7]*0.5),"career_xp":25,"happiness":10,"text":"„®бвЁ¦Ґ­Ёп ЇаЁ§­ ­л! Џ®«гзҐ­  ЇаҐ¬Ёп Ё гў ¦Ґ­ЁҐ."},"fail_effect":{"happiness":-5,"career_xp":-5,"text":"Ќ з «мбвў® Ї®бзЁв «® ў б б«ЁиЄ®¬ ­ Ј«л¬."}},
-                        {"text":"‘Єа®¬­® ¦¤ вм","p":0.9,"success_effect":{"cash":int(l['country'][7]*0.2),"text":"‚лЇЁб «Ё бв ­¤ ав­л© бЄа®¬­л© Ў®­гб."}}]},
-            {"id":"work_headhunt","title":"?? ЋддҐа ®в Є®­ЄгаҐ­в®ў","text":"Љ®­ЄгаЁагой п дЁа¬  ЇаҐ¤« Ј Ґв ЇҐаҐ©вЁ Є ­Ё¬ б Ї®ўлиҐ­ЁҐ¬ ®Є« ¤ .",
-             "choices":[{"text":"€бЇ®«м§®ў вм ®ддҐа ¤«п в®аЈ ","p":0.65,"success_effect":{"career_xp":30,"happiness":8,"text":"’ҐЄгйҐҐ агЄ®ў®¤бвў® Ї®ўлбЁ«® § аЇ« вг!"},"fail_effect":{"career_xp":-20,"text":"Ґд ў®бЇаЁ­п« нв® Є Є и ­в ¦."}},
-                        {"text":"Ћбв вмбп ўҐа­л¬ Є®¬Ї ­ЁЁ","p":1.0,"success_effect":{"career_xp":15,"relationships":8,"text":"ЏаҐ¤ ­­®бвм Є®««ҐЄвЁўг § ¬ҐзҐ­  ­ з «мбвў®¬."}}]},
-            {"id":"work_audit","title":"?? Џа®ўҐаЄ  ®взҐв­®бвЁ","text":"‚­Ґ§ Ї­л©  г¤Ёв Їа®ўҐапҐв аҐ§г«мв вл ў иҐ© а Ў®вл §  Єў ав «.",
-             "choices":[{"text":"‡ йЁвЁвм Є ¦¤л© Їг­Єв","p":0.8,"success_effect":{"career_xp":30,"knowledge":5,"text":"Ђг¤Ёв®ал ­Ґ ­ и«Ё ­Ё Ґ¤Ё­®© ®иЁЎЄЁ! ђҐЇгв жЁп ЎҐ§гЇаҐз­ ."},"fail_effect":{"career_xp":-15,"happiness":-4,"text":"‚бЇ«л«Ё ¬Ґ«ЄЁҐ ­Ґ¤®зҐвл."}},
-                        {"text":"‘ў «Ёвм ­  бв ¦Ґа ","p":0.4,"success_effect":{"career_xp":10,"relationships":-10,"text":"‚лЄагвЁ«бп, ­® Є®««ҐЄвЁў ®бг¦¤ Ґв."},"fail_effect":{"career_xp":-30,"relationships":-15,"happiness":-10,"text":"ЋЎ¬ ­ а бЄалв! ђҐЇгв жЁп Ї®¤®аў ­ ."}}]},
+            {"id":"work_ot","title":"💼 Овертайм","text":"Горящий проект требует сверхурочной работы на всю ночь.",
+             "choices":[{"text":"Согласиться","p":0.75,"success_effect":{"career_xp":35,"happiness":-4,"health":-3,"text":"Проект завершен вовремя! XP +35."},"fail_effect":{"career_xp":10,"happiness":-8,"health":-5,"text":"Усталость сказалась, но работу сдали."}},
+                        {"text":"Уйти домой","p":1.0,"success_effect":{"career_xp":-10,"happiness":5,"text":"Выбрал отдых. Шеф недоволен."}}]},
+            {"id":"work_int","title":"📉 Офисные сплетни","text":"Коллеги распускают слухи за вашей спиной перед повышением.",
+             "choices":[{"text":"Разобраться прямо","p":0.6,"success_effect":{"career_xp":30,"relationships":5,"text":"Поставил интриганов на место! Уважение в коллективе."},"fail_effect":{"career_xp":-15,"happiness":-5,"text":"Скандал дошел до начальства. XP -15."}},
+                        {"text":"Игнорировать","p":1.0,"success_effect":{"happiness":2,"text":"Не обратил внимания и сфокусировался на задачах."}}]},
+            {"id":"work_bonus","title":"💰 Премиальный фонд","text":"Руководство распределяет годовые бонусы лучшим сотрудникам.",
+             "choices":[{"text":"Потребовать премию","p":0.7,"success_effect":{"cash":int(l['country'][7]*0.5),"career_xp":25,"happiness":10,"text":"Достижения признаны! Получена премия и уважение."},"fail_effect":{"happiness":-5,"career_xp":-5,"text":"Начальство посчитало вас слишком наглым."}},
+                        {"text":"Скромно ждать","p":0.9,"success_effect":{"cash":int(l['country'][7]*0.2),"text":"Выписали стандартный скромный бонус."}}]},
+            {"id":"work_headhunt","title":"💼 Оффер от конкурентов","text":"Конкурирующая фирма предлагает перейти к ним с повышением оклада.",
+             "choices":[{"text":"Использовать оффер для торга","p":0.65,"success_effect":{"career_xp":30,"happiness":8,"text":"Текущее руководство повысило зарплату!"},"fail_effect":{"career_xp":-20,"text":"Шеф воспринял это как шантаж."}},
+                        {"text":"Остаться верным компании","p":1.0,"success_effect":{"career_xp":15,"relationships":8,"text":"Преданность коллективу замечена начальством."}}]},
+            {"id":"work_audit","title":"📋 Проверка отчетности","text":"Внезапный аудит проверяет результаты вашей работы за квартал.",
+             "choices":[{"text":"Защитить каждый пункт","p":0.8,"success_effect":{"career_xp":30,"knowledge":5,"text":"Аудиторы не нашли ни единой ошибки! Репутация безупречна."},"fail_effect":{"career_xp":-15,"happiness":-4,"text":"Всплыли мелкие недочеты."}},
+                        {"text":"Свалить на стажера","p":0.4,"success_effect":{"career_xp":10,"relationships":-10,"text":"Выкрутился, но коллектив осуждает."},"fail_effect":{"career_xp":-30,"relationships":-15,"happiness":-10,"text":"Обман раскрыт! Репутация подорвана."}}]},
         ]
         return pick_rotating(l, work_pool, max_recent=4)
 
     if age >= 18 and l["cars"] and random.random() < 0.15:
         if not l.get("has_license"):
-            return {"id":"dps1","title":"рџљЁ Р”РџРЎ","text":"РџСЂРѕСЃРёС‚ РїСЂР°РІР°. РЈ С‚РµР±СЏ РЅРµС‚.",
-                    "choices":[{"text":"рџ’µ Р’Р·СЏС‚РєР°","p":0.7,"success":"bribe_dps","fail":"dps_jail"},{"text":"рџ¬ Р”РѕРіРѕРІРѕСЂРёС‚СЊСЃСЏ","p":0.2,"success":"dps_warning","fail":"dps_jail"}]}
+            return {"id":"dps1","title":"ЁЯЪи ╨Ф╨Я╨б","text":"╨Я╤А╨╛╤Б╨╕╤В ╨┐╤А╨░╨▓╨░. ╨г ╤В╨╡╨▒╤П ╨╜╨╡╤В.",
+                    "choices":[{"text":"ЁЯТ╡ ╨Т╨╖╤П╤В╨║╨░","p":0.7,"success":"bribe_dps","fail":"dps_jail"},{"text":"ЁЯШм ╨Ф╨╛╨│╨╛╨▓╨╛╤А╨╕╤В╤М╤Б╤П","p":0.2,"success":"dps_warning","fail":"dps_jail"}]}
         elif random.random() < 0.3:
-            return {"id":"dps2","title":"рџЌ» РџСЊСЏРЅР°СЏ РµР·РґР°","text":"Р—Р°РїР°С… РїРµСЂРµРіР°СЂР°.",
-                    "choices":[{"text":"рџ’µ Р’Р·СЏС‚РєР°","p":0.5,"success":"bribe_dps_big","fail":"drunk_jail"},{"text":"рџљ¶ РћС‚РєР°Р·","p":0.1,"success":"dps_warning","fail":"drunk_jail"},{"text":"рџ­ РЎРјРёСЂРёС‚СЊСЃСЏ","p":1,"success":"drunk_jail","fail":"none"}]}
+            return {"id":"dps2","title":"ЁЯН╗ ╨Я╤М╤П╨╜╨░╤П ╨╡╨╖╨┤╨░","text":"╨Ч╨░╨┐╨░╤Е ╨┐╨╡╤А╨╡╨│╨░╤А╨░.",
+                    "choices":[{"text":"ЁЯТ╡ ╨Т╨╖╤П╤В╨║╨░","p":0.5,"success":"bribe_dps_big","fail":"drunk_jail"},{"text":"ЁЯЪ╢ ╨Ю╤В╨║╨░╨╖","p":0.1,"success":"dps_warning","fail":"drunk_jail"},{"text":"ЁЯШн ╨б╨╝╨╕╤А╨╕╤В╤М╤Б╤П","p":1,"success":"drunk_jail","fail":"none"}]}
 
     if age < 13:
         pool = [e for e in CHILD_EVENTS if e["min_age"] <= age <= e["max_age"]]
@@ -679,50 +679,50 @@ def get_event(l):
     else:
         return pick_rotating(l, adult_events_for(l), max_recent=8)
 
-# ================= РЎРўРђРўРРЎРўРРљРђ =================
+# ================= ╨б╨в╨Р╨в╨Ш╨б╨в╨Ш╨Ъ╨Р =================
 def get_stats_line(l):
-    return f"вќ¤пёЏ {l['health']}% | рџЉ {l['happiness']}% | рџ§  {l['knowledge']}% | рџ¤ќ {l['relationships']}%"
+    return f"тЭдя╕П {l['health']}% | ЁЯШК {l['happiness']}% | ЁЯза {l['knowledge']}% | ЁЯдЭ {l['relationships']}%"
 
 def apply_focus(l, focus):
     if focus == "health":
         l["health"] = min(100, l["health"] + random.randint(5,10)); l["happiness"] = min(100, l["happiness"] + random.randint(0,5))
         l["knowledge"] = max(0, l["knowledge"] - random.randint(0,3)); l["relationships"] = max(0, l["relationships"] - random.randint(0,3))
-        l["life_map"].append(f"{get_age_str(l['age'])}: РЈРґРµР»РёР» РІСЂРµРјСЏ Р·РґРѕСЂРѕРІСЊСЋ")
+        l["life_map"].append(f"{get_age_str(l['age'])}: ╨г╨┤╨╡╨╗╨╕╨╗ ╨▓╤А╨╡╨╝╤П ╨╖╨┤╨╛╤А╨╛╨▓╤М╤О")
     elif focus == "knowledge":
         l["knowledge"] = min(100, l["knowledge"] + random.randint(5,10)); l["happiness"] = max(0, l["happiness"] - random.randint(0,5))
         l["health"] = max(0, l["health"] - random.randint(0,3)); l["relationships"] = max(0, l["relationships"] - random.randint(0,3))
-        l["life_map"].append(f"{get_age_str(l['age'])}: РЈС‡РёР»СЃСЏ Рё СЂР°Р·РІРёРІР°Р»СЃСЏ")
+        l["life_map"].append(f"{get_age_str(l['age'])}: ╨г╤З╨╕╨╗╤Б╤П ╨╕ ╤А╨░╨╖╨▓╨╕╨▓╨░╨╗╤Б╤П")
     elif focus == "relationships":
         l["relationships"] = min(100, l["relationships"] + random.randint(5,10)); l["happiness"] = min(100, l["happiness"] + random.randint(0,5))
         l["health"] = max(0, l["health"] - random.randint(0,3)); l["knowledge"] = max(0, l["knowledge"] - random.randint(0,3))
-        l["life_map"].append(f"{get_age_str(l['age'])}: РЈРґРµР»РёР» РІСЂРµРјСЏ СЃРµРјСЊРµ Рё РґСЂСѓР·СЊСЏРј")
+        l["life_map"].append(f"{get_age_str(l['age'])}: ╨г╨┤╨╡╨╗╨╕╨╗ ╨▓╤А╨╡╨╝╤П ╤Б╨╡╨╝╤М╨╡ ╨╕ ╨┤╤А╤Г╨╖╤М╤П╨╝")
     elif focus == "happiness":
         l["happiness"] = min(100, l["happiness"] + random.randint(10,15)); l["health"] = max(0, l["health"] - random.randint(0,5))
         l["knowledge"] = max(0, l["knowledge"] - random.randint(0,5)); l["relationships"] = max(0, l["relationships"] - random.randint(0,5))
-        l["life_map"].append(f"{get_age_str(l['age'])}: РќР°СЃР»Р°Р¶РґР°Р»СЃСЏ Р¶РёР·РЅСЊСЋ")
+        l["life_map"].append(f"{get_age_str(l['age'])}: ╨Э╨░╤Б╨╗╨░╨╢╨┤╨░╨╗╤Б╤П ╨╢╨╕╨╖╨╜╤М╤О")
     elif focus == "work":
         l["happiness"] = max(0, l["happiness"] - random.randint(1,4))
         l["health"] = max(0, l["health"] - random.randint(0,3))
         l["knowledge"] = min(100, l["knowledge"] + random.randint(1,4))
         l["relationships"] = max(0, l["relationships"] - random.randint(0,3))
-        # Р¤РѕРєСѓСЃ РЅР° СЂР°Р±РѕС‚Сѓ РґР°С‘С‚ РіР°СЂР°РЅС‚РёСЂРѕРІР°РЅРЅС‹Р№ РєР°СЂСЊРµСЂРЅС‹Р№ РѕРїС‹С‚
+        # ╨д╨╛╨║╤Г╤Б ╨╜╨░ ╤А╨░╨▒╨╛╤В╤Г ╨┤╨░╤С╤В ╨│╨░╤А╨░╨╜╤В╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╣ ╨║╨░╤А╤М╨╡╤А╨╜╤Л╨╣ ╨╛╨┐╤Л╤В
         xp_gain = random.randint(25, 45)
         l["career_xp"] = l.get("career_xp", 0) + xp_gain
-        l["life_map"].append(f"{get_age_str(l['age'])}: РЈСЃРµСЂРґРЅРѕ СЂР°Р±РѕС‚Р°Р» (+{xp_gain} XP РєР°СЂСЊРµСЂС‹)")
+        l["life_map"].append(f"{get_age_str(l['age'])}: ╨г╤Б╨╡╤А╨┤╨╜╨╛ ╤А╨░╨▒╨╛╤В╨░╨╗ (+{xp_gain} XP ╨║╨░╤А╤М╨╡╤А╤Л)")
 
 # ================= next_year =================
 def next_year(user_id, chat_id):
     uid_str = str(user_id)
-    if uid_str not in players_db: return bot.send_message(chat_id, "РќР°С‡РЅРё Р·Р°РЅРѕРІРѕ: /start")
+    if uid_str not in players_db: return bot.send_message(chat_id, "╨Э╨░╤З╨╜╨╕ ╨╖╨░╨╜╨╛╨▓╨╛: /start")
     l = players_db[uid_str]
-    if not l["alive"]: return bot.send_message(chat_id, "РўС‹ СѓРјРµСЂ. /start")
+    if not l["alive"]: return bot.send_message(chat_id, "╨в╤Л ╤Г╨╝╨╡╤А. /start")
 
     if l["in_prison"] > 0:
         l["in_prison"] -= 1; l["age"] += 1; save_db(players_db)
         if l["in_prison"] == 0:
-            l["job"] = "Р‘РµР·СЂР°Р±РѕС‚РЅС‹Р№"; l["salary"] = 0; l["job_type"] = "none"
-            return send_scene(chat_id, l, "в›“ <b>РўС‹ РІС‹С€РµР» РЅР° СЃРІРѕР±РѕРґСѓ.</b>", kb_year(), "life")
-        return send_scene(chat_id, l, f"в›“ <b>РўСЋСЂСЊРјР°.</b> РћСЃС‚Р°Р»РѕСЃСЊ: {get_age_str(l['in_prison'])}.", kb_year(), "prison")
+            l["job"] = "╨С╨╡╨╖╤А╨░╨▒╨╛╤В╨╜╤Л╨╣"; l["salary"] = 0; l["job_type"] = "none"
+            return send_scene(chat_id, l, "тЫУ <b>╨в╤Л ╨▓╤Л╤И╨╡╨╗ ╨╜╨░ ╤Б╨▓╨╛╨▒╨╛╨┤╤Г.</b>", kb_year(), "life")
+        return send_scene(chat_id, l, f"тЫУ <b>╨в╤О╤А╤М╨╝╨░.</b> ╨Ю╤Б╤В╨░╨╗╨╛╤Б╤М: {get_age_str(l['in_prison'])}.", kb_year(), "prison")
 
     if l.get("focus"):
         l["last_focus"] = l["focus"]; apply_focus(l, l["focus"]); l["focus"] = None
@@ -744,7 +744,7 @@ def next_year(user_id, chat_id):
     inv_report = process_investments(l)
     l["clean_cash"] += rent + biz
 
-    # РћС‚РјС‹РІР°РЅРёРµ РґРµРЅРµРі РєСЂРёРјРёРЅР°Р»Р° С‡РµСЂРµР· Р±РёР·РЅРµСЃ
+    # ╨Ю╤В╨╝╤Л╨▓╨░╨╜╨╕╨╡ ╨┤╨╡╨╜╨╡╨│ ╨║╤А╨╕╨╝╨╕╨╜╨░╨╗╨░ ╤З╨╡╤А╨╡╨╖ ╨▒╨╕╨╖╨╜╨╡╤Б
     launder_text = ""
     if l.get("job_type") == "criminal" and l.get("dirty_cash", 0) > 0 and l.get("businesses"):
         max_launder = sum(int(b["value"] * 0.4) for b in l["businesses"])
@@ -752,29 +752,29 @@ def next_year(user_id, chat_id):
         if laundered > 0:
             l["dirty_cash"] -= laundered
             l["clean_cash"] += laundered
-            launder_text = f"\nрџ§є РћС‚РјС‹С‚Рѕ С‡РµСЂРµР· СЃРѕР±СЃС‚РІРµРЅРЅС‹Р№ Р±РёР·РЅРµСЃ: {fmt_money(laundered, l['country'])}."
+            launder_text = f"\nЁЯз║ ╨Ю╤В╨╝╤Л╤В╨╛ ╤З╨╡╤А╨╡╨╖ ╤Б╨╛╨▒╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╨▒╨╕╨╖╨╜╨╡╤Б: {fmt_money(laundered, l['country'])}."
 
-    # Р”РѕС…РѕРґ РєСЂРёРјРёРЅР°Р»Р°
+    # ╨Ф╨╛╤Е╨╛╨┤ ╨║╤А╨╕╨╝╨╕╨╜╨░╨╗╨░
     if l.get("job_type") == "criminal":
         rank = l.get("career_rank", 1)
         crim_income = int(l["country"][7] * (0.4 + 0.25 * rank))
         l["dirty_cash"] += crim_income
 
-    # РџРµРЅСЃРёРѕРЅРЅС‹Р№ РІРѕР·СЂР°СЃС‚ РІ 65 Р»РµС‚
+    # ╨Я╨╡╨╜╤Б╨╕╨╛╨╜╨╜╤Л╨╣ ╨▓╨╛╨╖╤А╨░╤Б╤В ╨▓ 65 ╨╗╨╡╤В
     g_m = l.get("gender") == "m"
     if l["age"] == 65 and l.get("job_type") in ["civilian","police","military","politics"]:
         pension = max(300, int(l["salary"] * 0.6))
-        l["job"] = "РџРµРЅСЃРёРѕРЅРµСЂ"
+        l["job"] = "╨Я╨╡╨╜╤Б╨╕╨╛╨╜╨╡╤А"
         l["salary"] = pension
         l["job_type"] = "pensioner"
-        ret_text = "РІС‹С€РµР» РЅР° РїРµРЅСЃРёСЋ" if g_m else "РІС‹С€Р»Р° РЅР° РїРµРЅСЃРёСЋ"
-        add_to_life_map(l, f"рџ‘ґ {ret_text.capitalize()} (РїРµРЅСЃРёСЏ: {fmt_money(pension, l['country'])}).")
+        ret_text = "╨▓╤Л╤И╨╡╨╗ ╨╜╨░ ╨┐╨╡╨╜╤Б╨╕╤О" if g_m else "╨▓╤Л╤И╨╗╨░ ╨╜╨░ ╨┐╨╡╨╜╤Б╨╕╤О"
+        add_to_life_map(l, f"ЁЯС┤ {ret_text.capitalize()} (╨┐╨╡╨╜╤Б╨╕╤П: {fmt_money(pension, l['country'])}).")
 
     tax = int(l["salary"] * 0.2) if l["job_type"] in ["civilian","police","military","politics"] else 0
     med = sum(DISEASES[d]["cash"] for d in l["diseases"])
     spend_mod = 1.0
-    if l["prejudice"] and ("СЃРєСѓРїС‹Рј" in l["prejudice"] or "РїСЂРµРґРїСЂРёРёРјС‡РёРІС‹Рј" in l["prejudice"]): spend_mod = 0.7
-    elif l["prejudice"] and ("Р±РµР·Р·Р°Р±РѕС‚РЅС‹Рј" in l["prejudice"] or "РїСЊСЏРЅРёС†РµР№" in l["prejudice"]): spend_mod = 1.3
+    if l["prejudice"] and ("╤Б╨║╤Г╨┐╤Л╨╝" in l["prejudice"] or "╨┐╤А╨╡╨┤╨┐╤А╨╕╨╕╨╝╤З╨╕╨▓╤Л╨╝" in l["prejudice"]): spend_mod = 0.7
+    elif l["prejudice"] and ("╨▒╨╡╨╖╨╖╨░╨▒╨╛╤В╨╜╤Л╨╝" in l["prejudice"] or "╨┐╤М╤П╨╜╨╕╤Ж╨╡╨╣" in l["prejudice"]): spend_mod = 1.3
     living = int(l["country"][7] * 0.2 * spend_mod + (300 * l["children"]))
     l["clean_cash"] += (l["salary"] - tax - med - living)
     if l["clean_cash"] < 0:
@@ -785,15 +785,15 @@ def next_year(user_id, chat_id):
 
     if l["job_type"] in ["civilian","police","military","criminal","politics"]:
         l["job_years"] += 1
-        # РџРѕРІС‹С€РµРЅРёРµ РїСЂРѕРёСЃС…РѕРґРёС‚ РїСЂРё РЅР°РєРѕРїР»РµРЅРёРё 100 XP (С‚СЂРµР±СѓРµС‚СЃСЏ РѕС‚ 1 РіРѕРґР° СЃС‚Р°Р¶Р°)
+        # ╨Я╨╛╨▓╤Л╤И╨╡╨╜╨╕╨╡ ╨┐╤А╨╛╨╕╤Б╤Е╨╛╨┤╨╕╤В ╨┐╤А╨╕ ╨╜╨░╨║╨╛╨┐╨╗╨╡╨╜╨╕╨╕ 100 XP (╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П ╨╛╤В 1 ╨│╨╛╨┤╨░ ╤Б╤В╨░╨╢╨░)
         if l["career_xp"] >= 100 and l["job_years"] >= 1:
             l["career_xp"] = 0
             if l["career_rank"] < 5:
                 l["career_rank"] += 1
                 l["salary"] = int(l["salary"] * 1.35)
                 l["job_years"] = 0
-                new_title = CAREER_TITLES.get(l["job_type"], {}).get(l["career_rank"], "Р’С‹СЃС€РёР№ С‡РёРЅ")
-                add_to_life_map(l, f"рџЋ– РџРѕРІС‹С€РµРЅРёРµ РІ РєР°СЂСЊРµСЂРµ: {new_title}")
+                new_title = CAREER_TITLES.get(l["job_type"], {}).get(l["career_rank"], "╨Т╤Л╤Б╤И╨╕╨╣ ╤З╨╕╨╜")
+                add_to_life_map(l, f"ЁЯОЦ ╨Я╨╛╨▓╤Л╤И╨╡╨╜╨╕╨╡ ╨▓ ╨║╨░╤А╤М╨╡╤А╨╡: {new_title}")
                 l["happiness"] = min(100, l["happiness"] + 10)
         elif l["career_xp"] <= -50:
             l["career_xp"] = 0
@@ -801,14 +801,14 @@ def next_year(user_id, chat_id):
                 l["career_rank"] -= 1
                 l["salary"] = int(l["salary"] * 0.7)
                 l["job_years"] = 0
-                new_title = CAREER_TITLES.get(l["job_type"], {}).get(l["career_rank"], "РќРёР·С€РёР№ С‡РёРЅ")
-                add_to_life_map(l, f"рџ“‰ РџРѕРЅРёР¶РµРЅРёРµ РІ РґРѕР»Р¶РЅРѕСЃС‚Рё: {new_title}")
+                new_title = CAREER_TITLES.get(l["job_type"], {}).get(l["career_rank"], "╨Э╨╕╨╖╤И╨╕╨╣ ╤З╨╕╨╜")
+                add_to_life_map(l, f"ЁЯУЙ ╨Я╨╛╨╜╨╕╨╢╨╡╨╜╨╕╨╡ ╨▓ ╨┤╨╛╨╗╨╢╨╜╨╛╤Б╤В╨╕: {new_title}")
                 l["happiness"] = max(0, l["happiness"] - 10)
 
     echo_text = ""
     if l["age"] in [7,18,30,50]:
         n = random.choice(l["neighbors"])
-        echo_text = f"\n\nрџ‘Ґ <b>Р­С…Рѕ:</b> РўРІРѕР№ СЂРѕРІРµСЃРЅРёРє <b>{n['name']}</b> ({n['country'][1]}) вЂ” {get_neighbor_echo(n, l['age'])}."
+        echo_text = f"\n\nЁЯСе <b>╨н╤Е╨╛:</b> ╨в╨▓╨╛╨╣ ╤А╨╛╨▓╨╡╤Б╨╜╨╕╨║ <b>{n['name']}</b> ({n['country'][1]}) тАФ {get_neighbor_echo(n, l['age'])}."
     peer_text = show_peer_lives(l)
     if peer_text: echo_text += "\n\n" + peer_text
     if biz_crisis_text: echo_text += "\n\n" + biz_crisis_text
@@ -827,36 +827,36 @@ def next_year(user_id, chat_id):
 
     if l["age"] in (5,15,30,50,70) and l["age"] not in [a["age"] for a in l.get("philosophy_answers",[])]:
         questions = {
-            5:{"q":"Р§С‚Рѕ РґР»СЏ С‚РµР±СЏ СЃРµР№С‡Р°СЃ СЃР°РјРѕРµ РІР°Р¶РЅРѕРµ?","opts":["рџ‘ЁвЂЌрџ‘©вЂЌрџ‘§ РЎРµРјСЊСЏ","рџЋ® РРіСЂС‹","рџЊЌ РЈР·РЅР°С‚СЊ РјРёСЂ"]},
-            15:{"q":"РљРµРј С‚С‹ С…РѕС‡РµС€СЊ СЃС‚Р°С‚СЊ?","opts":["рџ’ј РЈСЃРїРµС€РЅС‹Рј","вќ¤пёЏ Р›СЋР±РёРјС‹Рј","рџ§  РЈРјРЅС‹Рј"]},
-            30:{"q":"Р§С‚Рѕ РґРµР»Р°РµС‚ Р¶РёР·РЅСЊ РѕСЃРјС‹СЃР»РµРЅРЅРѕР№?","opts":["рџ’° Р”РµРЅСЊРіРё","рџ¤ќ РћС‚РЅРѕС€РµРЅРёСЏ","рџЋЇ Р¦РµР»СЊ"]},
-            50:{"q":"Рћ С‡С‘Рј С‚С‹ Р¶Р°Р»РµРµС€СЊ?","opts":["вЏ° Рћ РІСЂРµРјРµРЅРё","рџ’” Рћ РЅРµСЃРґРµР»Р°РЅРЅРѕРј","рџ” РќРё Рѕ С‡С‘Рј"]},
-            70:{"q":"Р§С‚Рѕ С‚С‹ РѕСЃС‚Р°РІРёС€СЊ РїРѕСЃР»Рµ СЃРµР±СЏ?","opts":["рџ‘ЁвЂЌрџ‘©вЂЌрџ‘§ Р”РµС‚РµР№","рџ“љ Р—РЅР°РЅРёСЏ","рџ’­ Р’РѕСЃРїРѕРјРёРЅР°РЅРёСЏ"]},
+            5:{"q":"╨з╤В╨╛ ╨┤╨╗╤П ╤В╨╡╨▒╤П ╤Б╨╡╨╣╤З╨░╤Б ╤Б╨░╨╝╨╛╨╡ ╨▓╨░╨╢╨╜╨╛╨╡?","opts":["ЁЯСитАНЁЯСйтАНЁЯСз ╨б╨╡╨╝╤М╤П","ЁЯОо ╨Ш╨│╤А╤Л","ЁЯМН ╨г╨╖╨╜╨░╤В╤М ╨╝╨╕╤А"]},
+            15:{"q":"╨Ъ╨╡╨╝ ╤В╤Л ╤Е╨╛╤З╨╡╤И╤М ╤Б╤В╨░╤В╤М?","opts":["ЁЯТ╝ ╨г╤Б╨┐╨╡╤И╨╜╤Л╨╝","тЭдя╕П ╨Ы╤О╨▒╨╕╨╝╤Л╨╝","ЁЯза ╨г╨╝╨╜╤Л╨╝"]},
+            30:{"q":"╨з╤В╨╛ ╨┤╨╡╨╗╨░╨╡╤В ╨╢╨╕╨╖╨╜╤М ╨╛╤Б╨╝╤Л╤Б╨╗╨╡╨╜╨╜╨╛╨╣?","opts":["ЁЯТ░ ╨Ф╨╡╨╜╤М╨│╨╕","ЁЯдЭ ╨Ю╤В╨╜╨╛╤И╨╡╨╜╨╕╤П","ЁЯОп ╨ж╨╡╨╗╤М"]},
+            50:{"q":"╨Ю ╤З╤С╨╝ ╤В╤Л ╨╢╨░╨╗╨╡╨╡╤И╤М?","opts":["тП░ ╨Ю ╨▓╤А╨╡╨╝╨╡╨╜╨╕","ЁЯТФ ╨Ю ╨╜╨╡╤Б╨┤╨╡╨╗╨░╨╜╨╜╨╛╨╝","ЁЯШФ ╨Э╨╕ ╨╛ ╤З╤С╨╝"]},
+            70:{"q":"╨з╤В╨╛ ╤В╤Л ╨╛╤Б╤В╨░╨▓╨╕╤И╤М ╨┐╨╛╤Б╨╗╨╡ ╤Б╨╡╨▒╤П?","opts":["ЁЯСитАНЁЯСйтАНЁЯСз ╨Ф╨╡╤В╨╡╨╣","ЁЯУЪ ╨Ч╨╜╨░╨╜╨╕╤П","ЁЯТн ╨Т╨╛╤Б╨┐╨╛╨╝╨╕╨╜╨░╨╜╨╕╤П"]},
         }
         q = questions[l["age"]]
-        l["current_event"] = {"id":f"phil_{l['age']}","title":f"рџ¤” Р’РѕРїСЂРѕСЃ РІ {get_age_str(l['age'])}","text":q["q"],
-                              "choices":[{"text":opt,"p":1,"success_effect":{"happiness":3,"text":f"РўС‹ РІС‹Р±СЂР°Р»: {opt}."}} for opt in q["opts"]],
+        l["current_event"] = {"id":f"phil_{l['age']}","title":f"ЁЯдФ ╨Т╨╛╨┐╤А╨╛╤Б ╨▓ {get_age_str(l['age'])}","text":q["q"],
+                              "choices":[{"text":opt,"p":1,"success_effect":{"happiness":3,"text":f"╨в╤Л ╨▓╤Л╨▒╤А╨░╨╗: {opt}."}} for opt in q["opts"]],
                               "is_philosophy":True,"age":l["age"],"resolved":False}
         save_db(players_db)
         return send_scene(chat_id, l, format_event(l, l["current_event"]), kb_event(l["current_event"]["choices"]), "life")
 
-    if l["age"] == 6: return start_exam(user_id, chat_id, 1, "С€РєРѕР»Сѓ")
-    elif l["age"] == 12: return start_exam(user_id, chat_id, 2, "РєРѕР»Р»РµРґР¶")
-    elif l["age"] == 18: return start_exam(user_id, chat_id, 3, "СѓРЅРёРІРµСЂСЃРёС‚РµС‚")
+    if l["age"] == 6: return start_exam(user_id, chat_id, 1, "╤И╨║╨╛╨╗╤Г")
+    elif l["age"] == 12: return start_exam(user_id, chat_id, 2, "╨║╨╛╨╗╨╗╨╡╨┤╨╢")
+    elif l["age"] == 18: return start_exam(user_id, chat_id, 3, "╤Г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В")
 
     evt = get_event(l)
     if evt:
         evt["resolved"] = False
         l["current_event"] = evt
         sc = "life"
-        if "РћРІРµСЂС‚Р°Р№Рј" in evt["title"] or "РРЅС‚СЂРёРіРё" in evt["title"]: sc = "office_angry"
-        elif "РљСЂРёР·РёСЃ" in evt["title"]: sc = "sad"
-        elif "Р‘СЂР°Рє" in evt["title"]: sc = "love"
-        elif "Р Р°Р·РІРѕРґ" in evt["title"]: sc = "sad"
-        elif "РњРѕС€РµРЅРЅРёРєРё" in evt["title"]: sc = "money_lose"
-        elif "Р›РѕС‚РµСЂРµСЏ" in evt["title"]: sc = "money_win"
-        elif "Р”РџРЎ" in evt["title"] or "РµР·РґР°" in evt["title"]: sc = "police"
-        elif evt["title"].startswith(("рџЌј","рџ‘Ј","рџ§ё Р›СЋР±РёРјР°СЏ")): sc = "toddler"
+        if "╨Ю╨▓╨╡╤А╤В╨░╨╣╨╝" in evt["title"] or "╨Ш╨╜╤В╤А╨╕╨│╨╕" in evt["title"]: sc = "office_angry"
+        elif "╨Ъ╤А╨╕╨╖╨╕╤Б" in evt["title"]: sc = "sad"
+        elif "╨С╤А╨░╨║" in evt["title"]: sc = "love"
+        elif "╨а╨░╨╖╨▓╨╛╨┤" in evt["title"]: sc = "sad"
+        elif "╨Ь╨╛╤И╨╡╨╜╨╜╨╕╨║╨╕" in evt["title"]: sc = "money_lose"
+        elif "╨Ы╨╛╤В╨╡╤А╨╡╤П" in evt["title"]: sc = "money_win"
+        elif "╨Ф╨Я╨б" in evt["title"] or "╨╡╨╖╨┤╨░" in evt["title"]: sc = "police"
+        elif evt["title"].startswith(("ЁЯН╝","ЁЯСг","ЁЯз╕ ╨Ы╤О╨▒╨╕╨╝╨░╤П")): sc = "toddler"
         send_scene(chat_id, l, format_event(l, evt) + echo_text, kb_event(evt["choices"]), sc)
     else:
         l["current_event"] = None
@@ -864,7 +864,7 @@ def next_year(user_id, chat_id):
 
     new_ach = check_achievements(l)
     for ach in new_ach:
-        msg = bot.send_message(chat_id, f"рџЏ† <b>РќРѕРІРѕРµ РґРѕСЃС‚РёР¶РµРЅРёРµ!</b>\n{ach['name']} вЂ” {ach['desc']}", parse_mode="HTML")
+        msg = bot.send_message(chat_id, f"ЁЯПЖ <b>╨Э╨╛╨▓╨╛╨╡ ╨┤╨╛╤Б╤В╨╕╨╢╨╡╨╜╨╕╨╡!</b>\n{ach['name']} тАФ {ach['desc']}", parse_mode="HTML")
         track_message(l, chat_id, msg.message_id)
     save_db(players_db)
 
@@ -872,13 +872,13 @@ def send_death(user_id, chat_id):
     l = players_db[str(user_id)]; l["alive"] = False; c = l["country"]
     l["current_event"] = None
     causes = []
-    if l["age"] < 5: causes = ["РџРµСЂРёРЅР°С‚Р°Р»СЊРЅС‹Рµ РїСЂРёС‡РёРЅС‹","РРЅС„РµРєС†РёРё","РќРµСЃС‡Р°СЃС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№"]
-    elif l["age"] < 15: causes = ["РРЅС„РµРєС†РёРё","РќРµСЃС‡Р°СЃС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№","Р’СЂРѕР¶РґС‘РЅРЅС‹Рµ Р°РЅРѕРјР°Р»РёРё"]
-    elif l["age"] < 30: causes = ["РќРµСЃС‡Р°СЃС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№","РќР°СЃРёР»РёРµ","Р‘РѕР»РµР·РЅРё"]
-    elif l["age"] < 50: causes = ["РЎРµСЂРґРµС‡РЅРѕ-СЃРѕСЃСѓРґРёСЃС‚С‹Рµ","РћРЅРєРѕР»РѕРіРёСЏ","РќРµСЃС‡Р°СЃС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№"]
-    elif l["age"] < 70: causes = ["РћРЅРєРѕР»РѕРіРёСЏ","РЎРµСЂРґРµС‡РЅРѕ-СЃРѕСЃСѓРґРёСЃС‚С‹Рµ","Р”РёР°Р±РµС‚"]
-    else: causes = ["РЎРµСЂРґРµС‡РЅРѕ-СЃРѕСЃСѓРґРёСЃС‚С‹Рµ","РћРЅРєРѕР»РѕРіРёСЏ","РЎС‚Р°СЂРµРЅРёРµ"]
-    if l["diseases"]: cause = f"РћСЃР»РѕР¶РЅРµРЅРёРµ: {l['diseases'][-1]}"
+    if l["age"] < 5: causes = ["╨Я╨╡╤А╨╕╨╜╨░╤В╨░╨╗╤М╨╜╤Л╨╡ ╨┐╤А╨╕╤З╨╕╨╜╤Л","╨Ш╨╜╤Д╨╡╨║╤Ж╨╕╨╕","╨Э╨╡╤Б╤З╨░╤Б╤В╨╜╤Л╨╣ ╤Б╨╗╤Г╤З╨░╨╣"]
+    elif l["age"] < 15: causes = ["╨Ш╨╜╤Д╨╡╨║╤Ж╨╕╨╕","╨Э╨╡╤Б╤З╨░╤Б╤В╨╜╤Л╨╣ ╤Б╨╗╤Г╤З╨░╨╣","╨Т╤А╨╛╨╢╨┤╤С╨╜╨╜╤Л╨╡ ╨░╨╜╨╛╨╝╨░╨╗╨╕╨╕"]
+    elif l["age"] < 30: causes = ["╨Э╨╡╤Б╤З╨░╤Б╤В╨╜╤Л╨╣ ╤Б╨╗╤Г╤З╨░╨╣","╨Э╨░╤Б╨╕╨╗╨╕╨╡","╨С╨╛╨╗╨╡╨╖╨╜╨╕"]
+    elif l["age"] < 50: causes = ["╨б╨╡╤А╨┤╨╡╤З╨╜╨╛-╤Б╨╛╤Б╤Г╨┤╨╕╤Б╤В╤Л╨╡","╨Ю╨╜╨║╨╛╨╗╨╛╨│╨╕╤П","╨Э╨╡╤Б╤З╨░╤Б╤В╨╜╤Л╨╣ ╤Б╨╗╤Г╤З╨░╨╣"]
+    elif l["age"] < 70: causes = ["╨Ю╨╜╨║╨╛╨╗╨╛╨│╨╕╤П","╨б╨╡╤А╨┤╨╡╤З╨╜╨╛-╤Б╨╛╤Б╤Г╨┤╨╕╤Б╤В╤Л╨╡","╨Ф╨╕╨░╨▒╨╡╤В"]
+    else: causes = ["╨б╨╡╤А╨┤╨╡╤З╨╜╨╛-╤Б╨╛╤Б╤Г╨┤╨╕╤Б╤В╤Л╨╡","╨Ю╨╜╨║╨╛╨╗╨╛╨│╨╕╤П","╨б╤В╨░╤А╨╡╨╜╨╕╨╡"]
+    if l["diseases"]: cause = f"╨Ю╤Б╨╗╨╛╨╢╨╜╨╡╨╜╨╕╨╡: {l['diseases'][-1]}"
     else: cause = random.choice(causes)
     final_ach = check_achievements(l)
     score = calculate_life_score(l)
@@ -891,38 +891,38 @@ def send_death(user_id, chat_id):
     place = next((i+1 for i, e in enumerate(lb) if e is entry), len(lb))
     total = len(lb)
     balance = get_life_balance(l)
-    balance_text = (f"рџ“Љ <b>Р‘Р°Р»Р°РЅСЃ Р¶РёР·РЅРё:</b>\n  рџЉ РЎС‡Р°СЃС‚СЊРµ: {balance['happiness']}/100\n"
-                    f"  рџЋЇ РЎРјС‹СЃР»: {balance['meaning']}/100\n  рџ¤ќ РЎРІСЏР·Рё: {balance['connections']}/100\n"
-                    f"  рџ’° Р”РѕСЃС‚Р°С‚РѕРє: {balance['wealth']}/100\n")
+    balance_text = (f"ЁЯУК <b>╨С╨░╨╗╨░╨╜╤Б ╨╢╨╕╨╖╨╜╨╕:</b>\n  ЁЯШК ╨б╤З╨░╤Б╤В╤М╨╡: {balance['happiness']}/100\n"
+                    f"  ЁЯОп ╨б╨╝╤Л╤Б╨╗: {balance['meaning']}/100\n  ЁЯдЭ ╨б╨▓╤П╨╖╨╕: {balance['connections']}/100\n"
+                    f"  ЁЯТ░ ╨Ф╨╛╤Б╤В╨░╤В╨╛╨║: {balance['wealth']}/100\n")
     headlines = get_cinematic_headlines(l)
-    headlines_text = "рџ“њ <b>Р›РµС‚РѕРїРёСЃСЊ:</b>\n" + "\n".join([f"вЂў {h}" for h in headlines]) if headlines else ""
-    npc_text = "рџ’« <b>РЎСѓРґСЊР±С‹ Р±Р»РёР·РєРёС…:</b>\n" + "\n".join([get_npc_epilogue(n) for n in l.get("key_npcs",[])])
+    headlines_text = "ЁЯУЬ <b>╨Ы╨╡╤В╨╛╨┐╨╕╤Б╤М:</b>\n" + "\n".join([f"тАв {h}" for h in headlines]) if headlines else ""
+    npc_text = "ЁЯТл <b>╨б╤Г╨┤╤М╨▒╤Л ╨▒╨╗╨╕╨╖╨║╨╕╤Е:</b>\n" + "\n".join([get_npc_epilogue(n) for n in l.get("key_npcs",[])])
     earned = l.get("achievements", [])
-    ach_text = f"рџЏ† <b>Р”РѕСЃС‚РёР¶РµРЅРёСЏ:</b> {len(earned)}/{len(ACHIEVEMENTS)}"
-    if final_ach: ach_text += "\n" + "\n".join([f"вЂў {a['name']}" for a in final_ach])
+    ach_text = f"ЁЯПЖ <b>╨Ф╨╛╤Б╤В╨╕╨╢╨╡╨╜╨╕╤П:</b> {len(earned)}/{len(ACHIEVEMENTS)}"
+    if final_ach: ach_text += "\n" + "\n".join([f"тАв {a['name']}" for a in final_ach])
     if l.get("wealth_history"):
         max_w = max(l["wealth_history"]) or 1
-        chart = "".join(["в–Ѓ" if w < max_w*0.2 else "в–ѓ" if w < max_w*0.5 else "в–…" if w < max_w*0.8 else "в–€" for w in l["wealth_history"]])
-        chart_text = f"\nрџ“€ РљСЂРёРІР°СЏ РґРѕСЃС‚Р°С‚РєР°: {chart}\n"
+        chart = "".join(["тЦБ" if w < max_w*0.2 else "тЦГ" if w < max_w*0.5 else "тЦЕ" if w < max_w*0.8 else "тЦИ" for w in l["wealth_history"]])
+        chart_text = f"\nЁЯУИ ╨Ъ╤А╨╕╨▓╨░╤П ╨┤╨╛╤Б╤В╨░╤В╨║╨░: {chart}\n"
     else: chart_text = ""
-    top_text = "\nрџЏ† <b>РўРѕРї-5 Р¶РёР·РЅРµР№:</b>\n"
+    top_text = "\nЁЯПЖ <b>╨в╨╛╨┐-5 ╨╢╨╕╨╖╨╜╨╡╨╣:</b>\n"
     for i, e in enumerate(lb[:5]):
-        mark = "рџ‘‰" if e["user_id"] == str(user_id) and e["age"] == l["age"] else "  "
-        top_text += f"{mark} {i+1}. <b>{e['name']}</b> ({e['country']}) вЂ” {e['score']} РѕС‡РєРѕРІ, {get_age_str(e['age'])}\n"
-    msg = (f"рџ’Ђ <b>РЎРјРµСЂС‚СЊ РІ {get_age_str(l['age'])}.</b>\nрџ©є РџСЂРёС‡РёРЅР°: {cause}\n\n{balance_text}\n"
-           f"в­ђ РћС†РµРЅРєР° Р¶РёР·РЅРё: <b>{score} РѕС‡РєРѕРІ</b> В· РјРµСЃС‚Рѕ <b>#{place} РёР· {total}</b>\n\n"
+        mark = "ЁЯСЙ" if e["user_id"] == str(user_id) and e["age"] == l["age"] else "  "
+        top_text += f"{mark} {i+1}. <b>{e['name']}</b> ({e['country']}) тАФ {e['score']} ╨╛╤З╨║╨╛╨▓, {get_age_str(e['age'])}\n"
+    msg = (f"ЁЯТА <b>╨б╨╝╨╡╤А╤В╤М ╨▓ {get_age_str(l['age'])}.</b>\nЁЯй║ ╨Я╤А╨╕╤З╨╕╨╜╨░: {cause}\n\n{balance_text}\n"
+           f"тнР ╨Ю╤Ж╨╡╨╜╨║╨░ ╨╢╨╕╨╖╨╜╨╕: <b>{score} ╨╛╤З╨║╨╛╨▓</b> ┬╖ ╨╝╨╡╤Б╤В╨╛ <b>#{place} ╨╕╨╖ {total}</b>\n\n"
            f"{headlines_text}\n\n{npc_text}\n\n{ach_text}\n{chart_text}")
     kb = InlineKeyboardMarkup()
     for i, p in enumerate(l.get("peer_lives",[])):
         fate = get_neighbor_final({"trajectory":p["trajectory"],"death_age":p["death_age"]})
-        msg += f"\nрџ‘Ґ Р РѕРІРµСЃРЅРёРє {p['name']} ({p['country'][1]}): {fate}"
-        kb.add(InlineKeyboardButton(f"рџЋ­ РџСЂРѕР¶РёС‚СЊ Р¶РёР·РЅСЊ {p['name']}", callback_data=f"play_peer_{i}"))
+        msg += f"\nЁЯСе ╨а╨╛╨▓╨╡╤Б╨╜╨╕╨║ {p['name']} ({p['country'][1]}): {fate}"
+        kb.add(InlineKeyboardButton(f"ЁЯОн ╨Я╤А╨╛╨╢╨╕╤В╤М ╨╢╨╕╨╖╨╜╤М {p['name']}", callback_data=f"play_peer_{i}"))
     msg += "\n\n" + top_text
-    kb.add(InlineKeyboardButton("рџЏ† РўРѕРї Р¶РёР·РЅРµР№", callback_data="leaderboard"))
-    kb.add(InlineKeyboardButton("рџ“– Р”РѕСЃС‚РёР¶РµРЅРёСЏ", callback_data="achievements"))
+    kb.add(InlineKeyboardButton("ЁЯПЖ ╨в╨╛╨┐ ╨╢╨╕╨╖╨╜╨╡╨╣", callback_data="leaderboard"))
+    kb.add(InlineKeyboardButton("ЁЯУЦ ╨Ф╨╛╤Б╤В╨╕╨╢╨╡╨╜╨╕╤П", callback_data="achievements"))
     if l.get("children", 0) > 0 or l["clean_cash"] > 5000 or l["properties"] or l["businesses"]:
-        kb.add(InlineKeyboardButton(f"рџ‘‘ РџСЂРѕРґРѕР»Р¶РёС‚СЊ РґРёРЅР°СЃС‚РёСЋ (РќР°СЃР»РµРґРЅРёРє)", callback_data="dynasty_continue"))
-    kb.add(InlineKeyboardButton("рџЋІ РќР°С‡Р°С‚СЊ Р·Р°РЅРѕРІРѕ", callback_data="new"))
+        kb.add(InlineKeyboardButton(f"ЁЯСС ╨Я╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М ╨┤╨╕╨╜╨░╤Б╤В╨╕╤О (╨Э╨░╤Б╨╗╨╡╨┤╨╜╨╕╨║)", callback_data="dynasty_continue"))
+    kb.add(InlineKeyboardButton("ЁЯО▓ ╨Э╨░╤З╨░╤В╤М ╨╖╨░╨╜╨╛╨▓╨╛", callback_data="new"))
     play_cutscene(chat_id, l, get_cutscene_frames("death"), msg, kb)
 
 def start_exam(user_id, chat_id, level, place):
@@ -931,17 +931,17 @@ def start_exam(user_id, chat_id, level, place):
     if not available: l["asked_tests"][level] = []; available = TESTS[level]
     test = random.choice(available); l["asked_tests"][level].append(test); l["test_data"] = test
     
-    # РџРѕРґР±РёСЂР°РµРј СЃС‚СЂРѕРіРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СѓСЂРѕРІРЅСЋ СѓС‡РµР±РЅРѕРµ Р·Р°РІРµРґРµРЅРёРµ
+    # ╨Я╨╛╨┤╨▒╨╕╤А╨░╨╡╨╝ ╤Б╤В╤А╨╛╨│╨╛ ╤Б╨╛╨╛╤В╨▓╨╡╤В╤Б╤В╨▓╤Г╤О╤Й╨╡╨╡ ╤Г╤А╨╛╨▓╨╜╤О ╤Г╤З╨╡╨▒╨╜╨╛╨╡ ╨╖╨░╨▓╨╡╨┤╨╡╨╜╨╕╨╡
     inst_list = EDU_INSTITUTIONS.get(level, [])
-    institution = random.choice(inst_list) if inst_list else f"РЈС‡РµР±РЅРѕРµ Р·Р°РІРµРґРµРЅРёРµ ({place})"
+    institution = random.choice(inst_list) if inst_list else f"╨г╤З╨╡╨▒╨╜╨╛╨╡ ╨╖╨░╨▓╨╡╨┤╨╡╨╜╨╕╨╡ ({place})"
     
-    # РЎРѕС…СЂР°РЅСЏРµРј Р·Р°РІРµРґРµРЅРёРµ РІ РїРµСЂСЃРѕРЅР°Р¶Рµ
+    # ╨б╨╛╤Е╤А╨░╨╜╤П╨╡╨╝ ╨╖╨░╨▓╨╡╨┤╨╡╨╜╨╕╨╡ ╨▓ ╨┐╨╡╤А╤Б╨╛╨╜╨░╨╢╨╡
     l["current_exam_institution"] = institution
     l["current_exam_level"] = level
     
     kb = InlineKeyboardMarkup()
     for i, opt in enumerate(test["opts"]): kb.add(InlineKeyboardButton(opt, callback_data=f"ans_{i}"))
-    msg = bot.send_message(chat_id, f"рџ“ќ <b>Р­РєР·Р°РјРµРЅ РїСЂРё РїРѕСЃС‚СѓРїР»РµРЅРёРё: {institution}</b>\nРЈСЂРѕРІРµРЅСЊ: <b>{place}</b>\n\nР’РѕРїСЂРѕСЃ: <b>{test['q']}</b>", reply_markup=kb, parse_mode="HTML")
+    msg = bot.send_message(chat_id, f"ЁЯУЭ <b>╨н╨║╨╖╨░╨╝╨╡╨╜ ╨┐╤А╨╕ ╨┐╨╛╤Б╤В╤Г╨┐╨╗╨╡╨╜╨╕╨╕: {institution}</b>\n╨г╤А╨╛╨▓╨╡╨╜╤М: <b>{place}</b>\n\n╨Т╨╛╨┐╤А╨╛╤Б: <b>{test['q']}</b>", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
     save_db(players_db)
 
@@ -957,21 +957,21 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
     saved_by_knowledge = False
     bias_failed = False
     
-    # РњРµС…Р°РЅРёРєР° РІР»РёСЏРЅРёСЏ СЃС‚РµСЂРµРѕС‚РёРїРѕРІ РЅР° СЌРєР·Р°РјРµРЅР°С…
+    # ╨Ь╨╡╤Е╨░╨╜╨╕╨║╨░ ╨▓╨╗╨╕╤П╨╜╨╕╤П ╤Б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐╨╛╨▓ ╨╜╨░ ╤Н╨║╨╖╨░╨╝╨╡╨╜╨░╤Е
     if not success:
-        # Р•СЃР»Рё РёРіСЂРѕРє РѕС€РёР±СЃСЏ, РЅРѕ РѕР±С‰РµСЃС‚РІРѕ СЃС‡РёС‚Р°РµС‚ РµРіРѕ "СѓРјРЅС‹Рј"
-        if l.get("prejudice") and "СѓРјРЅС‹Рј" in l["prejudice"]:
-            if random.random() < 0.50:  # 50% С€Р°РЅСЃ СЃРЅРёСЃС…РѕР¶РґРµРЅРёСЏ СЌРєР·Р°РјРµРЅР°С‚РѕСЂРѕРІ
+        # ╨Х╤Б╨╗╨╕ ╨╕╨│╤А╨╛╨║ ╨╛╤И╨╕╨▒╤Б╤П, ╨╜╨╛ ╨╛╨▒╤Й╨╡╤Б╤В╨▓╨╛ ╤Б╤З╨╕╤В╨░╨╡╤В ╨╡╨│╨╛ "╤Г╨╝╨╜╤Л╨╝"
+        if l.get("prejudice") and "╤Г╨╝╨╜╤Л╨╝" in l["prejudice"]:
+            if random.random() < 0.50:  # 50% ╤И╨░╨╜╤Б ╤Б╨╜╨╕╤Б╤Е╨╛╨╢╨┤╨╡╨╜╨╕╤П ╤Н╨║╨╖╨░╨╝╨╡╨╜╨░╤В╨╛╤А╨╛╨▓
                 success = True
                 saved_by_stereotype = True
-        # Р›РёР±Рѕ РµСЃР»Рё Сѓ РїРµСЂСЃРѕРЅР°Р¶Р° СѓР¶Рµ РѕС‡РµРЅСЊ РІС‹СЃРѕРєРёРµ Р·РЅР°РЅРёСЏ (75+)
+        # ╨Ы╨╕╨▒╨╛ ╨╡╤Б╨╗╨╕ ╤Г ╨┐╨╡╤А╤Б╨╛╨╜╨░╨╢╨░ ╤Г╨╢╨╡ ╨╛╤З╨╡╨╜╤М ╨▓╤Л╤Б╨╛╨║╨╕╨╡ ╨╖╨╜╨░╨╜╨╕╤П (75+)
         elif l.get("knowledge", 50) >= 75 and random.random() < 0.35:
             success = True
             saved_by_knowledge = True
     else:
-        # Р•СЃР»Рё РѕС‚РІРµС‚РёР» РїСЂР°РІРёР»СЊРЅРѕ, РЅРѕ РµСЃС‚СЊ РЅРµРіР°С‚РёРІРЅС‹Р№ СЃС‚РµСЂРµРѕС‚РёРї ("РґРёРєР°СЂСЊ" / "С‡СѓР¶РѕР№")
-        if l.get("prejudice") and any(bad in l["prejudice"] for bad in ["РґРёРєР°СЂРµРј", "С‡СѓР¶РёРј", "РїРѕРґРѕР·СЂРµРЅРёРµРј"]):
-            if random.random() < 0.15:  # 15% СЂРёСЃРє РїСЂРµРґРІР·СЏС‚РѕСЃС‚Рё РєРѕРјРёСЃСЃРёРё
+        # ╨Х╤Б╨╗╨╕ ╨╛╤В╨▓╨╡╤В╨╕╨╗ ╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╨╛, ╨╜╨╛ ╨╡╤Б╤В╤М ╨╜╨╡╨│╨░╤В╨╕╨▓╨╜╤Л╨╣ ╤Б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐ ("╨┤╨╕╨║╨░╤А╤М" / "╤З╤Г╨╢╨╛╨╣")
+        if l.get("prejudice") and any(bad in l["prejudice"] for bad in ["╨┤╨╕╨║╨░╤А╨╡╨╝", "╤З╤Г╨╢╨╕╨╝", "╨┐╨╛╨┤╨╛╨╖╤А╨╡╨╜╨╕╨╡╨╝"]):
+            if random.random() < 0.15:  # 15% ╤А╨╕╤Б╨║ ╨┐╤А╨╡╨┤╨▓╨╖╤П╤В╨╛╤Б╤В╨╕ ╨║╨╛╨╝╨╕╤Б╤Б╨╕╨╕
                 success = False
                 bias_failed = True
 
@@ -985,47 +985,47 @@ def handle_exam_answer(user_id, chat_id, ans_idx):
         inst_label = f" ({institution})" if institution else ""
         if saved_by_stereotype:
             msg = (
-                f"рџ§  <b>РЎС‚РµСЂРµРѕС‚РёРї СЃРїР°СЃ СЌРєР·Р°РјРµРЅ{inst_label}!</b>\n"
-                f"РўС‹ РІС‹Р±СЂР°Р» РЅРµРїСЂР°РІРёР»СЊРЅС‹Р№ РѕС‚РІРµС‚, РЅРѕ РєРѕРјРёСЃСЃРёСЏ СЃ РґРµС‚СЃС‚РІР° СЃС‡РёС‚Р°РµС‚ РїСЂРµРґСЃС‚Р°РІРёС‚РµР»РµР№ С‚РІРѕРµР№ РЅР°С†РёРѕРЅР°Р»СЊРЅРѕСЃС‚Рё (В«{l.get('ethnicity', '')} вЂ” СЃС‡РёС‚Р°СЋС‚ СѓРјРЅС‹РјВ») РІСѓРЅРґРµСЂРєРёРЅРґР°РјРё. "
-                f"Р­РєР·Р°РјРµРЅР°С‚РѕСЂС‹ СЂРµС€РёР»Рё, С‡С‚Рѕ С‚С‹ РѕРіРѕРІРѕСЂРёР»СЃСЏ РёР»Рё РїСЂРёРјРµРЅРёР» РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ Р»РѕРіРёРєСѓ, Рё РїРѕСЃС‚Р°РІРёР»Рё Р·Р°С‡С‘С‚!\n"
-                f"<i>(РџСЂР°РІРёР»СЊРЅС‹Р№ РѕС‚РІРµС‚ Р±С‹Р»: {correct_text})</i>"
+                f"ЁЯза <b>╨б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐ ╤Б╨┐╨░╤Б ╤Н╨║╨╖╨░╨╝╨╡╨╜{inst_label}!</b>\n"
+                f"╨в╤Л ╨▓╤Л╨▒╤А╨░╨╗ ╨╜╨╡╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╤Л╨╣ ╨╛╤В╨▓╨╡╤В, ╨╜╨╛ ╨║╨╛╨╝╨╕╤Б╤Б╨╕╤П ╤Б ╨┤╨╡╤В╤Б╤В╨▓╨░ ╤Б╤З╨╕╤В╨░╨╡╤В ╨┐╤А╨╡╨┤╤Б╤В╨░╨▓╨╕╤В╨╡╨╗╨╡╨╣ ╤В╨▓╨╛╨╡╨╣ ╨╜╨░╤Ж╨╕╨╛╨╜╨░╨╗╤М╨╜╨╛╤Б╤В╨╕ (┬л{l.get('ethnicity', '')} тАФ ╤Б╤З╨╕╤В╨░╤О╤В ╤Г╨╝╨╜╤Л╨╝┬╗) ╨▓╤Г╨╜╨┤╨╡╤А╨║╨╕╨╜╨┤╨░╨╝╨╕. "
+                f"╨н╨║╨╖╨░╨╝╨╡╨╜╨░╤В╨╛╤А╤Л ╤А╨╡╤И╨╕╨╗╨╕, ╤З╤В╨╛ ╤В╤Л ╨╛╨│╨╛╨▓╨╛╤А╨╕╨╗╤Б╤П ╨╕╨╗╨╕ ╨┐╤А╨╕╨╝╨╡╨╜╨╕╨╗ ╨╜╨╡╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╤Г╤О ╨╗╨╛╨│╨╕╨║╤Г, ╨╕ ╨┐╨╛╤Б╤В╨░╨▓╨╕╨╗╨╕ ╨╖╨░╤З╤С╤В!\n"
+                f"<i>(╨Я╤А╨░╨▓╨╕╨╗╤М╨╜╤Л╨╣ ╨╛╤В╨▓╨╡╤В ╨▒╤Л╨╗: {correct_text})</i>"
             )
             l["happiness"] = min(100, l["happiness"] + 8)
         elif saved_by_knowledge:
             msg = (
-                f"рџ“љ <b>Р РµРїСѓС‚Р°С†РёСЏ РѕС‚Р»РёС‡РЅРёРєР°{inst_label}!</b>\n"
-                f"РўС‹ РґРѕРїСѓСЃС‚РёР» РѕРїР»РѕС€РЅРѕСЃС‚СЊ, РЅРѕ С‚РІРѕСЏ РІС‹СЃРѕРєР°СЏ СЌСЂСѓРґРёС†РёСЏ (Р·РЅР°РЅРёСЏ {l['knowledge']}%) СѓР±РµРґРёР»Р° РїСЂРµРїРѕРґР°РІР°С‚РµР»РµР№, С‡С‚Рѕ СЌС‚Рѕ СЃР»СѓС‡Р°Р№РЅР°СЏ РѕРїРёСЃРєР° РѕС‚ РІРѕР»РЅРµРЅРёСЏ. "
-                f"Р—Р°С‡С‘С‚ РІС‹СЃС‚Р°РІР»РµРЅ!"
+                f"ЁЯУЪ <b>╨а╨╡╨┐╤Г╤В╨░╤Ж╨╕╤П ╨╛╤В╨╗╨╕╤З╨╜╨╕╨║╨░{inst_label}!</b>\n"
+                f"╨в╤Л ╨┤╨╛╨┐╤Г╤Б╤В╨╕╨╗ ╨╛╨┐╨╗╨╛╤И╨╜╨╛╤Б╤В╤М, ╨╜╨╛ ╤В╨▓╨╛╤П ╨▓╤Л╤Б╨╛╨║╨░╤П ╤Н╤А╤Г╨┤╨╕╤Ж╨╕╤П (╨╖╨╜╨░╨╜╨╕╤П {l['knowledge']}%) ╤Г╨▒╨╡╨┤╨╕╨╗╨░ ╨┐╤А╨╡╨┐╨╛╨┤╨░╨▓╨░╤В╨╡╨╗╨╡╨╣, ╤З╤В╨╛ ╤Н╤В╨╛ ╤Б╨╗╤Г╤З╨░╨╣╨╜╨░╤П ╨╛╨┐╨╕╤Б╨║╨░ ╨╛╤В ╨▓╨╛╨╗╨╜╨╡╨╜╨╕╤П. "
+                f"╨Ч╨░╤З╤С╤В ╨▓╤Л╤Б╤В╨░╨▓╨╗╨╡╨╜!"
             )
             l["happiness"] = min(100, l["happiness"] + 5)
         else:
-            msg = f"вњ… <b>Р­РєР·Р°РјРµРЅ СЃРґР°РЅ РЅР° РѕС‚Р»РёС‡РЅРѕ{inst_label}!</b>\nРџСЂР°РІРёР»СЊРЅС‹Р№ РѕС‚РІРµС‚: <b>{correct_text}</b>."
+            msg = f"тЬЕ <b>╨н╨║╨╖╨░╨╝╨╡╨╜ ╤Б╨┤╨░╨╜ ╨╜╨░ ╨╛╤В╨╗╨╕╤З╨╜╨╛{inst_label}!</b>\n╨Я╤А╨░╨▓╨╕╨╗╤М╨╜╤Л╨╣ ╨╛╤В╨▓╨╡╤В: <b>{correct_text}</b>."
 
         if l["age"] == 6:
-            inst_name = institution or "С€РєРѕР»Р°"
-            l["education"] = f"РќР°С‡Р°Р»СЊРЅРѕРµ ({inst_name})"
+            inst_name = institution or "╤И╨║╨╛╨╗╨░"
+            l["education"] = f"╨Э╨░╤З╨░╨╗╤М╨╜╨╛╨╡ ({inst_name})"
             l["knowledge"] += 10
-            add_to_life_map(l, f"РџРѕСЃС‚СѓРїРёР» РІ {inst_name}" if g_m else f"РџРѕСЃС‚СѓРїРёР»Р° РІ {inst_name}")
+            add_to_life_map(l, f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ {inst_name}" if g_m else f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗╨░ ╨▓ {inst_name}")
         elif l["age"] == 12:
-            inst_name = institution or "Р»РёС†РµР№/РєРѕР»Р»РµРґР¶"
-            l["education"] = f"РЎСЂРµРґРЅРµРµ ({inst_name})"
+            inst_name = institution or "╨╗╨╕╤Ж╨╡╨╣/╨║╨╛╨╗╨╗╨╡╨┤╨╢"
+            l["education"] = f"╨б╤А╨╡╨┤╨╜╨╡╨╡ ({inst_name})"
             l["knowledge"] += 15
-            add_to_life_map(l, f"РџРѕСЃС‚СѓРїРёР» РІ {inst_name}" if g_m else f"РџРѕСЃС‚СѓРїРёР»Р° РІ {inst_name}")
+            add_to_life_map(l, f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ {inst_name}" if g_m else f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗╨░ ╨▓ {inst_name}")
         elif l["age"] == 18:
-            inst_name = institution or "СѓРЅРёРІРµСЂСЃРёС‚РµС‚"
-            l["education"] = f"Р’С‹СЃС€РµРµ ({inst_name})"
+            inst_name = institution or "╤Г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В"
+            l["education"] = f"╨Т╤Л╤Б╤И╨╡╨╡ ({inst_name})"
             l["knowledge"] += 25
-            add_to_life_map(l, f"РџРѕСЃС‚СѓРїРёР» РІ {inst_name}" if g_m else f"РџРѕСЃС‚СѓРїРёР»Р° РІ {inst_name}")
+            add_to_life_map(l, f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗ ╨▓ {inst_name}" if g_m else f"╨Я╨╛╤Б╤В╤Г╨┐╨╕╨╗╨░ ╨▓ {inst_name}")
     else:
         if bias_failed:
             msg = (
-                f"вљ пёЏ <b>РџСЂРµРґРІР·СЏС‚РѕСЃС‚СЊ СЌРєР·Р°РјРµРЅР°С‚РѕСЂРѕРІ!</b>\n"
-                f"РўС‹ РѕС‚РІРµС‚РёР» Р°Р±СЃРѕР»СЋС‚РЅРѕ РїСЂР°РІРёР»СЊРЅРѕ (<b>{correct_text}</b>), РЅРѕ РёР·-Р·Р° РїСЂРµРґСЂР°СЃСЃСѓРґРєРѕРІ (В«{l.get('prejudice', '')}В») РєРѕРјРёСЃСЃРёСЏ Р·Р°РїРѕРґРѕР·СЂРёР»Р° СЃРїРёСЃС‹РІР°РЅРёРµ, "
-                f"Р·Р°РІР°Р»РёР»Р° РєР°РІРµСЂР·РЅС‹РјРё РїСЂРёРґРёСЂРєР°РјРё Рё РѕС‚РєР°Р·Р°Р»Р° РІ Р·Р°С‡С‘С‚Рµ."
+                f"тЪая╕П <b>╨Я╤А╨╡╨┤╨▓╨╖╤П╤В╨╛╤Б╤В╤М ╤Н╨║╨╖╨░╨╝╨╡╨╜╨░╤В╨╛╤А╨╛╨▓!</b>\n"
+                f"╨в╤Л ╨╛╤В╨▓╨╡╤В╨╕╨╗ ╨░╨▒╤Б╨╛╨╗╤О╤В╨╜╨╛ ╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╨╛ (<b>{correct_text}</b>), ╨╜╨╛ ╨╕╨╖-╨╖╨░ ╨┐╤А╨╡╨┤╤А╨░╤Б╤Б╤Г╨┤╨║╨╛╨▓ (┬л{l.get('prejudice', '')}┬╗) ╨║╨╛╨╝╨╕╤Б╤Б╨╕╤П ╨╖╨░╨┐╨╛╨┤╨╛╨╖╤А╨╕╨╗╨░ ╤Б╨┐╨╕╤Б╤Л╨▓╨░╨╜╨╕╨╡, "
+                f"╨╖╨░╨▓╨░╨╗╨╕╨╗╨░ ╨║╨░╨▓╨╡╤А╨╖╨╜╤Л╨╝╨╕ ╨┐╤А╨╕╨┤╨╕╤А╨║╨░╨╝╨╕ ╨╕ ╨╛╤В╨║╨░╨╖╨░╨╗╨░ ╨▓ ╨╖╨░╤З╤С╤В╨╡."
             )
             l["happiness"] = max(0, l["happiness"] - 12)
         else:
-            msg = f"вќЊ <b>Р­РєР·Р°РјРµРЅ РїСЂРѕРІР°Р»РµРЅ!</b>\nРќРµРІРµСЂРЅС‹Р№ РѕС‚РІРµС‚ (РїСЂР°РІРёР»СЊРЅРѕ Р±С‹Р»Рѕ: <i>{correct_text}</i>). РџРѕСЃС‚СѓРїРёС‚СЊ РЅР° СЌС‚РѕС‚ СѓСЂРѕРІРµРЅСЊ РїРѕРєР° РЅРµ СѓРґР°Р»РѕСЃСЊ."
+            msg = f"тЭМ <b>╨н╨║╨╖╨░╨╝╨╡╨╜ ╨┐╤А╨╛╨▓╨░╨╗╨╡╨╜!</b>\n╨Э╨╡╨▓╨╡╤А╨╜╤Л╨╣ ╨╛╤В╨▓╨╡╤В (╨┐╤А╨░╨▓╨╕╨╗╤М╨╜╨╛ ╨▒╤Л╨╗╨╛: <i>{correct_text}</i>). ╨Я╨╛╤Б╤В╤Г╨┐╨╕╤В╤М ╨╜╨░ ╤Н╤В╨╛╤В ╤Г╤А╨╛╨▓╨╡╨╜╤М ╨┐╨╛╨║╨░ ╨╜╨╡ ╤Г╨┤╨░╨╗╨╛╤Б╤М."
             l["happiness"] = max(0, l["happiness"] - 5)
 
     l["last_result"] = {
@@ -1042,10 +1042,10 @@ def apply_outcome(l, outcome):
         cost = max(1000, int(vvp * 0.4))
         l["clean_cash"] = max(0, l["clean_cash"] - cost)
         l["political_reputation"] = min(100, l.get("political_reputation", 50) + 15)
-        # РџРµСЂРµС…РѕРґ РЅР° РїРѕР»РЅРѕС†РµРЅРЅСѓСЋ РїРѕР»РёС‚РёС‡РµСЃРєСѓСЋ РґРѕР»Р¶РЅРѕСЃС‚СЊ
+        # ╨Я╨╡╤А╨╡╤Е╨╛╨┤ ╨╜╨░ ╨┐╨╛╨╗╨╜╨╛╤Ж╨╡╨╜╨╜╤Г╤О ╨┐╨╛╨╗╨╕╤В╨╕╤З╨╡╤Б╨║╤Г╤О ╨┤╨╛╨╗╨╢╨╜╨╛╤Б╤В╤М
         l["job_type"] = "politics"
-        l["faction"] = "РџСЂР°РІСЏС‰Р°СЏ РєРѕР°Р»РёС†РёСЏ"
-        l["job"] = "РџРѕР»РёС‚РёРє"
+        l["faction"] = "╨Я╤А╨░╨▓╤П╤Й╨░╤П ╨║╨╛╨░╨╗╨╕╤Ж╨╕╤П"
+        l["job"] = "╨Я╨╛╨╗╨╕╤В╨╕╨║"
         l["career_rank"] = 1
         l["career_xp"] = 20
         l["job_years"] = 0
@@ -1053,114 +1053,114 @@ def apply_outcome(l, outcome):
         bonus = int(vvp * 1.2)
         l["clean_cash"] += bonus
         l["happiness"] = min(100, l["happiness"] + 15)
-        add_to_life_map(l, "РР·Р±СЂР°РЅ РґРµРїСѓС‚Р°С‚РѕРј СЃРѕРІРµС‚Р° (РЅР°С‡Р°Р»Рѕ РєР°СЂСЊРµСЂС‹ РІ РїРѕР»РёС‚РёРєРµ)")
-        return f"рџЏ† РџРѕР±РµРґР° РЅР° РІС‹Р±РѕСЂР°С…! Р’С‹ РѕСЃС‚Р°РІРёР»Рё РїСЂРµР¶РЅСЋСЋ СЃР»СѓР¶Р±Сѓ, РїРѕР»СѓС‡РёР»Рё РґРµРїСѓС‚Р°С‚СЃРєРёР№ РјР°РЅРґР°С‚ Рё РїСЂРµРјРёСЋ {fmt_money(bonus, l['country'])}!"
+        add_to_life_map(l, "╨Ш╨╖╨▒╤А╨░╨╜ ╨┤╨╡╨┐╤Г╤В╨░╤В╨╛╨╝ ╤Б╨╛╨▓╨╡╤В╨░ (╨╜╨░╤З╨░╨╗╨╛ ╨║╨░╤А╤М╨╡╤А╤Л ╨▓ ╨┐╨╛╨╗╨╕╤В╨╕╨║╨╡)")
+        return f"ЁЯПЖ ╨Я╨╛╨▒╨╡╨┤╨░ ╨╜╨░ ╨▓╤Л╨▒╨╛╤А╨░╤Е! ╨Т╤Л ╨╛╤Б╤В╨░╨▓╨╕╨╗╨╕ ╨┐╤А╨╡╨╢╨╜╤О╤О ╤Б╨╗╤Г╨╢╨▒╤Г, ╨┐╨╛╨╗╤Г╤З╨╕╨╗╨╕ ╨┤╨╡╨┐╤Г╤В╨░╤В╤Б╨║╨╕╨╣ ╨╝╨░╨╜╨┤╨░╤В ╨╕ ╨┐╤А╨╡╨╝╨╕╤О {fmt_money(bonus, l['country'])}!"
     if outcome == "politics_fail":
         cost = max(1000, int(vvp * 0.4))
         l["clean_cash"] = max(0, l["clean_cash"] - cost)
         l["political_reputation"] = max(0, l.get("political_reputation", 50) - 8)
         l["happiness"] = max(0, l["happiness"] - 6)
-        return "РџРѕСЂР°Р¶РµРЅРёРµ РЅР° РІС‹Р±РѕСЂР°С…. РЎСЂРµРґСЃС‚РІР° РЅР° РєР°РјРїР°РЅРёСЋ РїРѕС‚СЂР°С‡РµРЅС‹, РёР·Р±РёСЂР°С‚РµР»Рё РїСЂРµРґРїРѕС‡Р»Рё РѕРїРїРѕРЅРµРЅС‚Р°."
+        return "╨Я╨╛╤А╨░╨╢╨╡╨╜╨╕╨╡ ╨╜╨░ ╨▓╤Л╨▒╨╛╤А╨░╤Е. ╨б╤А╨╡╨┤╤Б╤В╨▓╨░ ╨╜╨░ ╨║╨░╨╝╨┐╨░╨╜╨╕╤О ╨┐╨╛╤В╤А╨░╤З╨╡╨╜╤Л, ╨╕╨╖╨▒╨╕╤А╨░╤В╨╡╨╗╨╕ ╨┐╤А╨╡╨┤╨┐╨╛╤З╨╗╨╕ ╨╛╨┐╨┐╨╛╨╜╨╡╨╜╤В╨░."
     if outcome == "politics_fail_free":
         l["happiness"] = max(0, l["happiness"] - 4)
-        return "РљР°РјРїР°РЅРёСЏ Р±РµР· Р±СЋРґР¶РµС‚Р° РЅРµ СЃРјРѕРіР»Р° РїСЂРёРІР»РµС‡СЊ РІРЅРёРјР°РЅРёРµ РїСЂРµСЃСЃС‹ Рё РёР·Р±РёСЂР°С‚РµР»РµР№."
-    if outcome == "toddler_mama": l["relationships"] += 5; return "РЎРєР°Р·Р°Р» В«РјР°РјР°В»."
-    if outcome == "toddler_papa": l["relationships"] += 5; return "РЎРєР°Р·Р°Р» В«РїР°РїР°В»."
-    if outcome == "toddler_walk": l["health"] += 5; l["happiness"] += 10; return "РџРµСЂРІС‹Р№ С€Р°Рі!"
-    if outcome == "toddler_fall": l["health"] -= 2; return "РЈРїР°Р»."
-    if outcome == "toddler_crawl": l["happiness"] += 2; return "РџРѕР»Р·Р°РµС€СЊ."
-    if outcome == "toddler_hug": l["happiness"] += 8; return "РњРёС€РєР° СѓСЃРїРѕРєРѕРёР»."
-    if outcome == "toddler_break": l["happiness"] -= 5; return "РЎР»РѕРјР°Р» РёРіСЂСѓС€РєСѓ."
-    if outcome == "prej_fight_win": l["clean_cash"] += int(vvp*0.5); l["prejudice"] = None; l["happiness"] += 10; return "РЎР»РѕРјР°Р» СЃС‚РµСЂРµРѕС‚РёРї!"
-    if outcome == "prej_fight_fail": l["clean_cash"] -= int(vvp*0.2); l["diseases"].append("РџРўРЎР "); l["health"] -= 10; return "РџРѕС‚СЂР°С‚РёР» СЃРёР»С‹."
+        return "╨Ъ╨░╨╝╨┐╨░╨╜╨╕╤П ╨▒╨╡╨╖ ╨▒╤О╨┤╨╢╨╡╤В╨░ ╨╜╨╡ ╤Б╨╝╨╛╨│╨╗╨░ ╨┐╤А╨╕╨▓╨╗╨╡╤З╤М ╨▓╨╜╨╕╨╝╨░╨╜╨╕╨╡ ╨┐╤А╨╡╤Б╤Б╤Л ╨╕ ╨╕╨╖╨▒╨╕╤А╨░╤В╨╡╨╗╨╡╨╣."
+    if outcome == "toddler_mama": l["relationships"] += 5; return "╨б╨║╨░╨╖╨░╨╗ ┬л╨╝╨░╨╝╨░┬╗."
+    if outcome == "toddler_papa": l["relationships"] += 5; return "╨б╨║╨░╨╖╨░╨╗ ┬л╨┐╨░╨┐╨░┬╗."
+    if outcome == "toddler_walk": l["health"] += 5; l["happiness"] += 10; return "╨Я╨╡╤А╨▓╤Л╨╣ ╤И╨░╨│!"
+    if outcome == "toddler_fall": l["health"] -= 2; return "╨г╨┐╨░╨╗."
+    if outcome == "toddler_crawl": l["happiness"] += 2; return "╨Я╨╛╨╗╨╖╨░╨╡╤И╤М."
+    if outcome == "toddler_hug": l["happiness"] += 8; return "╨Ь╨╕╤И╨║╨░ ╤Г╤Б╨┐╨╛╨║╨╛╨╕╨╗."
+    if outcome == "toddler_break": l["happiness"] -= 5; return "╨б╨╗╨╛╨╝╨░╨╗ ╨╕╨│╤А╤Г╤И╨║╤Г."
+    if outcome == "prej_fight_win": l["clean_cash"] += int(vvp*0.5); l["prejudice"] = None; l["happiness"] += 10; return "╨б╨╗╨╛╨╝╨░╨╗ ╤Б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐!"
+    if outcome == "prej_fight_fail": l["clean_cash"] -= int(vvp*0.2); l["diseases"].append("╨Я╨в╨б╨а"); l["health"] -= 10; return "╨Я╨╛╤В╤А╨░╤В╨╕╨╗ ╤Б╨╕╨╗╤Л."
     if outcome == "prej_exploit":
-        if is_bad: l["dirty_cash"] += int(vvp*0.8); l["happiness"] -= 5; return "РСЃРїРѕР»СЊР·РѕРІР°Р» РЅРµРіР°С‚РёРІРЅС‹Р№."
-        else: l["clean_cash"] += int(vvp*0.3); l["career_xp"] += 20; l["happiness"] += 5; return "РћСЃРµРґР»Р°Р» РїРѕР·РёС‚РёРІРЅС‹Р№!"
+        if is_bad: l["dirty_cash"] += int(vvp*0.8); l["happiness"] -= 5; return "╨Ш╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╗ ╨╜╨╡╨│╨░╤В╨╕╨▓╨╜╤Л╨╣."
+        else: l["clean_cash"] += int(vvp*0.3); l["career_xp"] += 20; l["happiness"] += 5; return "╨Ю╤Б╨╡╨┤╨╗╨░╨╗ ╨┐╨╛╨╖╨╕╤В╨╕╨▓╨╜╤Л╨╣!"
     if outcome == "prej_exploit_fail":
-        if is_bad: l["in_prison"] = 3; l["happiness"] -= 20; l["ever_in_prison"] = True; return "РЎРµР»."
-        else: l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 10; return "Р’С‹РіРѕСЂРµР»."
-    if outcome == "prej_accept": l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 5; return "РЎРјРёСЂРёР»СЃСЏ."
+        if is_bad: l["in_prison"] = 3; l["happiness"] -= 20; l["ever_in_prison"] = True; return "╨б╨╡╨╗."
+        else: l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 10; return "╨Т╤Л╨│╨╛╤А╨╡╨╗."
+    if outcome == "prej_accept": l["clean_cash"] -= int(vvp*0.1); l["happiness"] -= 5; return "╨б╨╝╨╕╤А╨╕╨╗╤Б╤П."
     if outcome == "marry":
         g_m = l.get("gender") == "m"
-        l["married"] = True; l["happiness"] += 20; l["relationships"] += 15; add_to_life_map(l, "Р–РµРЅРёР»СЃСЏ" if g_m else "Р’С‹С€Р»Р° Р·Р°РјСѓР¶")
-        if random.random() < 0.6: l["children"] = l.get("children",0) + 1; add_to_life_map(l, "Р РѕРґРёР»СЃСЏ СЂРµР±С‘РЅРѕРє")
-        return "РџРѕР¶РµРЅРёР»РёСЃСЊ!"
+        l["married"] = True; l["happiness"] += 20; l["relationships"] += 15; add_to_life_map(l, "╨Ц╨╡╨╜╨╕╨╗╤Б╤П" if g_m else "╨Т╤Л╤И╨╗╨░ ╨╖╨░╨╝╤Г╨╢")
+        if random.random() < 0.6: l["children"] = l.get("children",0) + 1; add_to_life_map(l, "╨а╨╛╨┤╨╕╨╗╤Б╤П ╤А╨╡╨▒╤С╨╜╨╛╨║")
+        return "╨Я╨╛╨╢╨╡╨╜╨╕╨╗╨╕╤Б╤М!"
     if outcome == "divorce":
         l["married"] = False
         if l["clean_cash"] > 0: l["clean_cash"] = int(l["clean_cash"] / 2)
         l["happiness"] -= 15; l["relationships"] -= 20
-        add_pending_consequence(l, 5, {"id":"conseq_ex","title":"рџ’” Р’СЃС‚СЂРµС‡Р° СЃ Р±С‹РІС€РёРј","text":"РЎР»СѓС‡Р°Р№РЅР°СЏ РІСЃС‚СЂРµС‡Р°.",
-                                       "choices":[{"text":"РџРѕРіРѕРІРѕСЂРёС‚СЊ","p":0.5,"success_effect":{"happiness":5,"relationships":5,"text":"РњРёСЂРЅРѕ."},"fail_effect":{"happiness":-10,"text":"РџРѕСЂСѓРіР°Р»РёСЃСЊ."}},{"text":"РњРёРјРѕ","p":1,"success_effect":{"text":"РџСЂРѕС€С‘Р»."}}]})
-        return "Р Р°Р·РІРѕРґ."
-    if outcome == "job_civ": l["job_type"] = "civilian"; l["job"] = "Р Р°Р±РѕС‚РЅРёРє"; l["salary"] = int(vvp * 0.6); l["relationships"] += 5; add_to_life_map(l, "РќР° СЂР°Р±РѕС‚Сѓ"); return "РўС‹ РЅР° РіСЂР°Р¶РґР°РЅРєРµ."
-    if outcome == "job_pol": l["job_type"] = "police"; l["faction"] = "РџРѕР»РёС†РёСЏ"; l["job"] = "РџРѕР»РёС†РµР№СЃРєРёР№"; l["salary"] = int(vvp * 0.5); l["relationships"] += 10; add_to_life_map(l, "Р’ РїРѕР»РёС†РёРё"); return "РўС‹ РІ РїРѕР»РёС†РёРё."
-    if outcome == "job_mil": l["job_type"] = "military"; l["faction"] = "РђСЂРјРёСЏ"; l["job"] = "Р’РѕРµРЅРЅС‹Р№"; l["salary"] = int(vvp * 0.4); l["relationships"] += 15; add_to_life_map(l, "Р’ Р°СЂРјРёРё"); return "РўС‹ РІ Р°СЂРјРёРё."
-    if outcome == "job_crim": l["job_type"] = "criminal"; l["faction"] = "РЈР»РёС‡РЅР°СЏ Р±Р°РЅРґР°"; l["job"] = "Р‘Р°РЅРґРёС‚"; l["dirty_cash"] += int(vvp*0.5); l["happiness"] -= 10; add_to_life_map(l, "РљСЂРёРјРёРЅР°Р»"); return "РљСЂРёРјРёРЅР°Р»."
+        add_pending_consequence(l, 5, {"id":"conseq_ex","title":"ЁЯТФ ╨Т╤Б╤В╤А╨╡╤З╨░ ╤Б ╨▒╤Л╨▓╤И╨╕╨╝","text":"╨б╨╗╤Г╤З╨░╨╣╨╜╨░╤П ╨▓╤Б╤В╤А╨╡╤З╨░.",
+                                       "choices":[{"text":"╨Я╨╛╨│╨╛╨▓╨╛╤А╨╕╤В╤М","p":0.5,"success_effect":{"happiness":5,"relationships":5,"text":"╨Ь╨╕╤А╨╜╨╛."},"fail_effect":{"happiness":-10,"text":"╨Я╨╛╤А╤Г╨│╨░╨╗╨╕╤Б╤М."}},{"text":"╨Ь╨╕╨╝╨╛","p":1,"success_effect":{"text":"╨Я╤А╨╛╤И╤С╨╗."}}]})
+        return "╨а╨░╨╖╨▓╨╛╨┤."
+    if outcome == "job_civ": l["job_type"] = "civilian"; l["job"] = "╨а╨░╨▒╨╛╤В╨╜╨╕╨║"; l["salary"] = int(vvp * 0.6); l["relationships"] += 5; add_to_life_map(l, "╨Э╨░ ╤А╨░╨▒╨╛╤В╤Г"); return "╨в╤Л ╨╜╨░ ╨│╤А╨░╨╢╨┤╨░╨╜╨║╨╡."
+    if outcome == "job_pol": l["job_type"] = "police"; l["faction"] = "╨Я╨╛╨╗╨╕╤Ж╨╕╤П"; l["job"] = "╨Я╨╛╨╗╨╕╤Ж╨╡╨╣╤Б╨║╨╕╨╣"; l["salary"] = int(vvp * 0.5); l["relationships"] += 10; add_to_life_map(l, "╨Т ╨┐╨╛╨╗╨╕╤Ж╨╕╨╕"); return "╨в╤Л ╨▓ ╨┐╨╛╨╗╨╕╤Ж╨╕╨╕."
+    if outcome == "job_mil": l["job_type"] = "military"; l["faction"] = "╨Р╤А╨╝╨╕╤П"; l["job"] = "╨Т╨╛╨╡╨╜╨╜╤Л╨╣"; l["salary"] = int(vvp * 0.4); l["relationships"] += 15; add_to_life_map(l, "╨Т ╨░╤А╨╝╨╕╨╕"); return "╨в╤Л ╨▓ ╨░╤А╨╝╨╕╨╕."
+    if outcome == "job_crim": l["job_type"] = "criminal"; l["faction"] = "╨г╨╗╨╕╤З╨╜╨░╤П ╨▒╨░╨╜╨┤╨░"; l["job"] = "╨С╨░╨╜╨┤╨╕╤В"; l["dirty_cash"] += int(vvp*0.5); l["happiness"] -= 10; add_to_life_map(l, "╨Ъ╤А╨╕╨╝╨╕╨╜╨░╨╗"); return "╨Ъ╤А╨╕╨╝╨╕╨╜╨░╨╗."
     if outcome == "career_xp_up": l["career_xp"] += 30; l["happiness"] -= 5; return "XP +30."
     if outcome == "career_xp_down": l["career_xp"] -= 20; return "XP -20."
     if outcome == "career_fight_win": l["career_xp"] += 40; l["happiness"] -= 5; return "XP +40."
     if outcome == "career_grind": l["career_xp"] -= 10; return "XP -10."
-    if outcome == "work_extra": l["clean_cash"] += int(vvp*0.1); l["career_xp"] += 10; l["health"] -= 5; return "Р’С‚РѕСЂР°СЏ СЂР°Р±РѕС‚Р°."
-    if outcome == "family_time": l["career_xp"] -= 10; l["happiness"] += 10; return "Р’СЂРµРјСЏ СЃ СЃРµРјСЊРµР№."
-    if outcome == "burnout": l["diseases"].append("РЎРµСЂРґРµС‡РЅР°СЏ РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕСЃС‚СЊ"); l["health"] -= 20; return "Р’С‹РіРѕСЂР°РЅРёРµ."
+    if outcome == "work_extra": l["clean_cash"] += int(vvp*0.1); l["career_xp"] += 10; l["health"] -= 5; return "╨Т╤В╨╛╤А╨░╤П ╤А╨░╨▒╨╛╤В╨░."
+    if outcome == "family_time": l["career_xp"] -= 10; l["happiness"] += 10; return "╨Т╤А╨╡╨╝╤П ╤Б ╤Б╨╡╨╝╤М╨╡╨╣."
+    if outcome == "burnout": l["diseases"].append("╨б╨╡╤А╨┤╨╡╤З╨╜╨░╤П ╨╜╨╡╨┤╨╛╤Б╤В╨░╤В╨╛╤З╨╜╨╛╤Б╤В╤М"); l["health"] -= 20; return "╨Т╤Л╨│╨╛╤А╨░╨╜╨╕╨╡."
     if outcome == "scammed":
         loss = int(l["clean_cash"] * 0.5); l["clean_cash"] -= loss; l["happiness"] -= 20
-        add_pending_consequence(l, 3, {"id":"conseq_scam","title":"рџљЁ Р’РѕР·РјРµР·РґРёРµ","text":"РњРѕС€РµРЅРЅРёРєР° РїРѕР№РјР°Р»Рё!",
-                                       "choices":[{"text":"РџРѕРґР°С‚СЊ РёСЃРє","p":0.7,"success_effect":{"cash":5000,"happiness":10,"text":"Р’РµСЂРЅСѓР»Рё!"},"fail_effect":{"cash":-1000,"text":"РР·РґРµСЂР¶РєРё."}},{"text":"Р—Р°Р±С‹С‚СЊ","p":1,"success_effect":{"text":"РќРµ СЃС‚Р°Р»."}}]})
-        return f"РЈРєСЂР°Р»Рё {fmt_money(loss, l['country'])}."
-    if outcome == "child_fight": l["happiness"] += 5; return "Р”Р°Р» СЃРґР°С‡Рё."
-    if outcome == "child_tell": return "РџРѕР¶Р°Р»РѕРІР°Р»СЃСЏ."
-    if outcome == "child_smart": l["books_read"] = l.get("books_read",0) + 1; l["knowledge"] += 10; l["happiness"] += 5; return "РљРЅРёРіР° СЂР°СЃС€РёСЂРёР»Р° РєСЂСѓРіРѕР·РѕСЂ."
-    if outcome == "child_walk": l["health"] += 5; l["happiness"] += 5; return "РҐРѕСЂРѕС€Рѕ РїРѕРіСѓР»СЏР»."
-    if outcome == "child_sport": l["health"] += 5; l["happiness"] += 8; l["relationships"] += 3; return "РћС‚Р»РёС‡РЅРѕ РїРѕРёРіСЂР°Р»."
-    if outcome == "child_injury": l["health"] -= 5; return "РўСЂР°РІРјР°."
-    if outcome == "child_bday_big": l["happiness"] += 15; l["relationships"] += 10; return "РћС‚Р»РёС‡РЅС‹Р№ РїСЂР°Р·РґРЅРёРє!"
-    if outcome == "child_bday_bad": l["happiness"] -= 8; return "Р”СЂСѓР·СЊСЏ РЅРµ РїСЂРёС€Р»Рё."
-    if outcome == "child_bday_small": l["happiness"] += 6; return "РўРёС…Рѕ, РЅРѕ С…РѕСЂРѕС€Рѕ."
-    if outcome == "child_circus": l["happiness"] += 10; return "Р’РѕР»С€РµР±СЃС‚РІРѕ!"
-    if outcome == "child_swim_good": l["health"] += 4; l["happiness"] += 6; return "РќР°СѓС‡РёР»СЃСЏ РїР»Р°РІР°С‚СЊ."
-    if outcome == "child_swim_fear": l["happiness"] -= 4; return "РСЃРїСѓРіР°Р»СЃСЏ."
-    if outcome == "child_sick_treat": l["health"] += 6; return "РџРµСЂРµР±РѕР»РµР»."
-    if outcome == "child_sick_walk_ok": l["happiness"] += 3; return "РџРѕРіСѓР»СЏР»."
-    if outcome == "child_sick_walk_bad": l["health"] -= 8; return "Р‘РѕР»РµР·РЅСЊ СѓСЃРёР»РёР»Р°СЃСЊ."
-    if outcome == "child_draw_win": l["happiness"] += 10; l["knowledge"] += 3; return "РџРѕР±РµРґРёР»!"
-    if outcome == "child_draw_lose": l["happiness"] += 2; return "РџРѕСѓС‡Р°СЃС‚РІРѕРІР°Р»."
-    if outcome == "child_bike_ok": l["health"] += 3; l["happiness"] += 8; return "РџРѕРєР°С‚Р°Р»СЃСЏ."
-    if outcome == "child_bike_fall": l["health"] -= 5; return "РЈРїР°Р»."
-    if outcome == "child_bike_learn": l["health"] += 2; return "РћСЃРІРѕРёР»."
-    if outcome == "child_dog_ok": l["happiness"] += 6; return "РџРѕРіР»Р°РґРёР»."
-    if outcome == "child_dog_bite": l["health"] -= 10; l["diseases"].append("РђРЅРµРјРёСЏ"); return "РЈРєСѓСЃРёР»Р°."
-    if outcome == "child_dog_run": return "РЈР±РµР¶Р°Р»."
-    if outcome == "child_theater_good": l["happiness"] += 10; l["relationships"] += 5; return "РћС‚Р»РёС‡РЅР°СЏ СЂРѕР»СЊ!"
-    if outcome == "child_theater_shy": l["happiness"] -= 3; return "РџРѕСЃС‚РµСЃРЅСЏР»СЃСЏ."
-    if outcome == "child_theater_tech": l["knowledge"] += 3; return "РџРѕРјРѕРіР°Р» Р·Р° РєСѓР»РёСЃР°РјРё."
+        add_pending_consequence(l, 3, {"id":"conseq_scam","title":"ЁЯЪи ╨Т╨╛╨╖╨╝╨╡╨╖╨┤╨╕╨╡","text":"╨Ь╨╛╤И╨╡╨╜╨╜╨╕╨║╨░ ╨┐╨╛╨╣╨╝╨░╨╗╨╕!",
+                                       "choices":[{"text":"╨Я╨╛╨┤╨░╤В╤М ╨╕╤Б╨║","p":0.7,"success_effect":{"cash":5000,"happiness":10,"text":"╨Т╨╡╤А╨╜╤Г╨╗╨╕!"},"fail_effect":{"cash":-1000,"text":"╨Ш╨╖╨┤╨╡╤А╨╢╨║╨╕."}},{"text":"╨Ч╨░╨▒╤Л╤В╤М","p":1,"success_effect":{"text":"╨Э╨╡ ╤Б╤В╨░╨╗."}}]})
+        return f"╨г╨║╤А╨░╨╗╨╕ {fmt_money(loss, l['country'])}."
+    if outcome == "child_fight": l["happiness"] += 5; return "╨Ф╨░╨╗ ╤Б╨┤╨░╤З╨╕."
+    if outcome == "child_tell": return "╨Я╨╛╨╢╨░╨╗╨╛╨▓╨░╨╗╤Б╤П."
+    if outcome == "child_smart": l["books_read"] = l.get("books_read",0) + 1; l["knowledge"] += 10; l["happiness"] += 5; return "╨Ъ╨╜╨╕╨│╨░ ╤А╨░╤Б╤И╨╕╤А╨╕╨╗╨░ ╨║╤А╤Г╨│╨╛╨╖╨╛╤А."
+    if outcome == "child_walk": l["health"] += 5; l["happiness"] += 5; return "╨е╨╛╤А╨╛╤И╨╛ ╨┐╨╛╨│╤Г╨╗╤П╨╗."
+    if outcome == "child_sport": l["health"] += 5; l["happiness"] += 8; l["relationships"] += 3; return "╨Ю╤В╨╗╨╕╤З╨╜╨╛ ╨┐╨╛╨╕╨│╤А╨░╨╗."
+    if outcome == "child_injury": l["health"] -= 5; return "╨в╤А╨░╨▓╨╝╨░."
+    if outcome == "child_bday_big": l["happiness"] += 15; l["relationships"] += 10; return "╨Ю╤В╨╗╨╕╤З╨╜╤Л╨╣ ╨┐╤А╨░╨╖╨┤╨╜╨╕╨║!"
+    if outcome == "child_bday_bad": l["happiness"] -= 8; return "╨Ф╤А╤Г╨╖╤М╤П ╨╜╨╡ ╨┐╤А╨╕╤И╨╗╨╕."
+    if outcome == "child_bday_small": l["happiness"] += 6; return "╨в╨╕╤Е╨╛, ╨╜╨╛ ╤Е╨╛╤А╨╛╤И╨╛."
+    if outcome == "child_circus": l["happiness"] += 10; return "╨Т╨╛╨╗╤И╨╡╨▒╤Б╤В╨▓╨╛!"
+    if outcome == "child_swim_good": l["health"] += 4; l["happiness"] += 6; return "╨Э╨░╤Г╤З╨╕╨╗╤Б╤П ╨┐╨╗╨░╨▓╨░╤В╤М."
+    if outcome == "child_swim_fear": l["happiness"] -= 4; return "╨Ш╤Б╨┐╤Г╨│╨░╨╗╤Б╤П."
+    if outcome == "child_sick_treat": l["health"] += 6; return "╨Я╨╡╤А╨╡╨▒╨╛╨╗╨╡╨╗."
+    if outcome == "child_sick_walk_ok": l["happiness"] += 3; return "╨Я╨╛╨│╤Г╨╗╤П╨╗."
+    if outcome == "child_sick_walk_bad": l["health"] -= 8; return "╨С╨╛╨╗╨╡╨╖╨╜╤М ╤Г╤Б╨╕╨╗╨╕╨╗╨░╤Б╤М."
+    if outcome == "child_draw_win": l["happiness"] += 10; l["knowledge"] += 3; return "╨Я╨╛╨▒╨╡╨┤╨╕╨╗!"
+    if outcome == "child_draw_lose": l["happiness"] += 2; return "╨Я╨╛╤Г╤З╨░╤Б╤В╨▓╨╛╨▓╨░╨╗."
+    if outcome == "child_bike_ok": l["health"] += 3; l["happiness"] += 8; return "╨Я╨╛╨║╨░╤В╨░╨╗╤Б╤П."
+    if outcome == "child_bike_fall": l["health"] -= 5; return "╨г╨┐╨░╨╗."
+    if outcome == "child_bike_learn": l["health"] += 2; return "╨Ю╤Б╨▓╨╛╨╕╨╗."
+    if outcome == "child_dog_ok": l["happiness"] += 6; return "╨Я╨╛╨│╨╗╨░╨┤╨╕╨╗."
+    if outcome == "child_dog_bite": l["health"] -= 10; l["diseases"].append("╨Р╨╜╨╡╨╝╨╕╤П"); return "╨г╨║╤Г╤Б╨╕╨╗╨░."
+    if outcome == "child_dog_run": return "╨г╨▒╨╡╨╢╨░╨╗."
+    if outcome == "child_theater_good": l["happiness"] += 10; l["relationships"] += 5; return "╨Ю╤В╨╗╨╕╤З╨╜╨░╤П ╤А╨╛╨╗╤М!"
+    if outcome == "child_theater_shy": l["happiness"] -= 3; return "╨Я╨╛╤Б╤В╨╡╤Б╨╜╤П╨╗╤Б╤П."
+    if outcome == "child_theater_tech": l["knowledge"] += 3; return "╨Я╨╛╨╝╨╛╨│╨░╨╗ ╨╖╨░ ╨║╤Г╨╗╨╕╤Б╨░╨╝╨╕."
     if outcome == "teen_smoke":
-        l["diseases"].append("Р Р°Рє Р»РµРіРєРёС…"); l["health"] -= 15
-        add_pending_consequence(l, 25, {"id":"conseq_smoke","title":"рџљ¬ Р Р°СЃРїР»Р°С‚Р°","text":"Р“РѕРґС‹ РєСѓСЂРµРЅРёСЏ РґР°Р»Рё Рѕ СЃРµР±Рµ Р·РЅР°С‚СЊ.",
-                                        "choices":[{"text":"Р›РµС‡РёС‚СЊСЃСЏ","p":0.6,"success_effect":{"cash":-5000,"health":10,"text":"РћР±РѕС€Р»РѕСЃСЊ."},"fail_effect":{"diseases":["Р Р°Рє Р»РµРіРєРёС…"],"health":-25,"text":"Р Р°Рє Р»С‘РіРєРёС…."}}]})
-        return "РљСѓСЂРёР»."
-    if outcome == "teen_healthy": l["clean_cash"] += 200; l["health"] += 5; return "РЎСЌРєРѕРЅРѕРјРёР»."
-    if outcome == "teen_love": l["happiness"] += 15; l["relationships"] += 10; return "Р’Р·Р°РёРјРЅР°СЏ Р»СЋР±РѕРІСЊ."
-    if outcome == "teen_heartbreak": l["diseases"].append("РџРўРЎР "); l["happiness"] -= 15; l["relationships"] -= 10; return "РћС‚РєР°Р·."
-    if outcome == "teen_sport_good": l["health"] += 8; l["happiness"] += 5; return "РЎРїРѕСЂС‚ РїРѕС€С‘Р» РЅР° РїРѕР»СЊР·Сѓ."
-    if outcome == "teen_sport_hurt": l["health"] -= 6; return "РўСЂР°РІРјР°."
-    if outcome == "teen_games_win": l["happiness"] += 8; l["relationships"] += 5; return "РџРѕР±РµРґР°!"
-    if outcome == "teen_games_lose": l["happiness"] += 3; return "РџСЂРѕРёРіСЂР°Р», РЅРѕ РІРµСЃРµР»Рѕ."
-    if outcome == "teen_study": l["knowledge"] += 6; return "РџРѕР·Р°РЅРёРјР°Р»СЃСЏ."
-    if outcome == "teen_fight_win": l["happiness"] += 8; l["relationships"] -= 3; return "Р”Р°Р» СЃРґР°С‡Рё."
-    if outcome == "teen_fight_lose": l["health"] -= 8; return "РџРѕР»СѓС‡РёР»."
-    if outcome == "teen_tell_teacher": l["relationships"] += 3; return "РЈС‡РёС‚РµР»СЊ РІРјРµС€Р°Р»СЃСЏ."
-    if outcome == "teen_band": l["happiness"] += 10; l["relationships"] += 5; return "РРіСЂР° РІ РіСЂСѓРїРїРµ!"
-    if outcome == "teen_license_ok": l["has_license"] = True; l["happiness"] += 10; return "РџРѕР»СѓС‡РёР» РїСЂР°РІР°!"
-    if outcome == "teen_license_fail": l["happiness"] -= 3; return "РќРµ СЃРґР°Р»."
-    if outcome == "lottery_win": l["clean_cash"] += int(vvp * 5); l["happiness"] += 30; return "Р”Р–Р•РљРџРћРў!"
-    if outcome == "lottery_lose": l["clean_cash"] -= 100; l["happiness"] -= 5; return "Р‘РёР»РµС‚ РїСѓСЃС‚РѕР№."
-    if outcome == "bribe_dps": l["dirty_cash"] -= int(vvp*0.1); return "РџСЂРѕРЅРµСЃР»Рѕ."
-    if outcome == "dps_jail": l["in_prison"] = 1; l["happiness"] -= 15; l["ever_in_prison"] = True; return "1 РіРѕРґ С‚СЋСЂСЊРјС‹."
-    if outcome == "dps_warning": return "РРЅСЃРїРµРєС‚РѕСЂ РїСЂРµРґСѓРїСЂРµРґРёР»."
-    if outcome == "bribe_dps_big": l["dirty_cash"] -= int(vvp*0.3); return "РћС‚РєСѓРїРёР»СЃСЏ."
-    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; l["ever_in_prison"] = True; return "3 РіРѕРґР° + РєРѕРЅС„РёСЃРєР°С†РёСЏ."
-    return "Р“РѕРґ РїСЂРѕС€РµР»."
+        l["diseases"].append("╨а╨░╨║ ╨╗╨╡╨│╨║╨╕╤Е"); l["health"] -= 15
+        add_pending_consequence(l, 25, {"id":"conseq_smoke","title":"ЁЯЪм ╨а╨░╤Б╨┐╨╗╨░╤В╨░","text":"╨У╨╛╨┤╤Л ╨║╤Г╤А╨╡╨╜╨╕╤П ╨┤╨░╨╗╨╕ ╨╛ ╤Б╨╡╨▒╨╡ ╨╖╨╜╨░╤В╤М.",
+                                        "choices":[{"text":"╨Ы╨╡╤З╨╕╤В╤М╤Б╤П","p":0.6,"success_effect":{"cash":-5000,"health":10,"text":"╨Ю╨▒╨╛╤И╨╗╨╛╤Б╤М."},"fail_effect":{"diseases":["╨а╨░╨║ ╨╗╨╡╨│╨║╨╕╤Е"],"health":-25,"text":"╨а╨░╨║ ╨╗╤С╨│╨║╨╕╤Е."}}]})
+        return "╨Ъ╤Г╤А╨╕╨╗."
+    if outcome == "teen_healthy": l["clean_cash"] += 200; l["health"] += 5; return "╨б╤Н╨║╨╛╨╜╨╛╨╝╨╕╨╗."
+    if outcome == "teen_love": l["happiness"] += 15; l["relationships"] += 10; return "╨Т╨╖╨░╨╕╨╝╨╜╨░╤П ╨╗╤О╨▒╨╛╨▓╤М."
+    if outcome == "teen_heartbreak": l["diseases"].append("╨Я╨в╨б╨а"); l["happiness"] -= 15; l["relationships"] -= 10; return "╨Ю╤В╨║╨░╨╖."
+    if outcome == "teen_sport_good": l["health"] += 8; l["happiness"] += 5; return "╨б╨┐╨╛╤А╤В ╨┐╨╛╤И╤С╨╗ ╨╜╨░ ╨┐╨╛╨╗╤М╨╖╤Г."
+    if outcome == "teen_sport_hurt": l["health"] -= 6; return "╨в╤А╨░╨▓╨╝╨░."
+    if outcome == "teen_games_win": l["happiness"] += 8; l["relationships"] += 5; return "╨Я╨╛╨▒╨╡╨┤╨░!"
+    if outcome == "teen_games_lose": l["happiness"] += 3; return "╨Я╤А╨╛╨╕╨│╤А╨░╨╗, ╨╜╨╛ ╨▓╨╡╤Б╨╡╨╗╨╛."
+    if outcome == "teen_study": l["knowledge"] += 6; return "╨Я╨╛╨╖╨░╨╜╨╕╨╝╨░╨╗╤Б╤П."
+    if outcome == "teen_fight_win": l["happiness"] += 8; l["relationships"] -= 3; return "╨Ф╨░╨╗ ╤Б╨┤╨░╤З╨╕."
+    if outcome == "teen_fight_lose": l["health"] -= 8; return "╨Я╨╛╨╗╤Г╤З╨╕╨╗."
+    if outcome == "teen_tell_teacher": l["relationships"] += 3; return "╨г╤З╨╕╤В╨╡╨╗╤М ╨▓╨╝╨╡╤И╨░╨╗╤Б╤П."
+    if outcome == "teen_band": l["happiness"] += 10; l["relationships"] += 5; return "╨Ш╨│╤А╨░ ╨▓ ╨│╤А╤Г╨┐╨┐╨╡!"
+    if outcome == "teen_license_ok": l["has_license"] = True; l["happiness"] += 10; return "╨Я╨╛╨╗╤Г╤З╨╕╨╗ ╨┐╤А╨░╨▓╨░!"
+    if outcome == "teen_license_fail": l["happiness"] -= 3; return "╨Э╨╡ ╤Б╨┤╨░╨╗."
+    if outcome == "lottery_win": l["clean_cash"] += int(vvp * 5); l["happiness"] += 30; return "╨Ф╨Ц╨Х╨Ъ╨Я╨Ю╨в!"
+    if outcome == "lottery_lose": l["clean_cash"] -= 100; l["happiness"] -= 5; return "╨С╨╕╨╗╨╡╤В ╨┐╤Г╤Б╤В╨╛╨╣."
+    if outcome == "bribe_dps": l["dirty_cash"] -= int(vvp*0.1); return "╨Я╤А╨╛╨╜╨╡╤Б╨╗╨╛."
+    if outcome == "dps_jail": l["in_prison"] = 1; l["happiness"] -= 15; l["ever_in_prison"] = True; return "1 ╨│╨╛╨┤ ╤В╤О╤А╤М╨╝╤Л."
+    if outcome == "dps_warning": return "╨Ш╨╜╤Б╨┐╨╡╨║╤В╨╛╤А ╨┐╤А╨╡╨┤╤Г╨┐╤А╨╡╨┤╨╕╨╗."
+    if outcome == "bribe_dps_big": l["dirty_cash"] -= int(vvp*0.3); return "╨Ю╤В╨║╤Г╨┐╨╕╨╗╤Б╤П."
+    if outcome == "drunk_jail": l["in_prison"] = 3; l["cars"] = []; l["happiness"] -= 30; l["ever_in_prison"] = True; return "3 ╨│╨╛╨┤╨░ + ╨║╨╛╨╜╤Д╨╕╤Б╨║╨░╤Ж╨╕╤П."
+    return "╨У╨╛╨┤ ╨┐╤А╨╛╤И╨╡╨╗."
 
 def resolve_choice(user_id, chat_id, i):
     l = players_db[str(user_id)]
@@ -1171,23 +1171,23 @@ def resolve_choice(user_id, chat_id, i):
     c = evt["choices"][i]
     success = random.random() < c["p"]
     
-    # РЎС‚РµСЂРµРѕС‚РёРї "СЃС‡РёС‚Р°СЋС‚ СѓРјРЅС‹Рј" РїРѕРјРѕРіР°РµС‚ РІ РєРѕРЅС‚СЂРѕР»СЊРЅС‹С…, СЌРєР·Р°РјРµРЅР°С… Рё РѕР»РёРјРїРёР°РґР°С…
-    if not success and l.get("prejudice") and "СѓРјРЅС‹Рј" in l["prejudice"]:
+    # ╨б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐ "╤Б╤З╨╕╤В╨░╤О╤В ╤Г╨╝╨╜╤Л╨╝" ╨┐╨╛╨╝╨╛╨│╨░╨╡╤В ╨▓ ╨║╨╛╨╜╤В╤А╨╛╨╗╤М╨╜╤Л╤Е, ╤Н╨║╨╖╨░╨╝╨╡╨╜╨░╤Е ╨╕ ╨╛╨╗╨╕╨╝╨┐╨╕╨░╨┤╨░╤Е
+    if not success and l.get("prejudice") and "╤Г╨╝╨╜╤Л╨╝" in l["prejudice"]:
         title_low = evt.get("title", "").lower()
-        if any(term in title_low for term in ["СЌРєР·Р°РјРµРЅ", "РѕР»РёРјРїРёР°Рґ", "СѓС‡С‘Р±", "СѓРЅРёРІРµСЂ", "С€РєРѕР»", "РєРѕРЅС‚СЂРѕР»СЊРЅ", "РєСѓСЂСЃ", "РґРёРїР»РѕРј"]):
+        if any(term in title_low for term in ["╤Н╨║╨╖╨░╨╝╨╡╨╜", "╨╛╨╗╨╕╨╝╨┐╨╕╨░╨┤", "╤Г╤З╤С╨▒", "╤Г╨╜╨╕╨▓╨╡╤А", "╤И╨║╨╛╨╗", "╨║╨╛╨╜╤В╤А╨╛╨╗╤М╨╜", "╨║╤Г╤А╤Б", "╨┤╨╕╨┐╨╗╨╛╨╝"]):
             if random.random() < 0.45:
                 success = True
                 if "success_effect" in c:
                     c = dict(c)
                     eff = dict(c["success_effect"])
-                    eff["text"] = "рџ§  РЎС‚РµСЂРµРѕС‚РёРї РїРѕРјРѕРі: " + eff.get("text", "")
+                    eff["text"] = "ЁЯза ╨б╤В╨╡╤А╨╡╨╛╤В╨╕╨┐ ╨┐╨╛╨╝╨╛╨│: " + eff.get("text", "")
                     c["success_effect"] = eff
     if "success_effect" in c:
-        effect = c.get("success_effect") if success else c.get("fail_effect", {"text":"Р“РѕРґ РїСЂРѕС€РµР»."})
+        effect = c.get("success_effect") if success else c.get("fail_effect", {"text":"╨У╨╛╨┤ ╨┐╤А╨╛╤И╨╡╨╗."})
         text = apply_direct_effect(l, effect); outcome = "direct"
     else:
         outcome = c["success"] if success else c.get("fail", "none")
-        text = apply_outcome(l, outcome) if outcome else "Р“РѕРґ РїСЂРѕС€РµР»."
+        text = apply_outcome(l, outcome) if outcome else "╨У╨╛╨┤ ╨┐╤А╨╛╤И╨╡╨╗."
     l["last_result"] = {"success":success,"text":text}
     if evt.get("is_philosophy"):
         l.setdefault("philosophy_answers",[]).append({"age":evt["age"],"choice":c["text"]})
@@ -1228,36 +1228,36 @@ def resolve_choice(user_id, chat_id, i):
 def format_year(l):
     c = l["country"]
     visuals = get_scene_visuals("life", l["gender"], ethnicity=l.get("ethnicity"), region=c[2], age=l.get("age"))
-    parts = [f"<b>Р’РѕР·СЂР°СЃС‚: {get_age_str(l['age'])}</b>\n{visuals}"]
-    if l.get("last_result"): parts.append(f"\n{'вњ…' if l['last_result']['success'] else 'вќЊ'} <i>{l['last_result']['text']}</i>")
+    parts = [f"<b>╨Т╨╛╨╖╤А╨░╤Б╤В: {get_age_str(l['age'])}</b>\n{visuals}"]
+    if l.get("last_result"): parts.append(f"\n{'тЬЕ' if l['last_result']['success'] else 'тЭМ'} <i>{l['last_result']['text']}</i>")
     parts.append(f"\n{get_stats_line(l)}")
-    parts.append(f"\nрџ§¬ РџСЂРѕРёСЃС…РѕР¶РґРµРЅРёРµ: <b>{l['ethnicity']}</b>")
-    if l["prejudice"]: parts.append(f"вљ пёЏ <i>РћР±С‰РµСЃС‚РІРѕ: {l['prejudice']}</i>")
-    parts.append(f"рџ’° Р‘Р°Р»Р°РЅСЃ: <b>{fmt_money(l['clean_cash'], c)}</b>")
-    if l["age"] <= 6: parts.append("рџ‘ЁвЂЌрџ‘©вЂЌрџ‘§ <i>Р–РёРІС‘С€СЊ РЅР° РѕР±РµСЃРїРµС‡РµРЅРёРё СЂРѕРґРёС‚РµР»РµР№</i>")
-    elif l["age"] <= 13: parts.append("рџЄ™ <i>РљР°СЂРјР°РЅРЅС‹Рµ РѕС‚ СЂРѕРґРёС‚РµР»РµР№</i>")
-    elif l["age"] <= 17: parts.append("рџ’ј <i>РџРѕРґСЂР°Р±РѕС‚РєР° РїРѕСЃР»Рµ СѓС‡С‘Р±С‹</i>")
-    if l["dirty_cash"] > 0: parts.append(f"рџ’ј Р“СЂСЏР·РЅС‹Рµ: <b>{fmt_money(l['dirty_cash'], c)}</b>")
-    if l["debt"] > 0: parts.append(f"рџЏ¦ Р”РѕР»Рі: <b>{fmt_money(l['debt'], c)}</b>")
-    parts.append(f"рџ‘‘ РљР»Р°СЃСЃ: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
+    parts.append(f"\nЁЯзм ╨Я╤А╨╛╨╕╤Б╤Е╨╛╨╢╨┤╨╡╨╜╨╕╨╡: <b>{l['ethnicity']}</b>")
+    if l["prejudice"]: parts.append(f"тЪая╕П <i>╨Ю╨▒╤Й╨╡╤Б╤В╨▓╨╛: {l['prejudice']}</i>")
+    parts.append(f"ЁЯТ░ ╨С╨░╨╗╨░╨╜╤Б: <b>{fmt_money(l['clean_cash'], c)}</b>")
+    if l["age"] <= 6: parts.append("ЁЯСитАНЁЯСйтАНЁЯСз <i>╨Ц╨╕╨▓╤С╤И╤М ╨╜╨░ ╨╛╨▒╨╡╤Б╨┐╨╡╤З╨╡╨╜╨╕╨╕ ╤А╨╛╨┤╨╕╤В╨╡╨╗╨╡╨╣</i>")
+    elif l["age"] <= 13: parts.append("ЁЯкЩ <i>╨Ъ╨░╤А╨╝╨░╨╜╨╜╤Л╨╡ ╨╛╤В ╤А╨╛╨┤╨╕╤В╨╡╨╗╨╡╨╣</i>")
+    elif l["age"] <= 17: parts.append("ЁЯТ╝ <i>╨Я╨╛╨┤╤А╨░╨▒╨╛╤В╨║╨░ ╨┐╨╛╤Б╨╗╨╡ ╤Г╤З╤С╨▒╤Л</i>")
+    if l["dirty_cash"] > 0: parts.append(f"ЁЯТ╝ ╨У╤А╤П╨╖╨╜╤Л╨╡: <b>{fmt_money(l['dirty_cash'], c)}</b>")
+    if l["debt"] > 0: parts.append(f"ЁЯПж ╨Ф╨╛╨╗╨│: <b>{fmt_money(l['debt'], c)}</b>")
+    parts.append(f"ЁЯСС ╨Ъ╨╗╨░╤Б╤Б: {get_wealth_status(l['clean_cash'], l['dirty_cash'], l)}")
     job = l["job"]
     if l["job_type"] in ["civilian","police","military","criminal","politics"]:
         job += f" ({CAREER_TITLES[l['job_type']].get(l['career_rank'],'')}, XP: {l['career_xp']}/100)"
-    parts.append(f"рџ’ј {job}")
-    if l["properties"]: parts.append("рџЏ  " + ", ".join([p["type"] for p in l["properties"]]))
-    if l["cars"]: parts.append("рџљ— " + ", ".join([c["type"] for c in l["cars"]]))
-    if l["businesses"]: parts.append("рџЏў " + ", ".join([b["type"] for b in l["businesses"]]))
-    if l.get("investments"): parts.append("рџ“€ РџРѕСЂС‚С„РµР»СЊ: " + ", ".join([f"{i['type']} ({fmt_money(i['amount'], c)})" for i in l["investments"]]))
-    if l.get("political_reputation", 50) != 50 or l.get("job_type") == "civilian": parts.append(f"рџЏ› РџРѕР»РёС‚РёС‡РµСЃРєРѕРµ РІР»РёСЏРЅРёРµ: {l.get('political_reputation', 50)}/100")
-    if l["diseases"]: parts.append(f"рџ©є {', '.join(l['diseases'])}")
-    parts.append(f"рџЋ“ {l['education']}")
-    parts.append(f"рџ‘ЁвЂЌрџ‘©вЂЌрџ‘§ Р”РµС‚Рё: {l['children']} | Р‘СЂР°Рє: {'Р”Р°' if l['married'] else 'РќРµС‚'}")
+    parts.append(f"ЁЯТ╝ {job}")
+    if l["properties"]: parts.append("ЁЯПа " + ", ".join([p["type"] for p in l["properties"]]))
+    if l["cars"]: parts.append("ЁЯЪЧ " + ", ".join([c["type"] for c in l["cars"]]))
+    if l["businesses"]: parts.append("ЁЯПв " + ", ".join([b["type"] for b in l["businesses"]]))
+    if l.get("investments"): parts.append("ЁЯУИ ╨Я╨╛╤А╤В╤Д╨╡╨╗╤М: " + ", ".join([f"{i['type']} ({fmt_money(i['amount'], c)})" for i in l["investments"]]))
+    if l.get("political_reputation", 50) != 50 or l.get("job_type") == "civilian": parts.append(f"ЁЯПЫ ╨Я╨╛╨╗╨╕╤В╨╕╤З╨╡╤Б╨║╨╛╨╡ ╨▓╨╗╨╕╤П╨╜╨╕╨╡: {l.get('political_reputation', 50)}/100")
+    if l["diseases"]: parts.append(f"ЁЯй║ {', '.join(l['diseases'])}")
+    parts.append(f"ЁЯОУ {l['education']}")
+    parts.append(f"ЁЯСитАНЁЯСйтАНЁЯСз ╨Ф╨╡╤В╨╕: {l['children']} | ╨С╤А╨░╨║: {'╨Ф╨░' if l['married'] else '╨Э╨╡╤В'}")
     return "\n".join(parts)
 
 def format_event(l, evt):
     c = l.get("country", ["","","default"])
     visuals = get_scene_visuals("life", l["gender"], ethnicity=l.get("ethnicity"), region=c[2], age=l.get("age"))
-    return f"<b>{get_age_str(l['age'])} В· {evt['title']}</b>\n{visuals}\n\n{get_stats_line(l)}\n\n{evt['text']}"
+    return f"<b>{get_age_str(l['age'])} ┬╖ {evt['title']}</b>\n{visuals}\n\n{get_stats_line(l)}\n\n{evt['text']}"
 
 def send_scene(chat_id, l, text, kb, scene_type="life"):
     if not text.startswith("<b>"):
@@ -1267,19 +1267,19 @@ def send_scene(chat_id, l, text, kb, scene_type="life"):
     msg = bot.send_message(chat_id, text, reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
-def kb_intro(): return InlineKeyboardMarkup().add(InlineKeyboardButton("рџЋІ Р РѕРґРёС‚СЊСЃСЏ", callback_data="new"))
-def kb_year(): return InlineKeyboardMarkup().add(InlineKeyboardButton("в–¶пёЏ РЎР»РµРґСѓСЋС‰РёР№ РіРѕРґ", callback_data="year")).add(InlineKeyboardButton("рџ›’ РњР°РіР°Р·РёРЅ", callback_data="shop"))
+def kb_intro(): return InlineKeyboardMarkup().add(InlineKeyboardButton("ЁЯО▓ ╨а╨╛╨┤╨╕╤В╤М╤Б╤П", callback_data="new"))
+def kb_year(): return InlineKeyboardMarkup().add(InlineKeyboardButton("тЦ╢я╕П ╨б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ ╨│╨╛╨┤", callback_data="year")).add(InlineKeyboardButton("ЁЯЫТ ╨Ь╨░╨│╨░╨╖╨╕╨╜", callback_data="shop"))
 
 def kb_focus(l=None):
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton("вќ¤пёЏ Р—РґРѕСЂРѕРІСЊРµ", callback_data="focus_health"), InlineKeyboardButton("рџ§  Р—РЅР°РЅРёСЏ", callback_data="focus_knowledge"))
-    kb.add(InlineKeyboardButton("рџ¤ќ РћС‚РЅРѕС€РµРЅРёСЏ", callback_data="focus_relationships"), InlineKeyboardButton("рџЉ РЎС‡Р°СЃС‚СЊРµ", callback_data="focus_happiness"))
+    kb.add(InlineKeyboardButton("тЭдя╕П ╨Ч╨┤╨╛╤А╨╛╨▓╤М╨╡", callback_data="focus_health"), InlineKeyboardButton("ЁЯза ╨Ч╨╜╨░╨╜╨╕╤П", callback_data="focus_knowledge"))
+    kb.add(InlineKeyboardButton("ЁЯдЭ ╨Ю╤В╨╜╨╛╤И╨╡╨╜╨╕╤П", callback_data="focus_relationships"), InlineKeyboardButton("ЁЯШК ╨б╤З╨░╤Б╤В╤М╨╡", callback_data="focus_happiness"))
     if l and l.get("job_type") in ("civilian","police","military","criminal"):
-        kb.add(InlineKeyboardButton("рџ’ј Р Р°Р±РѕС‚Р°", callback_data="focus_work"))
-    kb.add(InlineKeyboardButton("рџЏ† РўРѕРї Р¶РёР·РЅРµР№", callback_data="leaderboard"))
-    kb.add(InlineKeyboardButton("рџ“– Р”РѕСЃС‚РёР¶РµРЅРёСЏ", callback_data="achievements"))
-    kb.add(InlineKeyboardButton("в–¶пёЏ РџСЂРѕРїСѓСЃС‚РёС‚СЊ", callback_data="year"))
-    kb.add(InlineKeyboardButton("рџ›’ РњР°РіР°Р·РёРЅ", callback_data="shop"))
+        kb.add(InlineKeyboardButton("ЁЯТ╝ ╨а╨░╨▒╨╛╤В╨░", callback_data="focus_work"))
+    kb.add(InlineKeyboardButton("ЁЯПЖ ╨в╨╛╨┐ ╨╢╨╕╨╖╨╜╨╡╨╣", callback_data="leaderboard"))
+    kb.add(InlineKeyboardButton("ЁЯУЦ ╨Ф╨╛╤Б╤В╨╕╨╢╨╡╨╜╨╕╤П", callback_data="achievements"))
+    kb.add(InlineKeyboardButton("тЦ╢я╕П ╨Я╤А╨╛╨┐╤Г╤Б╤В╨╕╤В╤М", callback_data="year"))
+    kb.add(InlineKeyboardButton("ЁЯЫТ ╨Ь╨░╨│╨░╨╖╨╕╨╜", callback_data="shop"))
     return kb
 
 def kb_event(choices):
@@ -1290,37 +1290,37 @@ def kb_event(choices):
 def open_shop(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup().add(
-        InlineKeyboardButton("рџЏ  РќРµРґРІРёР¶РёРјРѕСЃС‚СЊ", callback_data="shop_prop")
+        InlineKeyboardButton("ЁЯПа ╨Э╨╡╨┤╨▓╨╕╨╢╨╕╨╝╨╛╤Б╤В╤М", callback_data="shop_prop")
     ).add(
-        InlineKeyboardButton("рџљ— РђРІС‚Рѕ", callback_data="shop_car")
+        InlineKeyboardButton("ЁЯЪЧ ╨Р╨▓╤В╨╛", callback_data="shop_car")
     ).add(
-        InlineKeyboardButton("рџЏў Р‘РёР·РЅРµСЃС‹", callback_data="shop_biz")
+        InlineKeyboardButton("ЁЯПв ╨С╨╕╨╖╨╜╨╡╤Б╤Л", callback_data="shop_biz")
     ).add(
-        InlineKeyboardButton("рџ“€ РРЅРІРµСЃС‚РёС†РёРё", callback_data="shop_invest")
+        InlineKeyboardButton("ЁЯУИ ╨Ш╨╜╨▓╨╡╤Б╤В╨╕╤Ж╨╕╨╕", callback_data="shop_invest")
     )
     if l.get("debt", 0) > 0:
-        kb.add(InlineKeyboardButton(f"рџ’і РџРѕРіР°СЃРёС‚СЊ РґРѕР»Рі ({fmt_money(l['debt'], c)})", callback_data="shop_pay_debt"))
-    kb.add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ", callback_data="year"))
-    msg = bot.send_message(chat_id, f"рџ›’ <b>РњР°РіР°Р·РёРЅ</b>\nР‘Р°Р»Р°РЅСЃ: {fmt_money(l['clean_cash'], c)}\nР”РѕР»Рі: {fmt_money(l.get('debt', 0), c)}", reply_markup=kb, parse_mode="HTML")
+        kb.add(InlineKeyboardButton(f"ЁЯТ│ ╨Я╨╛╨│╨░╤Б╨╕╤В╤М ╨┤╨╛╨╗╨│ ({fmt_money(l['debt'], c)})", callback_data="shop_pay_debt"))
+    kb.add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤", callback_data="year"))
+    msg = bot.send_message(chat_id, f"ЁЯЫТ <b>╨Ь╨░╨│╨░╨╖╨╕╨╜</b>\n╨С╨░╨╗╨░╨╜╤Б: {fmt_money(l['clean_cash'], c)}\n╨Ф╨╛╨╗╨│: {fmt_money(l.get('debt', 0), c)}", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 def shop_prop_menu(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup()
-    for name, price in PROPERTIES.items(): kb.add(InlineKeyboardButton(f"вњ… {name} вЂ” {fmt_money(price, c)}", callback_data=f"buy_prop_{name}"))
-    kb.add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ", callback_data="shop"))
-    msg = bot.send_message(chat_id, f"рџЏ  <b>РќРµРґРІРёР¶РёРјРѕСЃС‚СЊ</b>", reply_markup=kb, parse_mode="HTML")
+    for name, price in PROPERTIES.items(): kb.add(InlineKeyboardButton(f"тЬЕ {name} тАФ {fmt_money(price, c)}", callback_data=f"buy_prop_{name}"))
+    kb.add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤", callback_data="shop"))
+    msg = bot.send_message(chat_id, f"ЁЯПа <b>╨Э╨╡╨┤╨▓╨╕╨╢╨╕╨╝╨╛╤Б╤В╤М</b>", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 def shop_car_menu(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup()
-    for name, price in CARS.items(): kb.add(InlineKeyboardButton(f"вњ… {name} вЂ” {fmt_money(price, c)}", callback_data=f"buy_car_{name}"))
+    for name, price in CARS.items(): kb.add(InlineKeyboardButton(f"тЬЕ {name} тАФ {fmt_money(price, c)}", callback_data=f"buy_car_{name}"))
     if not l.get("has_license"):
         lic_price = int(c[7] * 0.05)
-        kb.add(InlineKeyboardButton(f"рџЄЄ РљСѓРїРёС‚СЊ РїСЂР°РІР° вЂ” {fmt_money(lic_price, c)}", callback_data="buy_license"))
-    kb.add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ", callback_data="shop"))
-    msg = bot.send_message(chat_id, f"рџљ— <b>РђРІС‚Рѕ</b>\nРќР°Р»РёС‡РёРµ РїСЂР°РІ: {'Р”Р°' if l.get('has_license') else 'РќРµС‚'}", reply_markup=kb, parse_mode="HTML")
+        kb.add(InlineKeyboardButton(f"ЁЯкк ╨Ъ╤Г╨┐╨╕╤В╤М ╨┐╤А╨░╨▓╨░ тАФ {fmt_money(lic_price, c)}", callback_data="buy_license"))
+    kb.add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤", callback_data="shop"))
+    msg = bot.send_message(chat_id, f"ЁЯЪЧ <b>╨Р╨▓╤В╨╛</b>\n╨Э╨░╨╗╨╕╤З╨╕╨╡ ╨┐╤А╨░╨▓: {'╨Ф╨░' if l.get('has_license') else '╨Э╨╡╤В'}", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 
@@ -1328,17 +1328,17 @@ def shop_invest_menu(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup()
     for name, data in INVESTMENT_ASSETS.items():
-        kb.add(InlineKeyboardButton(f"рџ“€ {name} вЂ” {fmt_money(data['price'], c)}", callback_data=f"buy_invest_{name}"))
-    kb.add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ", callback_data="shop"))
-    msg = bot.send_message(chat_id, f"рџ“€ <b>РРЅРІРµСЃС‚РёС†РёРѕРЅРЅС‹Р№ СЂС‹РЅРѕРє</b>\nР’РєР»Р°РґС‹РІР°Р№С‚Рµ СЃСЂРµРґСЃС‚РІР° РІ Р°РєС‚РёРІС‹ РґР»СЏ РµР¶РµРіРѕРґРЅРѕР№ РґРѕС…РѕРґРЅРѕСЃС‚Рё.\nР‘Р°Р»Р°РЅСЃ: {fmt_money(l['clean_cash'], c)}", reply_markup=kb, parse_mode="HTML")
+        kb.add(InlineKeyboardButton(f"ЁЯУИ {name} тАФ {fmt_money(data['price'], c)}", callback_data=f"buy_invest_{name}"))
+    kb.add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤", callback_data="shop"))
+    msg = bot.send_message(chat_id, f"ЁЯУИ <b>╨Ш╨╜╨▓╨╡╤Б╤В╨╕╤Ж╨╕╨╛╨╜╨╜╤Л╨╣ ╤А╤Л╨╜╨╛╨║</b>\n╨Т╨║╨╗╨░╨┤╤Л╨▓╨░╨╣╤В╨╡ ╤Б╤А╨╡╨┤╤Б╤В╨▓╨░ ╨▓ ╨░╨║╤В╨╕╨▓╤Л ╨┤╨╗╤П ╨╡╨╢╨╡╨│╨╛╨┤╨╜╨╛╨╣ ╨┤╨╛╤Е╨╛╨┤╨╜╨╛╤Б╤В╨╕.\n╨С╨░╨╗╨░╨╜╤Б: {fmt_money(l['clean_cash'], c)}", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 def shop_biz_menu(user_id, chat_id):
     l = players_db[str(user_id)]; c = l["country"]
     kb = InlineKeyboardMarkup()
-    for name, price in BUSINESSES.items(): kb.add(InlineKeyboardButton(f"рџЏў {name} вЂ” {fmt_money(price, c)}", callback_data=f"buy_biz_{name}"))
-    kb.add(InlineKeyboardButton("в¬…пёЏ РќР°Р·Р°Рґ", callback_data="shop"))
-    msg = bot.send_message(chat_id, f"рџЏў <b>Р‘РёР·РЅРµСЃС‹</b>", reply_markup=kb, parse_mode="HTML")
+    for name, price in BUSINESSES.items(): kb.add(InlineKeyboardButton(f"ЁЯПв {name} тАФ {fmt_money(price, c)}", callback_data=f"buy_biz_{name}"))
+    kb.add(InlineKeyboardButton("тмЕя╕П ╨Э╨░╨╖╨░╨┤", callback_data="shop"))
+    msg = bot.send_message(chat_id, f"ЁЯПв <b>╨С╨╕╨╖╨╜╨╡╤Б╤Л</b>", reply_markup=kb, parse_mode="HTML")
     track_message(l, chat_id, msg.message_id)
 
 def process_buy(user_id, chat_id, cat, name):
@@ -1346,39 +1346,39 @@ def process_buy(user_id, chat_id, cat, name):
     if cat == "debt":
         debt = l.get("debt", 0)
         if debt <= 0:
-            return bot.send_message(chat_id, "вњ… РЈ РІР°СЃ РЅРµС‚ РґРѕР»РіРѕРІ!", reply_markup=kb_year())
+            return bot.send_message(chat_id, "тЬЕ ╨г ╨▓╨░╤Б ╨╜╨╡╤В ╨┤╨╛╨╗╨│╨╛╨▓!", reply_markup=kb_year())
         if l["clean_cash"] <= 0:
-            return bot.send_message(chat_id, "вќЊ РЈ РІР°СЃ РЅРµС‚ СЃРІРѕР±РѕРґРЅС‹С… РґРµРЅРµРі РґР»СЏ РїРѕРіР°С€РµРЅРёСЏ РґРѕР»РіР°!", reply_markup=kb_year())
+            return bot.send_message(chat_id, "тЭМ ╨г ╨▓╨░╤Б ╨╜╨╡╤В ╤Б╨▓╨╛╨▒╨╛╨┤╨╜╤Л╤Е ╨┤╨╡╨╜╨╡╨│ ╨┤╨╗╤П ╨┐╨╛╨│╨░╤И╨╡╨╜╨╕╤П ╨┤╨╛╨╗╨│╨░!", reply_markup=kb_year())
         pay_amount = min(l["clean_cash"], debt)
         l["clean_cash"] -= pay_amount
         l["debt"] -= pay_amount
         save_db(players_db)
         if l["debt"] == 0:
-            add_to_life_map(l, "РџРѕР»РЅРѕСЃС‚СЊСЋ РІС‹РїР»Р°С‚РёР» РґРѕР»РіРё")
-            return bot.send_message(chat_id, f"рџЋ‰ <b>Р”РѕР»Рі РїРѕР»РЅРѕСЃС‚СЊСЋ РїРѕРіР°С€РµРЅ!</b>\nР’С‹РїР»Р°С‡РµРЅРѕ: {fmt_money(pay_amount, c)}.", reply_markup=kb_year(), parse_mode="HTML")
+            add_to_life_map(l, "╨Я╨╛╨╗╨╜╨╛╤Б╤В╤М╤О ╨▓╤Л╨┐╨╗╨░╤В╨╕╨╗ ╨┤╨╛╨╗╨│╨╕")
+            return bot.send_message(chat_id, f"ЁЯОЙ <b>╨Ф╨╛╨╗╨│ ╨┐╨╛╨╗╨╜╨╛╤Б╤В╤М╤О ╨┐╨╛╨│╨░╤И╨╡╨╜!</b>\n╨Т╤Л╨┐╨╗╨░╤З╨╡╨╜╨╛: {fmt_money(pay_amount, c)}.", reply_markup=kb_year(), parse_mode="HTML")
         else:
-            return bot.send_message(chat_id, f"рџ’і <b>Р§Р°СЃС‚СЊ РґРѕР»РіР° РїРѕРіР°С€РµРЅР°!</b>\nР’С‹РїР»Р°С‡РµРЅРѕ: {fmt_money(pay_amount, c)}.\nРћСЃС‚Р°С‚РѕРє РґРѕР»РіР°: {fmt_money(l['debt'], c)}.", reply_markup=kb_year(), parse_mode="HTML")
+            return bot.send_message(chat_id, f"ЁЯТ│ <b>╨з╨░╤Б╤В╤М ╨┤╨╛╨╗╨│╨░ ╨┐╨╛╨│╨░╤И╨╡╨╜╨░!</b>\n╨Т╤Л╨┐╨╗╨░╤З╨╡╨╜╨╛: {fmt_money(pay_amount, c)}.\n╨Ю╤Б╤В╨░╤В╨╛╨║ ╨┤╨╛╨╗╨│╨░: {fmt_money(l['debt'], c)}.", reply_markup=kb_year(), parse_mode="HTML")
     if cat == "license":
         price = int(c[7] * 0.05)
-        if l["clean_cash"] < price: return bot.send_message(chat_id, "вќЊ РњР°Р»Рѕ РґРµРЅРµРі РЅР° РїСЂР°РІР°!", reply_markup=kb_year())
+        if l["clean_cash"] < price: return bot.send_message(chat_id, "тЭМ ╨Ь╨░╨╗╨╛ ╨┤╨╡╨╜╨╡╨│ ╨╜╨░ ╨┐╤А╨░╨▓╨░!", reply_markup=kb_year())
         l["clean_cash"] -= price; l["has_license"] = True; save_db(players_db)
-        return bot.send_message(chat_id, "рџЋ‰ РўС‹ РїРѕР»СѓС‡РёР» РІРѕРґРёС‚РµР»СЊСЃРєРёРµ РїСЂР°РІР°!", reply_markup=kb_year(), parse_mode="HTML")
+        return bot.send_message(chat_id, "ЁЯОЙ ╨в╤Л ╨┐╨╛╨╗╤Г╤З╨╕╨╗ ╨▓╨╛╨┤╨╕╤В╨╡╨╗╤М╤Б╨║╨╕╨╡ ╨┐╤А╨░╨▓╨░!", reply_markup=kb_year(), parse_mode="HTML")
     if cat == "prop": base = PROPERTIES[name]
     elif cat == "car": base = CARS[name]
     elif cat == "biz": base = BUSINESSES[name]
     elif cat == "invest": base = INVESTMENT_ASSETS[name]["price"]
     else: base = 0
-    if l["clean_cash"] < base: return bot.send_message(chat_id, "вќЊ РњР°Р»Рѕ РґРµРЅРµРі!", reply_markup=kb_year())
+    if l["clean_cash"] < base: return bot.send_message(chat_id, "тЭМ ╨Ь╨░╨╗╨╛ ╨┤╨╡╨╜╨╡╨│!", reply_markup=kb_year())
     l["clean_cash"] -= base
-    if cat == "prop": l["properties"].append({"type":name,"value":base}); add_to_life_map(l, f"РљСѓРїРёР» {name}")
-    elif cat == "car": l["cars"].append({"type":name,"value":base}); add_to_life_map(l, f"РљСѓРїРёР» {name}")
-    elif cat == "biz": l["businesses"].append({"type":name,"value":base}); add_to_life_map(l, f"РћС‚РєСЂС‹Р» {name}")
+    if cat == "prop": l["properties"].append({"type":name,"value":base}); add_to_life_map(l, f"╨Ъ╤Г╨┐╨╕╨╗ {name}")
+    elif cat == "car": l["cars"].append({"type":name,"value":base}); add_to_life_map(l, f"╨Ъ╤Г╨┐╨╕╨╗ {name}")
+    elif cat == "biz": l["businesses"].append({"type":name,"value":base}); add_to_life_map(l, f"╨Ю╤В╨║╤А╤Л╨╗ {name}")
     elif cat == "invest":
         existing = next((i for i in l.setdefault("investments", []) if i["type"] == name), None)
         if existing: existing["amount"] += base
         else: l["investments"].append({"type": name, "amount": base})
-        add_to_life_map(l, f"РљСѓРїРёР» Р°РєС‚РёРІС‹: {name}")
+        add_to_life_map(l, f"╨Ъ╤Г╨┐╨╕╨╗ ╨░╨║╤В╨╕╨▓╤Л: {name}")
     save_db(players_db)
-    bot.send_message(chat_id, f"рџЋ‰ РљСѓРїР»РµРЅРѕ: <b>{name}</b>!", reply_markup=kb_year(), parse_mode="HTML")
+    bot.send_message(chat_id, f"ЁЯОЙ ╨Ъ╤Г╨┐╨╗╨╡╨╜╨╛: <b>{name}</b>!", reply_markup=kb_year(), parse_mode="HTML")
 
-# ================= РћР‘Р РђР‘РћРўР§РРљР =================
+# ================= ╨Ю╨С╨а╨Р╨С╨Ю╨в╨з╨Ш╨Ъ╨Ш =================
